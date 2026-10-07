@@ -49,8 +49,8 @@ Requirements: [Claude Code](https://code.claude.com), Node.js 18+ (22 recommende
 scripts (Remotion brings its own ffmpeg for rendering).
 
 ```bash
-# 1. Add the marketplace (replace with the GitHub repo where this is published)
-claude plugin marketplace add <owner>/<repo>
+# 1. Add the marketplace
+claude plugin marketplace add FefeRP/motion-graphics-skills
 
 # 2. Install the plugin
 claude plugin install motion-graphics@motion-graphics-skills
@@ -59,7 +59,7 @@ claude plugin install motion-graphics@motion-graphics-skills
 claude plugin details motion-graphics
 ```
 
-Inside a session you can do the same with `/plugin marketplace add <owner>/<repo>` and `/plugin install
+Inside a session you can do the same with `/plugin marketplace add FefeRP/motion-graphics-skills` and `/plugin install
 motion-graphics@motion-graphics-skills`.
 
 ### Try the kit
@@ -106,7 +106,7 @@ sound) so other engines can be added later.
 Skills para Claude Code que hacen motion graphics con ritmo profesional en Remotion: una base común (cámara, piezas
 con trayectoria, objetos que se transforman, transiciones, tipografía cinética, sonido al fotograma, 60 fps sin
 tirones) y estilos que son ajustes mezclables (oscuro, claro, agencia y sus variantes), más un kit de Remotion listo
-para renderizar. Instalación: `claude plugin marketplace add <owner>/<repo>` y
+para renderizar. Instalación: `claude plugin marketplace add FefeRP/motion-graphics-skills` y
 `claude plugin install motion-graphics@motion-graphics-skills`. Las skills están escritas en español.
 
 ## License
