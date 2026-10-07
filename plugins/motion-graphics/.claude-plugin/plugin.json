@@ -1,0 +1,10 @@
+{
+  "name": "motion-graphics",
+  "version": "1.0.0",
+  "description": "Professional motion graphics in Remotion: a shared engine (60 fps, smooth PCHIP paths, controlled springs, motion blur, morphing objects, kinetic typography, synced sound) and mixable styles (dark keynote, light SaaS, agency) with a ready-to-render kit.",
+  "author": {
+    "name": "motion-graphics-skills contributors"
+  },
+  "license": "MIT",
+  "keywords": ["remotion", "motion-graphics", "video", "animation", "launch-video", "kinetic-typography"]
+}

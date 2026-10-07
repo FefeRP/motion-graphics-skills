@@ -1,0 +1,32 @@
+{
+  "_nota": "Oscura/cinemática (keynote de producto). 10 s, 120 BPM. Tensión 0–1, DROP 1,00, golpes 4,00 y 9,00, silencio 7,85–8,00, impacto 8,00, cola 9–10.",
+  "duracion": 10,
+  "bpm": 120,
+  "fundido": 1.0,
+  "progresion": ["Am", "F", "Dm", "E"],
+  "inicioProgresion": 0,
+  "acordesDef": {
+    "Dm": { "raiz": 26, "acorde": [57, 62, 65, 69], "arp": [62, 65, 69] },
+    "E":  { "raiz": 28, "acorde": [56, 59, 64, 68], "arp": [64, 68, 71] }
+  },
+  "caracter": { "brillo": 0.55, "pegadaBombo": 1.2, "arp": 0.8 },
+  "mezcla": { "bajo": [0.75, 0.85], "acordes": [0.7, 0.6], "charles": [0.6, 0], "reverb": [1.6, 0.4] },
+  "secciones": [
+    { "nombre": "tension", "desde": 0,    "hasta": 1,    "acordes": 0.45, "acordesCorte": 600, "acordesTransp": -12 },
+    { "nombre": "drop",    "desde": 1,    "hasta": 4,    "bombo": true, "bajo": true, "charles": true, "acordes": 0.6, "acordesCorte": 1400, "acordesTransp": -12, "arp": "A", "arpCorte": [1800, 2600] },
+    { "nombre": "cuerpo",  "desde": 4,    "hasta": 7.85, "groove": true, "acordesCorte": 2000, "arp": "B", "arpCorte": [2600, 4000] },
+    { "nombre": "hueco",   "desde": 7.85, "hasta": 8 },
+    { "nombre": "impacto", "desde": 8,    "hasta": 9,    "bombo": true, "bajo": true, "acordes": 0.6, "acordesCorte": 1600, "acordesTransp": -12 },
+    { "nombre": "cola",    "desde": 9,    "hasta": 10 }
+  ],
+  "eventos": [
+    { "t": 0, "tipo": "tics", "hasta": 1, "paso": 0.125, "nivel": 0.9 },
+    { "t": 0, "tipo": "subida", "hasta": 1, "nivel": 0.25 },
+    { "t": 1, "tipo": "golpe", "fuerza": 1.1 }, { "t": 1, "tipo": "crash", "nivel": 0.9 },
+    { "t": 4, "tipo": "golpe", "fuerza": 1.1 }, { "t": 4, "tipo": "crash", "nivel": 1 },
+    { "t": 6, "tipo": "subida", "hasta": 7.85, "nivel": 0.4 },
+    { "t": 7.85, "tipo": "silencio", "hasta": 8, "nivel": 0.02 },
+    { "t": 8, "tipo": "final", "fuerza": 1.15 },
+    { "t": 9, "tipo": "golpe", "fuerza": 1.3 }, { "t": 9, "tipo": "crash", "nivel": 1.1 }
+  ]
+}

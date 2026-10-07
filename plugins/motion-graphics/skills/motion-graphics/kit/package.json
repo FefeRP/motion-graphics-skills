@@ -1,0 +1,28 @@
+{
+  "name": "motion-graphics-kit",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "description": "Kit de motion graphics para Remotion: base común (cámara, piezas, efectos, tipografía cinética) + estilos mezclables.",
+  "scripts": {
+    "dev": "remotion studio",
+    "check": "tsc --noEmit",
+    "render:demos": "node scripts/render.mjs render DemoOscuro && node scripts/render.mjs render DemoClaro && node scripts/render.mjs render DemoAgencia",
+    "sfx": "node scripts/sfx.mjs"
+  },
+  "dependencies": {
+    "@remotion/bundler": "4.0.484",
+    "@remotion/cli": "4.0.484",
+    "@remotion/google-fonts": "4.0.484",
+    "@remotion/motion-blur": "4.0.484",
+    "@remotion/renderer": "4.0.484",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "remotion": "4.0.484"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.7",
+    "typescript": "5.9.3"
+  }
+}

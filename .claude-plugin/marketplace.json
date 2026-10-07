@@ -1,0 +1,14 @@
+{
+  "name": "motion-graphics-skills",
+  "description": "Claude Code skills to make professional, fluid motion graphics in Remotion: a shared engine plus mixable styles.",
+  "owner": {
+    "name": "motion-graphics-skills contributors"
+  },
+  "plugins": [
+    {
+      "name": "motion-graphics",
+      "source": "./plugins/motion-graphics",
+      "description": "Base engine (camera, pieces with trajectories, morphing objects, transitions, kinetic type, sound) + dark, light and agency styles you can mix. Includes a ready-to-render Remotion kit."
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "_nota": "Luminosa, pop electrónico amable. 10 s, 120 BPM. Golpe 0,00; corte con fuga 4,50–4,90 y vuelta 5,00; acentos 5,0/5,3/5,6/5,9/6,2; golpe 6,60; golpe final 9,50 y cola.",
+  "duracion": 10,
+  "bpm": 120,
+  "fundido": 0.5,
+  "progresion": ["C", "G", "Am", "F"],
+  "inicioProgresion": 0,
+  "caracter": { "brillo": 1.5, "pegadaBombo": 0.5, "arp": 1.3, "lead": 1.1 },
+  "mezcla": { "bombo": [0.7, 0], "bajo": [0.38, 0.6], "acordes": [0.5, 0.45], "palmas": [1.7, 0], "charles": [1.0, 0] },
+  "secciones": [
+    { "nombre": "arranque",  "desde": 0,   "hasta": 4.5, "groove": true, "acordes": 0.6, "acordesCorte": 3200, "arp": "A", "arpCorte": [5000, 6500] },
+    { "nombre": "corte",     "desde": 4.5, "hasta": 5,   "palmas": "filtradas" },
+    { "nombre": "pulso",     "desde": 5,   "hasta": 6.6, "acordes": 0.45, "acordesCorte": 2600 },
+    { "nombre": "estribillo","desde": 6.6, "hasta": 9.5, "groove": true, "acordes": 0.6, "acordesCorte": 3400, "arp": "B", "arpCorte": [6500, 7000], "lead": true },
+    { "nombre": "cola",      "desde": 9.5, "hasta": 10 }
+  ],
+  "eventos": [
+    { "t": 0, "tipo": "golpe", "fuerza": 0.7, "grave": 0.4 }, { "t": 0, "tipo": "crash", "nivel": 0.8 },
+    { "t": 4.5, "tipo": "subida", "hasta": 4.9, "nivel": 0.35 },
+    { "t": 4.5, "tipo": "redoble", "hasta": 4.9 },
+    { "t": 4.9, "tipo": "silencio", "hasta": 5, "nivel": 0.1 },
+    { "t": 5, "tipo": "golpe", "fuerza": 0.6, "grave": 0.4 }, { "t": 5, "tipo": "crash", "nivel": 0.7 },
+    { "t": 5, "tipo": "acentos", "tiempos": [5.0, 5.3, 5.6, 5.9, 6.2], "fuerza": 0.85 },
+    { "t": 6.6, "tipo": "golpe", "fuerza": 0.75, "grave": 0.4 }, { "t": 6.6, "tipo": "crash", "nivel": 0.85 },
+    { "t": 9.5, "tipo": "final", "fuerza": 0.85, "grave": 0.4, "raiz": 36, "notas": [48, 60, 64, 67, 72, 76, 79] }
+  ]
+}
