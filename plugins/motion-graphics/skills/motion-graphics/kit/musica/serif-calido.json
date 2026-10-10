@@ -1,0 +1,43 @@
+{
+  "_nota": "Recreación serif cálido (keynote cálida). 11,5 s a 124 BPM. Grave en 0–1,1, golpes 2,90 / 3,45 / 4,32 / 6,00 / 6,50 / 7,05 / 8,12 / 9,20 / 10,03 y final 10,57.",
+  "duracion": 11.5,
+  "bpm": 124,
+  "fundido": 0.6,
+  "progresion": ["Am", "F", "Dm", "E"],
+  "progresionIntro": ["Am", "F"],
+  "inicioProgresion": 0,
+  "acordesDef": {
+    "Dm": { "raiz": 26, "acorde": [57, 62, 65, 69], "arp": [62, 65, 69] },
+    "E":  { "raiz": 28, "acorde": [56, 59, 64, 68], "arp": [64, 68, 71] }
+  },
+  "caracter": { "brillo": 0.5, "pegadaBombo": 1.1, "arp": 0.7, "lead": 0.8 },
+  "mezcla": { "bajo": [0.9, 0.7], "acordes": [0.65, 0.6], "charles": [0.5, 0], "reverb": [1.5, 0.4] },
+  "secciones": [
+    { "nombre": "luz",     "desde": 0,    "hasta": 1.1,  "bajo": true, "acordes": 0.5, "acordesCorte": 700, "acordesTransp": -12 },
+    { "nombre": "saludo",  "desde": 1.1,  "hasta": 2.85, "acordes": 0.6, "acordesCorte": 1400, "acordesTransp": -12, "arp": "A", "arpCorte": [1500, 3200] },
+    { "nombre": "caja",    "desde": 2.85, "hasta": 5.75, "groove": true, "acordesCorte": 1800, "arp": "A", "arpCorte": [2600, 3600], "lead": true },
+    { "nombre": "boton",   "desde": 5.75, "hasta": 6.4,  "bajo": true, "acordes": 0.5, "acordesCorte": 900, "acordesTransp": -12 },
+    { "nombre": "hueco",   "desde": 6.4,  "hasta": 6.5 },
+    { "nombre": "codigo",  "desde": 6.5,  "hasta": 9.1,  "groove": true, "acordesCorte": 2200, "arp": "B", "arpCorte": [3000, 4200] },
+    { "nombre": "palabra", "desde": 9.1,  "hasta": 10.5, "bajo": true, "acordes": 0.6, "acordesCorte": 1200, "acordesTransp": -12 },
+    { "nombre": "final",   "desde": 10.5, "hasta": 11.5 }
+  ],
+  "eventos": [
+    { "t": 0.05, "tipo": "golpe", "fuerza": 0.8, "grave": 1.4 },
+    { "t": 0.23, "tipo": "golpe", "fuerza": 0.9, "grave": 1.4 },
+    { "t": 0, "tipo": "subida", "hasta": 1.0, "nivel": 0.25 },
+    { "t": 1.07, "tipo": "golpe", "fuerza": 0.7 }, { "t": 1.07, "tipo": "crash", "nivel": 0.6 },
+    { "t": 2.9, "tipo": "golpe", "fuerza": 1.0 }, { "t": 2.9, "tipo": "crash", "nivel": 0.8 },
+    { "t": 3.45, "tipo": "golpe", "fuerza": 0.6 },
+    { "t": 4.32, "tipo": "golpe", "fuerza": 0.6 },
+    { "t": 5.2, "tipo": "subida", "hasta": 6.0, "nivel": 0.3 },
+    { "t": 6.0, "tipo": "golpe", "fuerza": 1.1, "grave": 1.3 },
+    { "t": 6.4, "tipo": "silencio", "hasta": 6.5, "nivel": 0.03 },
+    { "t": 6.5, "tipo": "golpe", "fuerza": 1.0 }, { "t": 6.5, "tipo": "crash", "nivel": 0.9 },
+    { "t": 7.05, "tipo": "golpe", "fuerza": 0.8 },
+    { "t": 8.12, "tipo": "golpe", "fuerza": 0.6 },
+    { "t": 9.2, "tipo": "golpe", "fuerza": 0.9, "grave": 1.3 },
+    { "t": 10.03, "tipo": "golpe", "fuerza": 0.9 }, { "t": 10.03, "tipo": "crash", "nivel": 0.7 },
+    { "t": 10.57, "tipo": "final", "fuerza": 1.05 }
+  ]
+}

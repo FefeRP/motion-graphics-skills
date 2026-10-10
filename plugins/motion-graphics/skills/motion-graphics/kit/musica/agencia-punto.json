@@ -1,0 +1,30 @@
+{
+  "_nota": "Reel agencia-punto (recreación de ref-agencia-reel). 15 s, 128 BPM (compás 1,875 s). Compás 1 solo arpegio filtrado (los clics los ponen los sfx), bombo a negras desde el compás 2, redoble a semicorcheas 12,6–13,1 s, silencio corto y golpe final en 13,125 s con cola.",
+  "duracion": 15,
+  "bpm": 128,
+  "fundido": 1.2,
+  "progresion": ["Am", "F", "C", "G"],
+  "inicioProgresion": 0,
+  "caracter": { "brillo": 1.1, "pegadaBombo": 1.6, "arp": 0.9 },
+  "mezcla": { "bombo": [1.15, 0], "bajo": [0.7, 0.8], "fx": [0.8, 0] },
+  "secciones": [
+    { "nombre": "punto",   "desde": 0,      "hasta": 1.875,  "acordes": 0.25, "acordesCorte": 700, "arp": "A", "arpCorte": [900, 3000] },
+    { "nombre": "groove",  "desde": 1.875,  "hasta": 5.625,  "groove": true, "arp": "A", "arpCorte": [5000, 5500] },
+    { "nombre": "cumbre",  "desde": 5.625,  "hasta": 11.25,  "groove": true, "arp": "B", "arpCorte": [6000, 6500], "lead": true },
+    { "nombre": "anillos", "desde": 11.25,  "hasta": 13.07,  "groove": true, "arp": "A", "arpCorte": [5000, 8000] },
+    { "nombre": "hueco",   "desde": 13.07,  "hasta": 13.125 },
+    { "nombre": "final",   "desde": 13.125, "hasta": 15 }
+  ],
+  "eventos": [
+    { "t": 1.875, "tipo": "golpe", "fuerza": 0.8 }, { "t": 1.875, "tipo": "crash", "nivel": 0.7 },
+    { "t": 3.75,  "tipo": "golpe", "fuerza": 0.7 },
+    { "t": 5.625, "tipo": "golpe", "fuerza": 0.8 }, { "t": 5.625, "tipo": "crash", "nivel": 0.7 },
+    { "t": 7.5,   "tipo": "golpe", "fuerza": 0.7 },
+    { "t": 9.375, "tipo": "golpe", "fuerza": 0.8 }, { "t": 9.375, "tipo": "crash", "nivel": 0.7 },
+    { "t": 11.25, "tipo": "golpe", "fuerza": 0.8 },
+    { "t": 12.6,  "tipo": "subida", "hasta": 13.07, "nivel": 0.45 },
+    { "t": 12.6,  "tipo": "redoble", "hasta": 13.07 },
+    { "t": 13.07, "tipo": "silencio", "hasta": 13.125, "nivel": 0.02 },
+    { "t": 13.125, "tipo": "final", "fuerza": 1.3 }
+  ]
+}
