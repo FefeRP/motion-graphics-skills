@@ -13,3 +13,7 @@ export * from "./efectos-2";
 export * from "./captura";
 export * from "./fidelidad";
 export * from "./humo";
+export * from "./taller";
+export * from "./puntos";
+export * from "./cobre";
+export * from "./cristal";

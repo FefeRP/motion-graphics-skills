@@ -5,7 +5,7 @@
 import React from "react";
 import { AbsoluteFill } from "remotion";
 import { Camara2D, Contador, EstiloProvider, Flash, FondoEstilo, Forma, Golpe, Mascara, Movil, Onda, PorLetra, Progreso, Tarjeta, mezclar, tramo, useCurva, useEstilo, useGolpe, useMuelle, useSeg, Sonido, type TokensEstilo } from "../base";
-import { ESTILOS, type NombreEstilo } from "../capas";
+import { TODOS_ESTILOS as ESTILOS, type NombreEstiloTodos as NombreEstilo } from "../capas/todos";
 
 export type PropsMezcla = { estilo: NombreEstilo; ajustes?: Partial<TokensEstilo> };
 /** 18 pulsos del ritmo del estilo (la escena entera está medida en pulsos). */
