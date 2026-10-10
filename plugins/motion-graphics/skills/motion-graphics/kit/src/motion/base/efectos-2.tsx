@@ -538,9 +538,11 @@ export const ANILLOS_ORBITA: AnilloOrbita[] = [{ r: 1, giro: 132, iconos: [-104,
  * Anillos concéntricos de luz con iconos en discos que giran en sentidos alternos y FRENAN juntos mientras la cámara se
  * aleja (entra a ×1,85, llega a ×1 en 1,5 s, desenfocada los primeros 0,17 s). En `sale`, colapso acelerado al centro
  * (×0,40 en 0,47 s) con los iconos apagándose antes. `children` va en el centro (texto).
+ * `forma="pastilla"`: cada elemento va en una pastilla de ancho automático (nombres de integraciones, etiquetas)
+ * en vez de un disco de `tamIcono`; entonces `tamIcono` es el alto de la pastilla.
  */
-export const Orbitas: React.FC<{ t0?: number; sale?: number; R?: number; iconos?: React.ReactNode[]; anillos?: AnilloOrbita[]; color?: string; disco?: string; tamIcono?: number; grosor?: number; children?: React.ReactNode }> = ({
-  t0 = 0, sale, R = 246, iconos = [], anillos = ANILLOS_ORBITA, color, disco = "#F4F7F7", tamIcono = 84, grosor = 7.5, children,
+export const Orbitas: React.FC<{ t0?: number; sale?: number; R?: number; iconos?: React.ReactNode[]; anillos?: AnilloOrbita[]; color?: string; disco?: string; tamIcono?: number; grosor?: number; forma?: "disco" | "pastilla"; children?: React.ReactNode }> = ({
+  forma = "disco", t0 = 0, sale, R = 246, iconos = [], anillos = ANILLOS_ORBITA, color, disco = "#F4F7F7", tamIcono = 84, grosor = 7.5, children,
 }) => {
   const t = useSeg();
   const est = useEstilo();
@@ -565,8 +567,9 @@ export const Orbitas: React.FC<{ t0?: number; sale?: number; R?: number; iconos?
         const ang = ((a0 + a.giro * p) * Math.PI) / 180, rr = R * a.r * (1 + 0.05 * (j % 2 ? 1 : -1));
         const ic = iconos[n++];
         return (
-          <div key={`${i}-${j}`} style={{ position: "absolute", left: 960 + rr * Math.cos(ang) - tamIcono / 2, top: 540 + rr * Math.sin(ang) - tamIcono / 2, width: tamIcono, height: tamIcono,
-            borderRadius: "50%", background: disco, opacity: apaga, display: "grid", placeItems: "center", boxShadow: "0 6px 24px rgba(0,0,0,0.35), inset 0 -4px 10px rgba(0,0,0,0.08)" }}>{ic}</div>
+          <div key={`${i}-${j}`} style={{ position: "absolute", left: 960 + rr * Math.cos(ang), top: 540 + rr * Math.sin(ang), transform: "translate(-50%, -50%)", height: tamIcono,
+            ...(forma === "pastilla" ? { padding: `0 ${Math.round(tamIcono * 0.42)}px`, whiteSpace: "nowrap" as const } : { width: tamIcono }),
+            borderRadius: forma === "pastilla" ? tamIcono : "50%", background: disco, opacity: apaga, display: "grid", placeItems: "center", boxShadow: "0 6px 24px rgba(0,0,0,0.35), inset 0 -4px 10px rgba(0,0,0,0.08)" }}>{ic}</div>
         );
       }))}
       <AbsoluteFill style={{ display: "grid", placeItems: "center" }}>{children}</AbsoluteFill>

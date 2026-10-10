@@ -11,3 +11,5 @@ export * from "./sonido";
 export * from "./efectos";
 export * from "./efectos-2";
 export * from "./captura";
+export * from "./fidelidad";
+export * from "./humo";

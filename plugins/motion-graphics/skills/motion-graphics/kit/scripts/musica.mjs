@@ -14,7 +14,7 @@
 //            "silencio" {hasta, nivel (0.02)} (baja TODA la mezcla, colas incluidas; rampa de 15 ms antes de t, vuelve de golpe en hasta)
 //   mezcla: { bus: [volumen, bombeo 0–1] } (solo los buses que cambien: bombo palmas charles bajo acordes arp lead fx eco reverb)
 //   caracter: { brillo (×cortes de acordes/arp/lead, 1), pegadaBombo (×clic de ataque del bombo, 1), acordes/arp/lead (×volumen, 1) }
-// Ejemplos: motion/musica/*.json. Con --config, el informe da además el RMS 50 ms antes/después de cada golpe.
+// Ejemplos: musica/*.json. Con --config, el informe da además el RMS 50 ms antes/después de cada golpe.
 // Flujo: notas → buses (con bombeo, eco y reverb) → limitador propio → loudnorm de ffmpeg en dos pasadas → WAV 44,1 kHz 16 bits.
 import fs from "node:fs";
 import os from "node:os";

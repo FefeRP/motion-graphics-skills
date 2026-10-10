@@ -1,6 +1,6 @@
 ---
 name: motion-graphics
-description: Base común para hacer motion graphics con ritmo profesional en Remotion (lanzamientos de producto, promos, intros, reels, demos de app). Úsala SIEMPRE antes de cualquier vídeo animado y después ajusta el estilo (oscuro, claro, agencia, sus variantes o una mezcla). Cubre cómo estudiar el material del usuario (web, capturas, logo), las tres vías para enseñar una interfaz (recrearla, captura entera, recortar piezas), el motor fluido (cámara, piezas con trayectoria, objetos que se transforman, transiciones, tipografía cinética, sonido) y cómo comprobar el resultado.
+description: Base común para hacer motion graphics con ritmo profesional en Remotion (lanzamientos de producto, promos, intros, reels, demos de app). Úsala SIEMPRE antes de cualquier vídeo animado y después ajusta el estilo (oscuro, claro, agencia, sus variantes o una mezcla). Cubre cómo estudiar el material del usuario (web, capturas, logo, código), las tres vías para enseñar una interfaz (recrearla, captura entera, recortar piezas) con un proceso OBLIGATORIO de fidelidad para que la interfaz recreada sea idéntica a la real (fuente de verdad, tokens copiados, comparación con capturas y lista de comprobación), el motor fluido (cámara, piezas con trayectoria, objetos que se transforman, transiciones, tipografía cinética, sonido) y cómo comprobar el resultado.
 ---
 
 # Motion graphics · base común
@@ -13,30 +13,37 @@ composición en `src/motion/videos/<nombre>.tsx` partiendo de la demo del estilo
 Motor: hoy solo Remotion. La base no depende de nada específico de Remotion salvo en `tiempo.ts` (reloj), `camara.tsx`
 (desenfoque) y `sonido.tsx`; si algún día se añade otro motor, esos tres ficheros son el adaptador.
 
-## 1. Antes de animar: estudia el material del usuario a fondo
-1. **Recoge lo real**: su web (captura a 1920×1080 a escala 2× con un navegador sin cabeza; espera a que cargue y
-   quita banners de cookies, chats y promos flotantes antes de la foto), capturas de su app/panel, su logo (SVG o PNG
-   transparente), su paleta y su tipografía (mira el CSS: `font-family`, colores de botones, radios, sombras).
+## 1. Antes de animar: estudia el producto real a fondo
+1. **Recoge lo real**: su web y su app (capturas de referencia con `node scripts/capturar.mjs`, ver §2b), su logo (SVG o
+   PNG transparente), su código si lo tienes (CSS, tokens, configuración de Tailwind, componentes), sus fuentes y sus
+   iconos. Antes de capturar, quita banners de cookies, chats y promos flotantes.
 2. **Inventario**: lista las piezas que el vídeo va a enseñar (botones, tarjetas, gráficas, tablas, menús, iconos,
-   textos exactos, precios, cifras) y anota de cada una su medida, color, radio, borde, sombra y tipografía. Mira con
-   zoom: un 1 px de borde, un degradado sutil o un icono concreto es lo que hace que se reconozca.
+   textos exactos, precios, cifras) y de cada una anota su medida, color, radio, borde, sombra, tipografía y estados.
+   Mira con zoom: un 1 px de borde, un degradado sutil o un icono concreto es lo que hace que se reconozca.
 3. **Copia fielmente**: mismos textos, mismos números, mismos iconos y colores. Lo "bonito" se añade en el movimiento,
    la luz y la composición, no inventando datos ni rediseñando la interfaz.
 4. **Nunca datos privados**: si una captura trae nombres, correos, IPs o facturas de terceros, cámbialos por datos de
-   demostración o difumínalos.
+   demostración del propio producto (sus semillas, fixtures o la maqueta de su web) o difumínalos.
 
 ## 2. Tres vías para enseñar una interfaz (elige según la situación)
 ### Vía 1 · Recrear la interfaz como componentes (la preferida para un producto)
 Cuándo: el vídeo enseña TU producto y quieres que cada parte se anime (números que cuentan, consola que se escribe,
 filas que se reordenan, botones que se pulsan). Con capturas solo puedes mover la imagen entera.
-Cómo: componentes React con los tokens del estilo (`Tarjeta`, o tus propias primitivas `Caja`, `Barra`, `Icono`,
-`Grafica`) copiando medidas/colores del inventario; cada pieza dentro de un `Movil` con trayectoria propia.
+**Obligatorio: sigue el proceso de fidelidad del §2b.** Una recreación "parecida" se nota al instante y hace que el
+producto parezca otro. La recreación se construye con los tokens DEL PRODUCTO (sus colores, su letra, sus radios), no
+con los del estilo del vídeo: el estilo (§4) solo decide el fondo, la luz, el ritmo, las transiciones y los rótulos que
+van FUERA de la interfaz.
+Cómo: componentes React con la MISMA estructura que el original (si el producto usa grid/flex, tú también: Remotion
+pinta con Chrome, así que el mismo CSS da el mismo resultado), cada pieza dentro de un `Movil` con trayectoria propia.
 Ejemplos concretos: tarjeta de servidor con barras de CPU/RAM que se llenan (`Barra` + `Contador`); consola que se
 escribe línea a línea (`Teclea` con 200–260 letras/s); gráfica SVG que se dibuja (`strokeDasharray` 1→0) y sigue viva
 (la línea ondula con `Math.sin(i*0.55 + t*2.2)`); selector de planes donde el elegido pasa al frente (z +220, escala
 1,06–1,12, borde de acento) y los demás se desenfocan 3 px; botón «Comprar» que se pulsa (escala 0,93 en 2–3
 fotogramas) y se transforma en una píldora y luego en un anillo de progreso (`Forma` → `Progreso` + `Contador`).
 Imagen solo para el arte (fotos, portadas, avatares, logo): recórtala "cover" para que nunca asome lo que la rodea.
+Ejemplo completo de antes/después: composición `DemoFidelidad` (`src/motion/demos/fidelidad.tsx`) con el producto de
+ejemplo de `ejemplos/fidelidad/pulso` (su «código real» y su captura): la versión «a ojo» difiere un 24 % de los
+píxeles de la captura real; la que sigue el proceso, un 0 %.
 
 ### Vía 2 · La captura entera (`Captura`)
 Cuándo: lo importante es reconocer la pantalla tal cual (una web conocida, un tutorial, "así se ve hoy").
@@ -59,6 +66,72 @@ Cómo limpiarla:
 - **Sombras**: recorta SIN la sombra de la captura y pon la sombra en Remotion (`Pieza` ya lleva la del estilo); así
   la pieza puede flotar en 3D sin una sombra pegada que delate el recorte.
 - **Esquinas**: redondea con `radio` en `Pieza`, no en el PNG. **Nitidez**: captura a 2× para que el zoom no emborrone.
+
+## 2b. Fidelidad de la interfaz recreada: proceso OBLIGATORIO (vía 1)
+No dibujes ni un componente hasta tener los pasos F1–F4. No des una escena por buena sin pasar F5–F6. Si algo no se
+puede copiar (falta el código, la fuente es de pago…), dilo al usuario y apúntalo como desviación: nunca lo rellenes
+"a ojo" en silencio.
+
+**F1 · Localiza la fuente de verdad** (por este orden de prioridad):
+1. El código del producto: CSS globales y de componentes, variables CSS, `tailwind.config.*`, ficheros de tema/tokens,
+   los componentes de la pantalla que vas a enseñar (para la estructura y los estados) y los textos (plantillas,
+   ficheros de traducción). `node scripts/extraer-tokens.mjs <carpeta-del-producto> --salida fidelidad/tokens.md` lista
+   variables CSS, colores, radios, sombras, familias y tamaños de letra, pesos, la librería de iconos y los SVG de logo,
+   con su `fichero:línea` y ordenados por frecuencia (los repetidos son los tokens de verdad). Después LEE los ficheros
+   que señala: el informe dice dónde mirar, no sustituye a leerlos.
+2. Los recursos de marca: logos e isotipos en SVG (úsalos tal cual, nunca redibujados ni recoloreados), las fuentes
+   (Google Fonts con `@remotion/google-fonts/<Familia>`; si son propias, sus .woff2 con `useFuenteLocal`) y los iconos.
+3. Capturas de referencia de cada pantalla que vas a recrear, al tamaño real de la interfaz:
+   `node scripts/capturar.mjs <url | fichero.html> referencias/<pantalla>.png --ancho 1440 --alto 900` (si hace falta
+   sesión iniciada, captúrala tú desde el navegador a ese mismo tamaño). Las capturas son SOLO referencia para medir y
+   comparar: en la vía 1 no se incrustan nunca en el vídeo.
+4. Sin código ni capturas (solo una idea): pide al usuario capturas o acceso. Si no los hay, avisa de que la
+   recreación será aproximada.
+
+**F2 · Extrae y copia tal cual** a un fichero de tokens del vídeo (p. ej. `src/motion/videos/<x>/producto.ts`),
+cada valor con un comentario de dónde sale (`// --color-primary, app/globals.css:12`):
+- colores (fondo, superficies, bordes, texto principal y apagado, primario, éxito/aviso/peligro y sus fondos);
+- tipografía: familia, pesos, tamaños, interlineado y tracking de cada nivel (títulos, cuerpo, etiquetas, cifras);
+- radios, grosores de borde, sombras (la cadena entera), espaciados (paddings, gaps, márgenes) y tamaños fijos
+  (alto de barra, ancho del menú lateral, alto de fila, alto de botón);
+- iconos: la MISMA librería y los mismos nombres (instala la librería de React que use el producto, p. ej.
+  `lucide-react`, e importa los mismos iconos; o copia sus SVG y usa `IconoMascara`). Nunca "uno parecido";
+- estados que aparecen en el vídeo: normal, hover, activo/seleccionado, foco, deshabilitado, vacío, cargando, éxito y
+  error, con su aspecto real (mira las clases o los estilos de cada estado en el código).
+
+**F3 · Misma disposición y proporciones**: construye cada pantalla a escala 1:1, al mismo ancho que la captura de
+referencia (`Lienzo` de 1440×900, por ejemplo), con la misma estructura (columnas del grid, orden de los elementos,
+alineaciones) y luego deja que la cámara la mueva y la acerque. No reescales a ojo las piezas para que "quepan": si no
+caben, encuadra con la cámara. Mientras construyes, pon `<Calco imagen="referencias/<pantalla>.png" modo="encima"
+opacidad={0.5} />` encima para cuadrar al píxel, y quítalo al terminar.
+
+**F4 · Textos y datos reales**: los mismos textos de la interfaz (menús, botones, títulos, etiquetas, avisos), en el
+mismo idioma y con las mismas mayúsculas, y datos de ejemplo realistas sacados del propio producto (su catálogo de
+demo, sus fixtures, la maqueta de su web), con su formato real de números, monedas y fechas (`Contador` usa
+separador de miles). Prohibido "Lorem ipsum", "John Doe", "Campaign A" o cifras redondas inventadas.
+
+**F5 · Compara con la captura real**, pantalla por pantalla, con la escena quieta y la cámara a escala 1:
+1. Saca el fotograma: `node scripts/render.mjs stills <Comp> [props.json] <t> --escala 1`.
+2. Compara: `node scripts/comparar-fidelidad.mjs referencias/<pantalla>.png out/<Comp>-<t>.png out/fidelidad.jpg
+   --recorte x,y,ancho,alto` (zona del fotograma donde está la pantalla). Sale una hoja con referencia | render,
+   un mapa de diferencias (lo blanco es lo que no coincide) y un calco al 50 %, más dos cifras. Orientativo para
+   una recreación fiel: diferencia media < 6 y menos del 4 % de píxeles distintos. El ejemplo «a ojo» da 46 y 24 %.
+3. Corrige cada diferencia en su origen (el token o la medida) y repite hasta que el mapa quede casi negro. En el
+   vídeo puedes enseñar el calco con `<Calco modo="diferencia" />`: lo que coincide queda negro.
+
+**F6 · Lista de comprobación** (pásala y apúntala en las notas del vídeo antes de dar la escena por buena):
+- [ ] Logo: el SVG original, sin redibujar, recolorear, deformar ni cambiar su tipografía.
+- [ ] Tipografía: la misma familia y los mismos pesos, tamaños, interlineado y tracking.
+- [ ] Paleta: cada color sale de un token del producto; ninguno inventado ni "parecido".
+- [ ] Iconos: misma librería, mismos iconos y mismo grosor de trazo.
+- [ ] Espaciado y medidas: paddings, gaps, radios, bordes y sombras como el original; la estructura cuadra con el calco.
+- [ ] Textos: idénticos a la interfaz (idioma, mayúsculas, puntuación); datos de ejemplo del propio producto.
+- [ ] Estados: cada estado que se ve (activo, hover, cargando, vacío, éxito/error) es el real.
+- [ ] Comparación F5 hecha con la cifra apuntada; las desviaciones que queden están listadas y justificadas.
+
+**Desviaciones**: si por la historia del vídeo hay que cambiar algo de la interfaz real (otro color, otro texto, una
+pantalla que aún no existe), no lo decidas tú: proponlo al usuario, apúntalo en las notas del vídeo como desviación y
+haz que el resto siga siendo idéntico. El estilo del vídeo NO es un motivo para recolorear la interfaz.
 
 ## 3. Las reglas medidas en 9 referencias profesionales (no negociables)
 1. **Nunca quieto**: algo nuevo cada 0,2–0,5 s (un evento por pulso); la cámara deriva siempre (+1,5–2,5 %/s de zoom o
@@ -87,7 +160,7 @@ Cómo limpiarla:
 Un estilo es solo un conjunto de ajustes (`TokensEstilo`): paleta (`fondo`, `texto`, `acento`, `paleta[]`),
 tipografía (`fuente`, `peso`, `tracking`, `mayusculas`, `fuente2`), ritmo (`ritmo.bpm`), curvas (`curvas.entrada/
 salida/viaje`, `entradaDur`), muelle (`muelle` con `sobrepaso`), luz de fondo (`luz`: foco, halo, liso, degradado,
-manchas) y texturas (viñeta, grano, bokeh, HUD). Todos los componentes de la base leen esos ajustes, así que la misma
+manchas, aurora) y texturas (viñeta, grano, bokeh, HUD). Todos los componentes de la base leen esos ajustes, así que la misma
 escena cambia de carácter cambiando solo el estilo (ver `demos/mezcla.tsx`, que es la misma escena con cualquier estilo).
 - Estilos (realmente distintos): **oscuro** (keynote de producto: casi negro con luz, objetos que se transforman),
   **claro** (intro SaaS: fondo claro, palabras gigantes de desenfocado a nítido, todo muy rápido) y **agencia** (un
@@ -99,6 +172,10 @@ escena cambia de carácter cambiando solo el estilo (ver `demos/mezcla.tsx`, que
 - Mezclar: `mezclar(ESTILOS.oscuro, { acento: "#FF3B5C" })` (otros colores), `mezclar(ESTILOS.claro, { ritmo:
   ESTILOS.agencia.ritmo, muelle: ESTILOS.agencia.muelle })` (claro con la energía de agencia), `mezclar(ESTILOS.oscuro,
   { fuente: "Syne", mayusculas: true })`. Con el color de marca del usuario: cambia `acento` y `luz.colores`.
+- Ejemplo real (lanzamiento SaaS con la marca del cliente: fondo liso con auroras, entradas cortas de intro SaaS):
+  `mezclar(ESTILOS.oscuro, { fondo: "#031C26", acento: "#37B5FE", paleta: ["#37B5FE", "#004AAC", "#7FCBFF"], entradaDur: 0.24,
+  curvas: { ...ESTILOS.oscuro.curvas, salida: ESTILOS.claro.curvas.salida }, luz: { tipo: "aurora", colores: ["#37B5FE", "#004AAC", "#7FCBFF"] } })`.
+  Si el usuario pide «fondo liso» con auroras: la aurora vive solo en su `zona` (arriba), el resto del fondo queda liso.
 
 ## 5. Catálogo de la base (`src/motion/base`)
 Tiempo (`tiempo.ts`): `useSeg()`, `tramo(t,a,b,curva)`, `ventana()`, `CURVAS`, `pchip()`, `pista(claves,t,campos)` (un
@@ -111,7 +188,7 @@ Piezas (`piezas.tsx`): `Movil` (cualquier contenido con trayectoria y estela), `
 Efectos (`efectos.tsx`): `Forma` (objeto puente), `Onda`, `Progreso`, `Flash`, `Deriva`, `ZoomAtraves`, `FugaLuz`,
 `BarridoRadial`, `Glitch`, `Palabra`, `Rodillo`, `Teclea`, `Escaneo`, `Chispas`. Más efectos (`efectos-2.tsx`):
 `ManchasLiquidas`, `FraseVoz`, `FlashCromatico`, `PildoraElastica`, `Estrobo`, `LenteBarril`, `LineaLuz`,
-`ParedPaneles`, `TarjetaBrillo`, `PilaTarjetas`, `Orbitas` (iconos en anillos que frenan juntos), `Seleccion`
+`ParedPaneles`, `TarjetaBrillo`, `PilaTarjetas`, `Orbitas` (iconos en anillos que frenan juntos; `forma="pastilla"` para nombres de integraciones o etiquetas), `Seleccion`
 (cursor que selecciona una palabra), `Tunel` (4 pantallas que se abren hacia la cámara), `Portal` (aro de luz que
 se cruza), `Horizonte` (arco de planeta con haz para la marca final). Todos se ven en la composición `DemoEfectos2`
 (24 s, una sección por efecto). Ayudantes: `clavesOla()`, `palabrasCada()`, `PATRONES_ESTROBO`, `ANILLOS_ORBITA`.
@@ -119,19 +196,36 @@ Límite conocido: `LenteBarril` usa un mapa de desplazamiento SVG de 8 bits (esc
 movimiento, no en planos quietos con texto pequeño.
 Texto (`texto.tsx`): `Descifra`, `Mascara`, `Lineas`, `PorLetra`, `Golpe`, `Contador`, `Neon`, `Anillo`.
 Escenas (`escenas.tsx`): `Escenas` + transiciones (corte, barrido que empuja, zoom, círculo, cortina).
-Acabado (`acabado.tsx`): `FondoEstilo` (fondo según el estilo), `Halo`, `Manchas`, `Vineta`, `Grano`, `Bokeh`,
+Acabado (`acabado.tsx`): `FondoEstilo` (fondo según el estilo), `Aurora` (cortinas de luz que titilan en una `zona`
+sobre fondo liso; `brillo` anímalo con los golpes), `Halo`, `Manchas`, `Vineta`, `Grano`, `Bokeh`,
 `Destello`, `Sombra`, `Hud`. Sonido (`sonido.tsx`): `Sonido sfx={[{t,f,v}]} musica="musica/x.wav"`.
+Humo (`humo.tsx`): `Humo` — humo, gas o aurora fina con un shader WebGL propio (ruido de gradiente, fbm con *domain
+warping* doble y *dithering*). Es la opción cuando la luz tiene que parecer materia y no bloques: `Aurora` se ve en
+cortinas de degradados, `Humo` se ve como gas, sin bandas ni píxeles. Props: `colores` (2–4), `zona`, `brillo`, `vel`,
+`escala` (más = volutas más pequeñas), `densidad`, `torsion` (1–1,6 = gas suave; 3+ = mármol), `estira` (>1 = velos
+horizontales de aurora), `semilla`, `calidad` (1 = píxel a píxel; 0,5 = la mitad, ampliado suave) y `mezcla`. Es
+determinista y necesita WebGL en el render (`chromiumOptions.gl = "swangle"`, ya puesto en `scripts/render.mjs`). Coste
+medido a 1080p y 60 fps en 3 núcleos: unos 0,15 s más por fotograma con dos capas (+20 %). Dos capas con distinta
+`escala` y `semilla` dan profundidad; no subas `torsion` si hay texto encima.
+Fidelidad (`fidelidad.tsx`, §2b): `Calco` (la captura real encima: `encima`, `cortina` o `diferencia`), `IconoMascara`
+(el SVG real del producto, recoloreable), `useFuenteLocal` (su fuente propia desde public/), `Lienzo` (pantalla 1:1).
+Scripts de fidelidad: `capturar.mjs` (capturas de referencia con el Chrome de Remotion), `extraer-tokens.mjs` (fuente
+de verdad del código) y `comparar-fidelidad.mjs` (render contra captura, con cifras).
 
 ## 6. Flujo y comprobación
-1. Material e inventario (§1) → vía (§2) → estilo o mezcla (§4).
+1. Material e inventario (§1) → vía (§2) → si es la vía 1, proceso de fidelidad F1–F4 (§2b) → estilo o mezcla (§4).
 2. **Guion en eventos**: una fila por pulso: "t · qué entra · de qué objeto nace · sonido". Escríbelo antes del código.
 3. **Música**: `node scripts/musica.mjs --config musica/<x>.json public/musica/<x>.wav` (sintetizada, sin derechos de
    terceros; duración, BPM y golpes exactos en el JSON). Sin música, deja la prop `musica` como hueco y todo a un BPM.
 4. **Código**: copia la demo del estilo a `src/motion/videos/<nombre>.tsx`, regístrala con `fps={60}`.
 5. **Fotogramas**: `node scripts/render.mjs stills <Comp> [props.json] 0.5 1.2 …` y hoja de contacto
    (`ffmpeg -i v.mp4 -vf "fps=4,scale=320:-1,tile=8x5" hoja.jpg`). Mira encuadre, solapes, texto legible, restos de
-   captura.
-6. **Render**: `node scripts/render.mjs render <Comp> [props.json]` (≈15–30 s de render por segundo a 60 fps sin GPU).
+   captura. Con interfaz recreada: comparación F5 con la captura real y lista F6 (§2b) ANTES de renderizar entero.
+6. **Render**: `node scripts/render.mjs render <Comp> [props.json]` (≈15–30 s de render por segundo a 60 fps sin GPU;
+   un lanzamiento de 45 s con auroras y desenfoques ≈ 1 h en 3 núcleos). Para corregir un detalle sin rehacerlo todo:
+   `render … --desde 11.5 --hasta 13 --mudo` (solo ese tramo, inicios en múltiplos del fotograma) y
+   `node scripts/empalmar.mjs v.mp4 v2.mp4 tramo.mp4@11.5 [otro.mp4@20.8]` (cambia la imagen de esos tramos y copia el
+   audio de la base).
 7. **Medir**: `node scripts/medir-ritmo.cjs v.mp4` → dif media 4–16, quieto ≤ 10 %, racha ≤ 0,5 s, saltos de 1 fotograma
    ≈ 0 (un pico aislado 3–5× sobre sus vecinos es un salto); `ffmpeg -i v.mp4 -af ebur128=peak=true -f null -` → pico
    < −1 dBFS. Compara lado a lado con la referencia (`hstack`) y, si tienes un revisor de vídeo con IA, pásaselo; no le

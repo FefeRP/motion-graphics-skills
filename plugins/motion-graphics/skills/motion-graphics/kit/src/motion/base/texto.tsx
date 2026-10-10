@@ -23,8 +23,9 @@ export const Descifra: React.FC<{ texto: string; t0: number; dur?: number; style
   return <span style={{ whiteSpace: "pre", ...style }}>{out}</span>;
 };
 
-/** Palabras que suben desde una máscara (bajo su línea) con escalón; salen subiendo. La entrada clásica de titulares. */
-export const Mascara: React.FC<{ texto: string; t0: number; t1?: number; escalon?: number; dur?: number; style?: React.CSSProperties; acento?: string[] }> = ({ texto, t0, t1, escalon = 0.06, dur: durP, style, acento = [] }) => {
+/** Palabras que suben desde una máscara (bajo su línea) con escalón; salen subiendo. La entrada clásica de titulares.
+ * `relleno`: un fondo CSS (p. ej. el degradado del titular de la marca) recortado al texto, palabra a palabra. */
+export const Mascara: React.FC<{ texto: string; t0: number; t1?: number; escalon?: number; dur?: number; style?: React.CSSProperties; acento?: string[]; relleno?: string }> = ({ texto, t0, t1, escalon = 0.06, dur: durP, style, acento = [], relleno }) => {
   const t = useSeg();
   const est = useEstilo();
   const ent = useCurva("entrada");
@@ -37,7 +38,8 @@ export const Mascara: React.FC<{ texto: string; t0: number; t1?: number; escalon
         const s = t1 === undefined ? 0 : tramo(t, t1 + i * escalon * 0.5, t1 + i * escalon * 0.5 + 0.35, CURVAS.acelera);
         return (
           <span key={i} style={{ display: "inline-block", overflow: "hidden", padding: "0.04em 0 0.1em" }}>
-            <span style={{ display: "inline-block", transform: `translateY(${(1 - k) * 105 - s * 105}%)`, color: acento.includes(w) ? est.acento : undefined }}>{w}</span>
+            <span style={{ display: "inline-block", transform: `translateY(${(1 - k) * 105 - s * 105}%)`, color: acento.includes(w) ? est.acento : undefined,
+              ...(relleno ? { background: relleno, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" } : {}) }}>{w}</span>
           </span>
         );
       })}
@@ -97,11 +99,11 @@ export const Golpe: React.FC<{ texto: string; t0: number; t1: number; desde?: nu
   );
 };
 
-/** Cifra que cuenta de `desde` a `hasta` (expo-out, cifras tabulares). */
+/** Cifra que cuenta de `desde` a `hasta` (expo-out, cifras tabulares). Siempre con separador de miles (en es-ES, 4.280 y no 4280). */
 export const Contador: React.FC<{ hasta: number; desde?: number; t0: number; dur?: number; decimales?: number; prefijo?: string; sufijo?: string; style?: React.CSSProperties }> = ({ hasta, desde = 0, t0, dur = 1.2, decimales = 0, prefijo = "", sufijo = "", style }) => {
   const t = useSeg();
   const v = desde + (hasta - desde) * tramo(t, t0, t0 + dur);
-  return <span style={{ fontVariantNumeric: "tabular-nums", ...style }}>{prefijo}{v.toLocaleString("es-ES", { minimumFractionDigits: decimales, maximumFractionDigits: decimales })}{sufijo}</span>;
+  return <span style={{ fontVariantNumeric: "tabular-nums", ...style }}>{prefijo}{v.toLocaleString("es-ES", { minimumFractionDigits: decimales, maximumFractionDigits: decimales, useGrouping: "always" } as unknown as Intl.NumberFormatOptions)}{sufijo}</span>;
 };
 
 /** Texto en contorno que se dibuja (trazo SVG) y luego se rellena: el «neón» de las keynote. */

@@ -23,9 +23,33 @@ horizon logo reveal):
 
 Full-quality MP4s are in [`docs/demos/`](docs/demos).
 
+## Rebuilt UI = the real UI (mandatory fidelity process)
+When the video rebuilds your product's interface as animatable components, it has to look **identical** to the real
+one, not "something similar". The base skill makes Claude follow a mandatory process before drawing anything:
+find the source of truth (your code, CSS variables, Tailwind config, real SVG logos, fonts, icon library, real
+texts), copy colors, type, radii, shadows, spacing, icons and states as they are, rebuild each screen 1:1 with the
+same structure, and then **compare rendered frames with real screenshots** side by side and pass a fidelity
+checklist (logo, type, palette, icons, spacing, texts, states). The kit includes the tools:
+
+```bash
+node scripts/capturar.mjs https://your-app.example/dashboard refs/dashboard.png --ancho 1440 --alto 900   # reference screenshot
+node scripts/extraer-tokens.mjs ../your-app --salida fidelidad/tokens.md   # colors, radii, shadows, fonts, icons… with file:line
+node scripts/comparar-fidelidad.mjs refs/dashboard.png out/Video-3.5.png out/check.jpg --recorte 240,150,1440,900
+```
+
+Before / after on the fictional product in `kit/ejemplos/fidelidad` (`DemoFidelidad`): rebuilt "by eye" differs from
+the real screenshot in 24 % of the pixels; following the process, 0 %.
+
+| Rebuilt by eye (24 % of pixels differ) | Following the process (0 %) |
+|---|---|
+| ![before](docs/fidelidad/antes.jpg) | ![after](docs/fidelidad/despues.jpg) |
+
+![fidelity demo](docs/demos/fidelidad.gif)
+
 ## What's inside
-- **`motion-graphics`** (base skill): how to study the user's material (website, screenshots, logo) and copy it
-  faithfully; **three ways to show an interface** — rebuild it as components (animated piece by piece), use the full
+- **`motion-graphics`** (base skill): how to study the user's material (website, screenshots, logo, code) and copy it
+  faithfully — with a **mandatory fidelity process** for rebuilt interfaces (source of truth, copied tokens, comparison
+  with real screenshots, checklist); **three ways to show an interface** — rebuild it as components (animated piece by piece), use the full
   screenshot in a browser/phone frame, or **cut parts** of the screenshot (a button, a card, a chart) as standalone
   pieces (with a script to crop, remove flat backgrounds and pad them); the rules measured on 9 professional
   references; the mixable style system; the workflow and how to measure the result.
@@ -34,8 +58,8 @@ Full-quality MP4s are in [`docs/demos/`](docs/demos).
 - **`motion-agencia`** · agency reel style (one saturated color per bar, wide display type, HUD).
 - **A Remotion kit** (`plugins/motion-graphics/skills/motion-graphics/kit`): the shared engine (`src/motion/base`),
   the styles (`src/motion/capas`), one demo per style, a style-mixing demo, an effects catalog, synthesized sound
-  effects and music (no third-party rights), and scripts to render, take stills, crop pieces, generate music and
-  measure rhythm.
+  effects and music (no third-party rights), and scripts to render, take stills, crop pieces, generate music,
+  measure rhythm, capture reference screenshots, extract design tokens from code and compare renders with the real UI.
 
 ### The engine in one paragraph
 Everything runs at 60 fps on smooth PCHIP trajectories (no stop-and-go at keyframes, no overshoot unless asked),
@@ -78,6 +102,7 @@ Just ask Claude in a Remotion project, for example:
 - *"Same video but light style, with my brand color #FF3B5C."*
 - *"Agency style but with the calmer rhythm of the dark style."*
 - *"Cut the pricing card and the CPU chart from this screenshot and animate them as separate pieces."*
+- *"Rebuild our dashboard from the code in ../app exactly as it is, and animate the numbers."*
 
 Claude will study your material, choose one of the three ways to show the UI, write the event-by-event script
 (one event per beat), build it with the kit, render stills to check framing, render the video, and measure it
@@ -95,6 +120,7 @@ plugins/motion-graphics/
     motion-claro/SKILL.md
     motion-agencia/SKILL.md
 docs/demos/                              # demo videos and GIFs
+docs/fidelidad/                          # before/after fidelity comparison sheets
 LICENSE                                  # MIT
 ```
 Only Remotion is supported today; the engine keeps Remotion-specific code in three small files (clock, motion blur,
@@ -106,7 +132,9 @@ sound) so other engines can be added later.
 Skills para Claude Code que hacen motion graphics con ritmo profesional en Remotion: una base común (cámara, piezas
 con trayectoria, objetos que se transforman, transiciones, tipografía cinética, sonido al fotograma, 60 fps sin
 tirones) y estilos que son ajustes mezclables (oscuro, claro, agencia y sus variantes), más un kit de Remotion listo
-para renderizar. Instalación: `claude plugin marketplace add FefeRP/motion-graphics-skills` y
+para renderizar. Cuando recrean la interfaz de tu producto, siguen un proceso obligatorio de fidelidad (fuente de
+verdad, tokens copiados, comparación con capturas reales y lista de comprobación) para que sea idéntica a la real.
+Instalación: `claude plugin marketplace add FefeRP/motion-graphics-skills` y
 `claude plugin install motion-graphics@motion-graphics-skills`. Las skills están escritas en español.
 
 ## License

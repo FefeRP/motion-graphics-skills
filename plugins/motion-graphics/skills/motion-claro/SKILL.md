@@ -5,9 +5,14 @@ description: Estilo CLARO de motion graphics (intro de app/SaaS): fondo claro, p
 
 # Estilo claro (intro SaaS)
 
-Lee antes la base: `la skill base `motion-graphics``. Tokens: `CLARO`, `FondoClaro`, `RUEDA_CLARO` en
+Lee antes la skill base `motion-graphics`. Tokens: `CLARO`, `FondoClaro`, `RUEDA_CLARO` en
 `src/motion/capas/index.tsx`. Demo: `src/motion/demos/claro.tsx` (`DemoClaro`, 10 s) → `motion/salida/demo-claro.mp4`.
 
+
+**Interfaz del producto: este estilo no la cambia.** Si el vídeo recrea una pantalla real (vía 1 de la base), sigue el
+proceso de fidelidad de la base (§2b): la pantalla lleva los colores, la letra, los radios, los iconos y los textos DEL
+PRODUCTO, idénticos a su captura real. El estilo solo pone el fondo, la luz, el ritmo, las transiciones y los rótulos
+que van fuera de la interfaz. Nunca recolorees la interfaz con el acento del estilo.
 
 ## Lo que lo define (medido)
 - **Todo es muy rápido**: entradas de **0,12–0,17 s**, palabras que viven 0,29 s y salen en 1–2 fotogramas; 0,85
@@ -48,6 +53,7 @@ teclea · 4,0 scroll · 4,4 selección · 4,5 fuga · 5,0–6,5 cinco palabras �
 7,85 cortinilla · 8,15 botón · 9,0 clic · 9,6 vuelve a línea. Música: `motion/musica/claro.json`.
 
 ## Comprobación
+Con interfaz recreada: comparación con la captura real y lista de fidelidad de la base (§2b, F5–F6) pasadas.
 `medir-ritmo` objetivo: dif media 5–9, quieto ≤ 15 % (la referencia tiene pausas buscadas de 1 s), racha ≤ 1 s, 0 saltos.
 
 ## Variante `claro-lima` (mezcla de claro, no un estilo aparte) — `ESTILOS["claro-lima"]`

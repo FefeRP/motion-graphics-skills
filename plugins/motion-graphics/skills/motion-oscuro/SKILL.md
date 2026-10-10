@@ -5,9 +5,14 @@ description: Estilo OSCURO de motion graphics (keynote de producto): casi negro 
 
 # Estilo oscuro (keynote de móvil keynote + app de concentración + tienda online)
 
-Lee antes la base: `la skill base `motion-graphics``. Tokens: `OSCURO` y `FondoOscuro` en
+Lee antes la skill base `motion-graphics`. Tokens: `OSCURO` y `FondoOscuro` en
 `src/motion/capas/index.tsx`. Demo de referencia: `src/motion/demos/oscuro.tsx` (`DemoOscuro`, 10 s) →
 `motion/salida/demo-oscuro.mp4`. 
+
+**Interfaz del producto: este estilo no la cambia.** Si el vídeo recrea una pantalla real (vía 1 de la base), sigue el
+proceso de fidelidad de la base (§2b): la pantalla lleva los colores, la letra, los radios, los iconos y los textos DEL
+PRODUCTO, idénticos a su captura real. El estilo solo pone el fondo, la luz, el ritmo, las transiciones y los rótulos
+que van fuera de la interfaz. Nunca recolorees la interfaz con el acento del estilo.
 
 ## Lo que lo define (medido)
 - Ritmo: **un evento cada 0,5 s** (keynote de móvil 47 eventos en 23 s), ≈1 cambio de plano por segundo (app de concentración), **0–2 cortes
@@ -53,6 +58,7 @@ píldora · 8,0 estallido · 8,6–9,0 vuelve a punto · 9,0 marca.
 Música: `motion/musica/oscuro.json` (120 BPM, drop 1,0, golpes 4,0/8,0/9,0, silencio 7,85–8,0).
 
 ## Comprobación
+Con interfaz recreada: comparación con la captura real y lista de fidelidad de la base (§2b, F5–F6) pasadas.
 `medir-ritmo` objetivo: dif media 4–7, quieto ≤ 10 %, racha ≤ 0,5 s (sin contar el logo final), 0 saltos. Encuadre:
 el objeto principal ocupa ≥ 25 % del ancho (zoom de cámara 1,4–2,2 en escenas de un objeto).
 

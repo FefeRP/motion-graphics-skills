@@ -1,0 +1,35 @@
+/* «pulso» · producto ficticio de ejemplo para el proceso de fidelidad del kit.
+   Hace de «código real del producto»: la recreación en Remotion debe copiar ESTOS valores, no inventarlos. */
+:root {
+  --pl-bg: #f6f5f2;
+  --pl-surface: #ffffff;
+  --pl-sidebar: #14161b;
+  --pl-sidebar-text: #a9aeb8;
+  --pl-sidebar-active: #22252c;
+  --pl-text: #1b1d22;
+  --pl-muted: #6b7079;
+  --pl-border: #e6e3dd;
+  --pl-primary: #e5484d;
+  --pl-primary-ink: #ffffff;
+  --pl-success: #2f9e66;
+  --pl-success-bg: #e6f4ec;
+  --pl-danger: #d23b3f;
+  --pl-warning-bg: #fbf0dc;
+  --pl-warning: #a8681a;
+
+  --pl-radius-card: 10px;
+  --pl-radius-btn: 8px;
+  --pl-radius-chip: 999px;
+  --pl-shadow-card: 0 1px 2px rgba(20, 22, 27, 0.06), 0 4px 12px rgba(20, 22, 27, 0.05);
+
+  --pl-font: "DM Sans", system-ui, sans-serif;
+  --pl-text-h1: 26px;
+  --pl-text-kpi: 30px;
+  --pl-text-body: 14px;
+  --pl-text-label: 12px;
+
+  --pl-sidebar-w: 232px;
+  --pl-topbar-h: 64px;
+  --pl-gap: 20px;
+  --pl-pad: 28px;
+}

@@ -1,5 +1,6 @@
 // Render y fotogramas de cualquier composición del kit (60 fps, sin GPU).
-//   node scripts/render.mjs render <Composicion> [props.json] [--salida out] [--escala 0.5]
+//   node scripts/render.mjs render <Composicion> [props.json] [--salida out] [--escala 0.5] [--desde s --hasta s] [--mudo] [--concurrencia 3]
+//     --desde/--hasta: solo ese tramo en s (para rehacer un trozo y empalmarlo con ffmpeg) · --mudo: sin audio
 //   node scripts/render.mjs stills <Composicion> [props.json] 0.5 1.2 3 … [--salida out]
 import fs from "node:fs";
 import path from "node:path";
@@ -22,10 +23,13 @@ const composition = await selectComposition({ serveUrl, id: comp, inputProps, ch
 const dir = path.resolve(opt("salida", path.join(RAIZ, "out")));
 fs.mkdirSync(dir, { recursive: true });
 if (paso === "render") {
-  const out = path.join(dir, `${nombre}.mp4`);
+  const desde = opt("desde"), hasta = opt("hasta"), fps = composition.fps;
+  const tramo = desde !== undefined || hasta !== undefined
+    ? [Math.round(Number(desde ?? 0) * fps), Math.min(composition.durationInFrames, Math.round(Number(hasta ?? composition.durationInFrames / fps) * fps)) - 1] : null;
+  const out = path.join(dir, tramo ? `${nombre}-${desde ?? 0}-${hasta ?? "fin"}.mp4` : `${nombre}.mp4`);
   const t0 = Date.now();
   await renderMedia({ composition, serveUrl, codec: "h264", outputLocation: out, inputProps, chromiumOptions, timeoutInMilliseconds,
-    imageFormat: "jpeg", jpegQuality: 95, crf: 16, scale: Number(opt("escala", 1)), audioCodec: "aac", audioBitrate: "256k", concurrency: Number(opt("concurrencia", 3)),
+    imageFormat: "jpeg", jpegQuality: 95, crf: 16, scale: Number(opt("escala", 1)), audioCodec: "aac", audioBitrate: "256k", concurrency: Number(opt("concurrencia", 3)), ...(tramo ? { frameRange: tramo } : {}), ...(resto.includes("--mudo") ? { muted: true } : {}),
     onProgress: ({ progress }) => process.stdout.write(`\r${Math.round(progress * 100)} %  `) });
   console.log(`\nListo en ${Math.round((Date.now() - t0) / 1000)} s → ${out}`);
 } else {

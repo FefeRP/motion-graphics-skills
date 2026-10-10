@@ -19,7 +19,9 @@ export type LuzFondo =
   /** degradado radial suave (fondos claros) */
   | { tipo: "degradado"; colores: [string, string, string] }
   /** manchas de color que fluyen (gradientes vivos) */
-  | { tipo: "manchas"; colores: string[] };
+  | { tipo: "manchas"; colores: string[] }
+  /** cortinas de aurora en la parte alta sobre el fondo liso (`Aurora`) */
+  | { tipo: "aurora"; colores: string[] };
 
 export type TokensEstilo = {
   id: string;
@@ -55,7 +57,7 @@ export type TokensEstilo = {
   muelle?: { stiffness: number; damping: number; mass: number; sobrepaso: number } | null;
   // luz y texturas
   luz?: LuzFondo;
-  texturas?: { vineta?: number; grano?: number; hud?: boolean; bokeh?: number };
+  texturas?: { vineta?: number; grano?: number; hud?: boolean; bokeh?: number; auroraMezcla?: "screen" | "normal" | "plus-lighter" };
 };
 
 export const TOKENS_BASE: TokensEstilo = {

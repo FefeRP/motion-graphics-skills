@@ -1,0 +1,94 @@
+<!doctype html>
+<!-- «pulso» · pantalla «Resumen» del producto ficticio de ejemplo (1440×900). Hace de interfaz REAL: se captura con
+     scripts/capturar.mjs y la recreación en Remotion se compara con esa captura. -->
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<script src="iconos.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 1440px; height: 900px; overflow: hidden; }
+  body { font-family: var(--pl-font); font-size: var(--pl-text-body); color: var(--pl-text); background: var(--pl-bg); -webkit-font-smoothing: antialiased; }
+  .app { display: grid; grid-template-columns: var(--pl-sidebar-w) 1fr; height: 900px; }
+  .lateral { background: var(--pl-sidebar); padding: 20px 14px; display: flex; flex-direction: column; }
+  .logo { display: flex; align-items: center; gap: 10px; color: #fff; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; padding: 0 10px; margin-bottom: 28px; }
+  .logo i { width: 22px; height: 22px; border-radius: 50%; border: 5px solid var(--pl-primary); }
+  .nav a { position: relative; display: flex; align-items: center; gap: 10px; height: 38px; padding: 0 12px; border-radius: var(--pl-radius-btn); color: var(--pl-sidebar-text); font-weight: 500; text-decoration: none; margin-bottom: 2px; }
+  .nav a.activo { background: var(--pl-sidebar-active); color: #fff; }
+  .nav a.activo::before { content: ""; position: absolute; left: -14px; top: 10px; width: 3px; height: 18px; border-radius: 0 2px 2px 0; background: var(--pl-primary); }
+  .usuario { margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: var(--pl-radius-btn); background: var(--pl-sidebar-active); }
+  .usuario b { width: 28px; height: 28px; border-radius: 50%; background: #343843; color: #fff; display: grid; place-items: center; font-size: 11px; }
+  .usuario div { color: #fff; font-size: 13px; font-weight: 500; line-height: 1.25; }
+  .usuario small { display: block; color: var(--pl-sidebar-text); font-size: 12px; font-weight: 400; }
+  .barra { height: var(--pl-topbar-h); display: flex; align-items: center; gap: 12px; padding: 0 var(--pl-pad); border-bottom: 1px solid var(--pl-border); background: var(--pl-surface); }
+  .barra h1 { font-size: var(--pl-text-h1); font-weight: 600; letter-spacing: -0.02em; margin: 0; flex: 1; }
+  .pildora { display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 14px; border: 1px solid var(--pl-border); border-radius: var(--pl-radius-chip); font-size: 13px; color: var(--pl-text); }
+  .boton { display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 16px; border-radius: var(--pl-radius-btn); background: var(--pl-primary); color: var(--pl-primary-ink); font-weight: 600; }
+  .contenido { padding: var(--pl-pad); }
+  .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--pl-gap); }
+  .tarjeta { background: var(--pl-surface); border: 1px solid var(--pl-border); border-radius: var(--pl-radius-card); box-shadow: var(--pl-shadow-card); padding: 20px; }
+  .etiqueta { font-size: var(--pl-text-label); text-transform: uppercase; letter-spacing: 0.06em; color: var(--pl-muted); font-weight: 600; }
+  .valor { font-size: var(--pl-text-kpi); font-weight: 600; letter-spacing: -0.02em; margin-top: 8px; font-variant-numeric: tabular-nums; }
+  .delta { display: inline-block; margin-top: 10px; font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: var(--pl-radius-chip); }
+  .sube { background: var(--pl-success-bg); color: var(--pl-success); }
+  .baja { background: #fbe7e7; color: var(--pl-danger); }
+  .fila2 { display: grid; grid-template-columns: 1.6fr 1fr; gap: var(--pl-gap); margin-top: var(--pl-gap); }
+  .titulo { font-size: 15px; font-weight: 600; margin-bottom: 18px; }
+  .barras { height: 220px; display: flex; align-items: flex-end; gap: 14px; padding-top: 10px; }
+  .barras i { flex: 1; border-radius: 4px 4px 0 0; background: #f8d1d2; }
+  .barras i:last-child { background: var(--pl-primary); }
+  table { width: 100%; border-collapse: collapse; }
+  td { height: 48px; border-top: 1px solid var(--pl-border); font-size: 14px; }
+  td.n { text-align: right; color: var(--pl-muted); font-variant-numeric: tabular-nums; padding-right: 14px; }
+  td.e { text-align: right; width: 90px; }
+  .chip { font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: var(--pl-radius-chip); }
+  .activa { background: var(--pl-success-bg); color: var(--pl-success); }
+  .pausa { background: var(--pl-warning-bg); color: var(--pl-warning); }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="lateral">
+    <div class="logo"><i></i>pulso</div>
+    <nav class="nav" id="nav"></nav>
+    <div class="usuario"><b>ED</b><div>Equipo demo<small>Plan Pro</small></div></div>
+  </aside>
+  <main>
+    <div class="barra">
+      <h1>Resumen</h1>
+      <span class="pildora" id="rango">Últimos 30 días</span>
+      <span class="boton" id="exportar">Exportar</span>
+    </div>
+    <div class="contenido">
+      <div class="kpis">
+        <div class="tarjeta"><div class="etiqueta">Visitantes</div><div class="valor">48.210</div><span class="delta sube">+12,4 %</span></div>
+        <div class="tarjeta"><div class="etiqueta">Conversión</div><div class="valor">3,8 %</div><span class="delta sube">+0,6 pp</span></div>
+        <div class="tarjeta"><div class="etiqueta">Ingresos</div><div class="valor">21.940 €</div><span class="delta baja">−2,1 %</span></div>
+      </div>
+      <div class="fila2">
+        <div class="tarjeta"><div class="titulo">Visitantes por semana</div><div class="barras" id="barras"></div></div>
+        <div class="tarjeta"><div class="titulo">Campañas principales</div>
+          <table>
+            <tr><td>Lanzamiento otoño</td><td class="n">12.480</td><td class="e"><span class="chip activa">Activa</span></td></tr>
+            <tr><td>Newsletter semanal</td><td class="n">8.932</td><td class="e"><span class="chip activa">Activa</span></td></tr>
+            <tr><td>Webinar de producto</td><td class="n">4.115</td><td class="e"><span class="chip pausa">En pausa</span></td></tr>
+            <tr><td>Prueba gratuita</td><td class="n">3.870</td><td class="e"><span class="chip activa">Activa</span></td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script>
+  const MENU = [["resumen", "Resumen", true], ["embudos", "Embudos"], ["audiencias", "Audiencias"], ["informes", "Informes"], ["ajustes", "Ajustes"]];
+  document.getElementById("nav").innerHTML = MENU.map(([i, n, a]) => `<a class="${a ? "activo" : ""}">${icono(i, 18)}${n}</a>`).join("");
+  document.getElementById("rango").insertAdjacentHTML("afterbegin", icono("calendario", 15));
+  document.getElementById("exportar").insertAdjacentHTML("afterbegin", icono("descargar", 16));
+  const B = [38, 44, 41, 52, 49, 58, 61, 57, 66, 72, 69, 84];
+  document.getElementById("barras").innerHTML = B.map((v) => `<i style="height:${(v / 84) * 200}px"></i>`).join("");
+</script>
+</body>
+</html>

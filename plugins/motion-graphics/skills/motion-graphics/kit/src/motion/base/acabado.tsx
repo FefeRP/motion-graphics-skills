@@ -96,6 +96,49 @@ export const Manchas: React.FC<{ colores: string[]; fondo?: string; vel?: number
   );
 };
 
+/**
+ * Aurora: cortinas de luz sobre un fondo LISO (no lo llena: vive en su `zona`). Cada cinta es una fila de columnas
+ * de luz alargadas que siguen una onda que se desplaza; el brillo recorre la cinta (titileo de aurora). Sin `filter`:
+ * la suavidad sale de los degradados, así que es barata. `zona` en % del cuadro [x, y, ancho, alto]; `brillo` 0–1
+ * multiplica la intensidad (anímalo para que la aurora "respire" con los golpes); `vel` = velocidad de la onda.
+ * En fondos oscuros usa `mezcla="screen"`; en claros, `"normal"` con colores saturados.
+ */
+export const Aurora: React.FC<{ colores?: string[]; zona?: [number, number, number, number]; brillo?: number; vel?: number; columnas?: number; mezcla?: "screen" | "normal" | "plus-lighter"; semilla?: number }> = ({
+  colores, zona = [0, 0, 100, 60], brillo = 1, vel = 1, columnas = 16, mezcla = "screen", semilla = 0,
+}) => {
+  const t = useSeg() * vel;
+  const est = useEstilo();
+  const cs = colores ?? [est.acento, ...(est.paleta ?? [])].slice(0, 3);
+  const [zx, zy, zw, zh] = zona;
+  const hex = (n: number) => Math.round(Math.max(0, Math.min(1, n)) * 255).toString(16).padStart(2, "0");
+  return (
+    <AbsoluteFill style={{ pointerEvents: "none", mixBlendMode: mezcla, overflow: "hidden" }}>
+      {cs.map((c, k) => {
+        const s = semilla + k * 1.7;
+        return Array.from({ length: columnas }, (_, i) => {
+          const u = i / (columnas - 1);
+          // la cinta: una onda lenta que se desplaza + otra corta (pliegues)
+          const ola = Math.sin(u * 5.2 + t * 0.55 + s) * 0.55 + Math.sin(u * 11 - t * 0.9 + s * 2) * 0.2;
+          const x = zx + u * zw + Math.sin(t * 0.3 + s + u * 3) * zw * 0.02;
+          const y = zy + zh * (0.42 + 0.22 * ola + 0.12 * (k - (cs.length - 1) / 2));
+          // titileo: un brillo que recorre la cinta
+          const brilla = 0.55 + 0.45 * Math.sin(u * 7 - t * 1.6 + s * 3) ** 2;
+          const alto = zh * (0.55 + 0.25 * Math.sin(u * 4 + t * 0.7 + s));
+          const ancho = (zw / columnas) * 2.6;
+          const a = 0.34 * brillo * brilla * Math.sin(Math.PI * Math.min(1, Math.max(0, u * 1.08 - 0.04)));
+          return (
+            <div key={`${k}-${i}`} style={{
+              position: "absolute", left: `${x - ancho / 2}%`, top: `${y - alto * 0.75}%`, width: `${ancho}%`, height: `${alto}%`,
+              background: `radial-gradient(ellipse 50% 50% at 50% 72%, ${c}${hex(a)} 0%, ${c}${hex(a * 0.55)} 32%, ${c}00 72%)`,
+              transform: `skewX(${Math.sin(u * 3 + t * 0.4 + s) * 12}deg)`,
+            }} />
+          );
+        });
+      })}
+    </AbsoluteFill>
+  );
+};
+
 /** Fondo del estilo actual según su `luz` (foco, halo, liso, degradado, manchas) + viñeta/bokeh de sus texturas. */
 export const FondoEstilo: React.FC<{ intensidad?: number; color?: string }> = ({ intensidad = 1, color }) => {
   const est = useEstilo();
@@ -107,6 +150,7 @@ export const FondoEstilo: React.FC<{ intensidad?: number; color?: string }> = ({
       {luz.tipo === "halo" && <Halo color={color ?? luz.colores[0]} fuerza={0.6 * intensidad} y={50} tam={50} />}
       {luz.tipo === "degradado" && <AbsoluteFill style={{ background: `radial-gradient(ellipse at 50% 45%, ${luz.colores[0]} 0%, ${luz.colores[1]} 60%, ${luz.colores[2]} 100%)` }} />}
       {luz.tipo === "manchas" && <Manchas colores={luz.colores} fondo={est.fondo} />}
+      {luz.tipo === "aurora" && <Aurora colores={luz.colores} brillo={intensidad} zona={[-5, -8, 110, 62]} mezcla={tex.auroraMezcla ?? "screen"} />}
       {tex.bokeh ? <Bokeh color={color ?? est.acento} fuerza={tex.bokeh} /> : null}
       {tex.vineta ? <Vineta fuerza={tex.vineta} /> : null}
       {tex.grano ? <Grano fuerza={tex.grano} /> : null}

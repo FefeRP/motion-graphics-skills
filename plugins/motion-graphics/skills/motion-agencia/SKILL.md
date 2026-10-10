@@ -5,9 +5,14 @@ description: Estilo AGENCIA de motion graphics (reel de estudio): una sección p
 
 # Estilo agencia (reel de estudio)
 
-Lee antes la base: `la skill base `motion-graphics``. Tokens: `AGENCIA`, `COLORES_AGENCIA`, `SYNE`, `SERIF`,
+Lee antes la skill base `motion-graphics`. Tokens: `AGENCIA`, `COLORES_AGENCIA`, `SYNE`, `SERIF`,
 `MONO`, `useTimecode` en `src/motion/capas/index.tsx`. Demo: `src/motion/demos/agencia.tsx` (`DemoAgencia`, 11,25 s) →
 `motion/salida/demo-agencia.mp4`. 
+
+**Interfaz del producto: este estilo no la cambia.** Si el vídeo recrea una pantalla real (vía 1 de la base), sigue el
+proceso de fidelidad de la base (§2b): la pantalla lleva los colores, la letra, los radios, los iconos y los textos DEL
+PRODUCTO, idénticos a su captura real. El estilo solo pone el fondo, la luz, el ritmo, las transiciones y los rótulos
+que van fuera de la interfaz. Nunca recolorees la interfaz con el acento del estilo.
 
 ## Lo que lo define (medido)
 - **Montado sobre la música**: 128 BPM, **cada sección dura un compás (1,875 s)** y cada transición o morph cae en un
@@ -52,5 +57,6 @@ S0 negro: cilindro → láser · S1 azul: navegador + "DISEÑO / & desarrollo we
 "EXPERTOS EN" descifrado, "IA." · S5 negro: "TODO" "EN UNO", silencio, destello, nombre. Música: `motion/musica/agencia.json`.
 
 ## Comprobación
+Con interfaz recreada: comparación con la captura real y lista de fidelidad de la base (§2b, F5–F6) pasadas.
 `medir-ritmo` objetivo: dif media 10–16, quieto ≤ 3 %, racha ≤ 0,3 s. Cada cambio de sección EXACTAMENTE en
 n × 1,875 s.
