@@ -1,6 +1,6 @@
 ---
 name: motion-claro
-description: Estilo CLARO de motion graphics (intro de app/SaaS): fondo claro, palabras gigantes que pasan de desenfocadas a nítidas una por pulso, cada escena sale de un objeto de la anterior (logo → barra de búsqueda, avión → punto → mapa), zoom que atraviesa el logo, fugas de luz, scroll con estela. Variante claro-lima (manchas líquidas, frases que siguen a la voz). Úsala tras la skill base motion-graphics cuando pidan algo claro, amable, tipo intro de app o SaaS.
+description: Estilo CLARO de motion graphics (intro de app/SaaS): fondo claro, palabras gigantes que pasan de desenfocadas a nítidas una por pulso, cada escena sale de un objeto de la anterior (logo → barra de búsqueda, avión → punto → mapa), zoom que atraviesa el logo, fugas de luz, scroll con estela. Variantes claro-lima (manchas líquidas, frases que siguen a la voz) y taller-claro (tarjetas vivas con un solo acento y rejilla de pulso). Úsala tras la skill base motion-graphics cuando pidan algo claro, amable, tipo intro de app o SaaS.
 ---
 
 # Estilo claro (intro SaaS)
@@ -65,3 +65,9 @@ Producto creativo/IA con voz en off. Fondo #FAF9FB, tinta #183527, lima #9CD20A/
 - Palabra gigante por corte seco a ×6 con paneo que frena en seco; botón en primer plano (corte ×5) que llega estirado
   como píldora y se redondea a círculo en 6 fotogramas; al pulsar, disco de acento que crece ×3 y se apaga en 0,33 s.
 - Transiciones entre un mundo claro y uno oscuro: resplandor lima desde el centro o la interfaz que se "quema" a blanco.
+
+## Variante `taller-claro` — `TODOS_ESTILOS["taller-claro"]`
+La mitad clara de `taller` (ver la skill motion-oscuro): blanco roto #F5F3EF, tarjetas blancas, texto #1F1D24, un solo
+acento #FF4F2D, Inter 800 + mono, rejilla de pulso de 28 fotogramas a 60 fps y muelle 180/12. Mosaico de tarjetas vivas
+(`MosaicoVivo`: letra de peso variable, cubo de alambre, barras, trazo, puntos con muelle), contador que rueda y una cifra
+que se convierte en la letra de la marca (`GlifoPuente`). Recreación: composición `RecReelPantalla` (segunda mitad).

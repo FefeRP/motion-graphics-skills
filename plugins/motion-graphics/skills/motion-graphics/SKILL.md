@@ -146,7 +146,8 @@ haz que el resto siga siendo idéntico. El estilo del vídeo NO es un motivo par
    limitado (`useMuelle`, campo `sobrepaso`: 0,1 = 10 %). Nada de vaivenes senoidales en piezas grandes.
 5. **Desenfoque como material**: lo rápido lleva estela direccional (`Movil estela`, `ConDesenfoque` en barridos); lo
    que entra pasa de desenfocado a nítido. **Nunca `filter` en un contenedor `preserve-3d`** (aplana el 3D y las piezas
-   saltan un fotograma).
+   saltan un fotograma), **ni `backdrop-filter` dentro de una cámara 3D** (Chrome deja de pintar media fila en algunos
+   fotogramas: para un cristal esmerilado en 3D usa una copia desenfocada de lo de detrás, recortada por el cristal).
 6. **Luz y profundidad**: lo importante brilla (halo de su color, borde de acento); lo demás se desenfoca o se
    oscurece. Fondo con luz que se mueve, nunca plano y quieto del todo.
 7. **Texto que nunca "aparece"**: se descifra, se teclea, sube por máscara, golpea, se dibuja con luz o entra gigante de
@@ -155,6 +156,13 @@ haz que el resto siga siendo idéntico. El estilo del vídeo NO es un motivo par
    2–9 fotogramas antes del golpe grande. Música + efectos suman: deja el pico por debajo de −1 dBFS.
 9. **Llena el cuadro**: el objeto principal ocupa ≥ 25 % del ancho; piezas pequeñas en un fondo vacío se leen como
    plantilla. Acerca la cámara (escala 1,2–2,2) y comprueba que los rótulos no se salen por los bordes.
+10. **Un hilo conductor**: un mismo objeto atraviesa el vídeo y cambia de papel (un punto que se divide, abre el iris, es
+   el centro de una figura y termina siendo el punto del logo; una cifra que se convierte en la letra de la marca).
+   En las 4 referencias de la cuarta ronda no hay ni un fundido: cada plano nace de un objeto del anterior.
+11. **Rejilla de pulso estricta**: elige el pulso (p. ej. 28 fotogramas a 60 fps ≈ 128,6 BPM) y pon CADA evento en un
+   pulso o medio pulso (botes, cambios de cámara, clics, cortes), con el sonido en el mismo fotograma o 1–2 antes.
+12. **Temperatura de la luz**: lo que entra llega sobreexpuesto o con un halo del acento y se «enfría» a su color en
+   0,2–0,5 s (texto, código, logos); da sensación de energía sin mover más cosas.
 
 ## 4. Universo mezclable: estilos = ajustes, no plantillas cerradas
 Un estilo es solo un conjunto de ajustes (`TokensEstilo`): paleta (`fondo`, `texto`, `acento`, `paleta[]`),
@@ -169,6 +177,20 @@ escena cambia de carácter cambiando solo el estilo (ver `demos/mezcla.tsx`, que
 - Variantes (son mezclas, no estilos nuevos): `oscuro-halo` (halo de marca que late), `oscuro-brasa` (negro puro y luz
   naranja: líneas de luz, tarjetas con brillo, estroboscopios), `oscuro-turquesa` (luz centrada fría, cortes por
   continuidad de velocidad), `claro-lima` (manchas líquidas y frases que siguen a la voz).
+- Variantes de la cuarta ronda (cada una con su recreación de prueba, composición `Rec…`, comparada con su original):
+  - `oscuro-cobre` (`RecSerifCalido`): negro cálido con halos cobre y serif editorial (EB Garamond + Inter), 124 BPM;
+    la regla es que **todo llega con luz y se enfría** (sobreexpuesto → su color en 0,2–0,5 s). Componentes en `cobre.tsx`.
+  - `oscuro-cristal` (`RecPromptCristal`): casi negro con manchas de color distintas en cada escena, interfaz de cristal
+    con contornos blancos de 1–2 px, texto que se escribe con luz, un bloque de color plano (coral) y canales blancos
+    entre paneles; ~100 BPM, sin rebotes. Componentes en `cristal.tsx`.
+  - `agencia-punto` (`RecAgenciaReel`): agencia con UN punto rojo que lo es todo (se divide, abre iris, es el centro y
+    el punto del logo) y una nube de ~600 puntos que cambia de forma; Montserrat 900 + serif recta + HUD tipo DIN,
+    128 BPM, muelles con sobrepaso del 12 %. Componentes en `puntos.tsx`.
+  - `taller` / `taller-claro` (`RecReelPantalla`): «el vídeo enseña la herramienta con la que está hecho» (la escena se
+    mete en su editor de curvas y la curva que se dibuja es la que mueve la pieza); grafito con luz naranja de suelo que
+    pasa a blanco roto, un solo acento, rejilla de pulso estricta (28 fotogramas a 60 fps) y muelle 180/12. Componentes
+    en `taller.tsx`.
+  Todas están en `TODOS_ESTILOS` (`src/motion/capas/todos.ts`) y se mezclan igual que las demás.
 - Mezclar: `mezclar(ESTILOS.oscuro, { acento: "#FF3B5C" })` (otros colores), `mezclar(ESTILOS.claro, { ritmo:
   ESTILOS.agencia.ritmo, muelle: ESTILOS.agencia.muelle })` (claro con la energía de agencia), `mezclar(ESTILOS.oscuro,
   { fuente: "Syne", mayusculas: true })`. Con el color de marca del usuario: cambia `acento` y `luz.colores`.
@@ -210,7 +232,30 @@ medido a 1080p y 60 fps en 3 núcleos: unos 0,15 s más por fotograma con dos ca
 Fidelidad (`fidelidad.tsx`, §2b): `Calco` (la captura real encima: `encima`, `cortina` o `diferencia`), `IconoMascara`
 (el SVG real del producto, recoloreable), `useFuenteLocal` (su fuente propia desde public/), `Lienzo` (pantalla 1:1).
 Scripts de fidelidad: `capturar.mjs` (capturas de referencia con el Chrome de Remotion), `extraer-tokens.mjs` (fuente
-de verdad del código) y `comparar-fidelidad.mjs` (render contra captura, con cifras).
+de verdad del código), `comparar-fidelidad.mjs` (render contra captura, con cifras) y `comparar-video.mjs`
+(recreación contra el vídeo original a lo largo del tiempo: imagen, color y TIMING por segundo, con el desfase que
+mejor encaja; úsalo para aprender una referencia y verificar que la has reproducido).
+Cuarta ronda (técnicas medidas en 4 referencias; props en el JSDoc de cada componente):
+- `puntos.tsx`: `HudCompas` (HUD con casillas de tiempo, compás n/8 y contador de fotogramas), `PuntosDivide` (un
+  punto que se divide en cada tiempo), `IrisAro`, `Corchetes`, `FormaPolar` (círculo ↔ cuadrado ↔ triángulo ↔ flor con
+  estela de contornos), `CajaTransformacion` (caja con 8 tiradores y etiqueta, como en un editor), `NubePuntos` (una
+  nube que pasa por flor, rejilla, plano, esfera, toro y cubo: `formaFlor`, `formaRejilla`, `formaEsfera`…),
+  `TramaOnda` (retícula de medios tonos con onda), `CintaRayas` (tubo de rayas que hace un lazo), `TextoAnillos`
+  (anillos de texto que giran en sentidos alternos), `PuntoSalta` (salto parabólico con squash & stretch).
+- `taller.tsx`: `LetrasCoreografia`, `TrackingRespira`, `EstallidoLetras` (se van todas menos una, que pasa al plano
+  siguiente), `BolaRebote` (bote al pulso con squash & stretch), `VentanaEditor` + `EditorCurvas` (la curva dibujada es
+  la que mueve la pieza), `Interruptor`, `DiscoObturador`, `MosaicoVivo` (con `PesoVariable`, `CuboAlambre`,
+  `RayasCristal`, `BarrasVivas`, `TrazoVivo`, `PuntosMuelle`), `ContadorRodillo`, `GlifoPuente` (una cifra se
+  convierte en la letra de la marca).
+- `cobre.tsx`: `Asterisco` (estrella de brazos irregulares), `Meteoro` (aguja de luz que se apaga en un punto),
+  `MarcaEstalla`, `MarcaBrota` (la palabra se despliega desde una letra y empuja al logo), `Resplandor`, `ArcoChispa` +
+  `TextoDeChispas` (cada palabra nace donde cae un arco de luz), `CajaCristal`, `EcoZoom` (salto de zoom tapado con un
+  fotograma de doble exposición), `BotonPulsa` + `CursorMano`, `OndaChoque`, `CodigoCae` (código que cae caliente y se
+  enfría), `Salida3D`, `GlifoCambia`, `TextoBrasa`.
+- `cristal.tsx`: `TecleaLuz` (una letra por fotograma que nace descifrada con un halo y se enfría; borra igual),
+  `BarraPrompt` (barra de cristal con chips, chispa que pasa a «+», clic que la ilumina), `Cursor`, `Estallido` (bloque
+  plano de rayos irregulares), `Mosaico` (paneles con canales blancos que recorre la cámara), `RedNodos` (conectores en
+  codo que se dibujan hacia iconos), `Chispa` (estrella de 4 puntas como objeto puente), `Roseton`, `FondoCristal`.
 
 ## 6. Flujo y comprobación
 1. Material e inventario (§1) → vía (§2) → si es la vía 1, proceso de fidelidad F1–F4 (§2b) → estilo o mezcla (§4).

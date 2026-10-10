@@ -23,6 +23,30 @@ horizon logo reveal):
 
 Full-quality MP4s are in [`docs/demos/`](docs/demos).
 
+## Learned from references, frame by frame
+Every style and variant comes from studying real motion graphics frame by frame (timing, easing measured per frame,
+sampled palettes, type, layers, sound) and then **recreating them in this engine and checking the recreation against
+the original** with `scripts/comparar-video.mjs` (image, color and timing per second). Round 4 added four variants,
+each with its recreation as a composition in the kit:
+
+| `oscuro-cobre` · warm dark, editorial serif, light that cools | `oscuro-cristal` · glass UI, typing with light, color per scene |
+|---|---|
+| ![](docs/demos/rec-oscuro-cobre.gif) | ![](docs/demos/rec-oscuro-cristal.gif) |
+| **`agencia-punto`** · one red dot drives the whole reel, morphing particle cloud | **`taller`** · the video shows the tool it was made with, strict beat grid |
+| ![](docs/demos/rec-agencia-punto.gif) | ![](docs/demos/rec-taller.gif) |
+
+Verification against the originals (`comparar-video.mjs`, whole clip; timing = correlation of the motion curves, 1 = events
+land on the same frames; color = mean chroma difference, < 8 = same palette):
+
+| Variant | Timing | Color | Notes |
+|---|---|---|---|
+| `oscuro-cobre` | 0.87 | 1.5 | glass box slightly less saturated |
+| `oscuro-cristal` | 0.95 | 2.9 | brand logos replaced by generic glyphs |
+| `agencia-punto` | 0.92 | 5.6 | particle torus a bit streakier |
+| `taller` | 0.81 | 5.4 | original was filmed from a monitor (washed-out colors) |
+
+The original reference videos are not included (they belong to their authors); only our recreations are.
+
 ## Rebuilt UI = the real UI (mandatory fidelity process)
 When the video rebuilds your product's interface as animatable components, it has to look **identical** to the real
 one, not "something similar". The base skill makes Claude follow a mandatory process before drawing anything:

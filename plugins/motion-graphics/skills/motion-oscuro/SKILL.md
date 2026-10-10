@@ -1,6 +1,6 @@
 ---
 name: motion-oscuro
-description: Estilo OSCURO de motion graphics (keynote de producto): casi negro con un foco de luz o un halo de marca, objetos que se transforman unos en otros, texto que se descifra o se dibuja con neón, cortes tapados por destellos o por continuidad de velocidad. Variantes oscuro-halo, oscuro-brasa y oscuro-turquesa. Úsala tras la skill base motion-graphics cuando pidan un lanzamiento de producto o de app, un estilo keynote, algo oscuro y elegante.
+description: Estilo OSCURO de motion graphics (keynote de producto): casi negro con un foco de luz o un halo de marca, objetos que se transforman unos en otros, texto que se descifra o se dibuja con neón, cortes tapados por destellos o por continuidad de velocidad. Variantes oscuro-halo, oscuro-brasa, oscuro-turquesa, oscuro-cobre (serif editorial cálida, luz que se enfría), oscuro-cristal (interfaz de cristal, texto que se escribe con luz, manchas de color por escena) y taller (el vídeo enseña la herramienta con la que está hecho, rejilla de pulso estricta). Úsala tras la skill base motion-graphics cuando pidan un lanzamiento de producto o de app, un estilo keynote, algo oscuro y elegante.
 ---
 
 # Estilo oscuro (keynote de móvil keynote + app de concentración + tienda online)
@@ -79,3 +79,34 @@ el objeto principal ocupa ≥ 25 % del ancho (zoom de cámara 1,4–2,2 en escen
   centro), palabra **seleccionada** (cursor en medio, la caja crece a los dos lados en 0,3 s, tiradores), túnel de
   móviles girando, portal de luz que se estira en barra de búsqueda (escritura rápida que frena) y horizonte de planeta
   que sube con haz de luz para el logo.
+- **`oscuro-cobre`** (asistente o producto premium, cálido): negro cálido-violáceo #0B080C, halos cobre (#6B3E2D,
+  #482820), acento #D87457, **EB Garamond 500** en titulares + Inter en la interfaz y el código, 124 BPM, muelle 170/12
+  (ζ ≈ 0,45) solo en la marca final. Regla: **todo llega con luz y se enfría** (el código cae naranja #E5AC91 y pasa a
+  blanco #F7E5E0 mientras se escribe; las palabras llegan con un bloom que se apaga). Recetas (`cobre.tsx`): `Meteoro`
+  (aguja de luz núcleo #FDF994 que se apaga en un punto) → `MarcaEstalla` (estrella de 12 brazos 0 → 1,2 → 1 en 0,5 s,
+  de melocotón al acento) → `MarcaBrota` (la palabra se despliega desde una letra y empuja la estrella 130 px en 0,73 s,
+  bezier 0,85/0/0,15/1) → `ArcoChispa` + `TextoDeChispas` (cada palabra del saludo nace donde cae un arco) →
+  `CajaCristal` (#261F1E con borde blanco 6 %, halo que se abre y se apaga dentro) → `CursorMano` + `BotonPulsa` (×0,45
+  con ease-in en 7 fotogramas y vuelta expo-out) → `OndaChoque` → `CodigoCae` → `TextoBrasa` («más rápido» con la
+  cámara alejándose) → estrella final con muelle. Saltos de zoom tapados con `EcoZoom` (un fotograma de doble
+  exposición). Recreación: composición `RecSerifCalido`.
+- **`oscuro-cristal`** (asistente de IA, tono tecnológico sereno): casi negro #06070C con **manchas de color distintas
+  en cada escena** que derivan siempre (pizarra #455876, violeta #33284D, cálida #8A5649, marino #25334F; `FondoCristal`),
+  Urbanist 400–600 (también para el código: sin monoespaciada), ~100 BPM, expo-out largos y **ningún rebote**. Recetas
+  (`cristal.tsx`): `TecleaLuz` (una letra por fotograma, nace descifrada con halo azul #6E8EFF que se enfría en 0,33 s;
+  borra igual), `BarraPrompt` (cristal #262542→#54577A, contorno blanco de 1–2 px dibujado desde líneas guía, chips que
+  caen en cascada inclinados −4°, la `Chispa` de 4 puntas se convierte en «+», tras el clic el extremo ondula como una
+  gota y el cristal se enciende de izquierda a derecha), `Estallido` coral #DB7B61 plano de 12 rayos que respira,
+  `Mosaico` con canales blancos de 46 px que la cámara recorre subiendo y paneando, `RedNodos` con conectores en codo.
+  Cortes escondidos en movimiento (la caída sigue al otro lado o zoom con estela), sin fundidos ni flashes.
+  Recreación: composición `RecPromptCristal`.
+- **`taller`** (vídeo que enseña cómo está hecho; tutoriales de producto o de motion): escenario grafito
+  #55524F→#2A2A2C→#141415 con cúpula de luz naranja #FF5A1F pegada abajo, que pasa a `taller-claro` (blanco roto
+  #F5F3EF, tarjetas blancas) con un círculo naranja que llena la pantalla (ease-in de 4 fotogramas) y se recoge en una
+  tarjeta (ease-out de 7). Un solo acento #FF4F2D, Inter 800–900 + mono. **Rejilla de pulso estricta**: 28 fotogramas a
+  60 fps (128,6 BPM) para TODO (botes, cámara, clics, contador). Muelle 180/12 (sobrepaso 20 %, medio periodo 0,27 s).
+  Recetas (`taller.tsx`): `LetrasCoreografia`, `TrackingRespira`, `EstallidoLetras` (se van todas menos una), `BolaRebote`
+  (parábola de 14 fotogramas a 30 fps, +30 % de alto al caer), `VentanaEditor` + `EditorCurvas` (la escena retrocede
+  dentro de su editor y la curva dibujada es la que mueve la bola), `Interruptor`, `DiscoObturador`, `MosaicoVivo`,
+  `ContadorRodillo` (quint-out ~1 s + rodillo final de 4 fotogramas) y `GlifoPuente` (el «0» de la cifra se convierte
+  en la letra del logo, quad-out de 0,53 s). Sonido solo efectos en la rejilla. Recreación: composición `RecReelPantalla`.

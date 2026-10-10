@@ -1,6 +1,6 @@
 ---
 name: motion-agencia
-description: Estilo AGENCIA de motion graphics (reel de estudio): una sección por compás a 128 BPM, cada una con su color plano saturado, display ancha en mayúsculas + serif cursiva + mono, cilindro de texto 3D, navegador que se convierte en móvil con muelle, barrido radial de color, zoom a través con match cut, glitch, texto descifrado, golpes de palabra y HUD con código de tiempo. Úsala tras la skill base motion-graphics cuando pidan energía, un reel, colores fuertes o estilo agencia.
+description: Estilo AGENCIA de motion graphics (reel de estudio): una sección por compás a 128 BPM, cada una con su color plano saturado, display ancha en mayúsculas + serif cursiva + mono, cilindro de texto 3D, navegador que se convierte en móvil con muelle, barrido radial de color, zoom a través con match cut, glitch, texto descifrado, golpes de palabra y HUD con código de tiempo. Variante agencia-punto (un punto rojo que hilvana todo el reel, nube de partículas que cambia de forma, trama de puntos, cinta 3D, anillos de texto). Úsala tras la skill base motion-graphics cuando pidan energía, un reel, colores fuertes o estilo agencia.
 ---
 
 # Estilo agencia (reel de estudio)
@@ -60,3 +60,23 @@ S0 negro: cilindro → láser · S1 azul: navegador + "DISEÑO / & desarrollo we
 Con interfaz recreada: comparación con la captura real y lista de fidelidad de la base (§2b, F5–F6) pasadas.
 `medir-ritmo` objetivo: dif media 10–16, quieto ≤ 3 %, racha ≤ 0,3 s. Cada cambio de sección EXACTAMENTE en
 n × 1,875 s.
+
+## Variante `agencia-punto` (mezcla de agencia, no un estilo aparte) — `TODOS_ESTILOS["agencia-punto"]`
+Reel de estudio o de motion designer. 128 BPM, 8 compases de 1,875 s, un fondo plano por compás: negro #110E14, rojo
+#FA4C2E, azul #2B43F8, amarillo #F5C139 y crema #E9E2DB (sin grano, viñeta 5–7 %). **Montserrat 900** en mayúsculas,
+serif recta seminegrita en el logo (Source Serif 4 600) y HUD tipo DIN (Barlow) que cambia de claro a oscuro según el
+fondo. Muelles contenidos: sobrepaso 6–26 % (12 % típico) con pico a ~0,17 s.
+- **Un punto rojo es el hilo de todo el vídeo** (`PuntosDivide`): aparece (expo de 3 fotogramas, +6 %), se divide en cada
+  tiempo 1 → 2 → 4 → 8 (+23 %), abre el primer iris (`IrisAro`), es el punto de la frase, el círculo que cambia de forma
+  (`FormaPolar`: círculo ↔ cuadrado ↔ triángulo ↔ flor, 4 fotogramas por cambio, con estela de contornos), el centro de
+  los anillos y el punto del logo, que aterriza con `PuntoSalta` (parábola de gravedad constante, aplastado 1,65:1 al
+  saltar y 2:1 al aterrizar).
+- **Una sola nube de ~600 puntos** (`NubePuntos`) pasa por flor de espiral → rejilla 33×19 → plano 3D → esfera → toro →
+  cubo; `TramaOnda` (retícula de 58 px con puntos de 9–24 px que forman un círculo con una onda), `CintaRayas` (tubo de
+  87 px y 7 franjas que hace un lazo a velocidad constante), `TextoAnillos` (4 anillos de texto, radios 448/364/281/206 px,
+  +34/−41/+54/−75 °/s), `CajaTransformacion` (cuadrado con 8 tiradores que gira 0 → 101 → 90° con etiqueta ROT/SHAPE).
+- `HudCompas`: 4 casillas de tiempo, `BAR n/8 · 128 BPM`, contador de fotogramas y código de tiempo HH:MM:SS:FF.
+- Transiciones: ningún fundido. Iris de 2–3 fotogramas, zoom al punto que se convierte en disco, cortes con el mismo
+  objeto a los dos lados y cortes en el momento de máxima velocidad, siempre en el golpe (la imagen 0–1 fotograma detrás
+  del sonido). Sonido: clics en cada división en el compás 1, bombo en cada tiempo desde el 2, redoble antes del golpe final.
+Recreación: composición `RecAgenciaReel`.
