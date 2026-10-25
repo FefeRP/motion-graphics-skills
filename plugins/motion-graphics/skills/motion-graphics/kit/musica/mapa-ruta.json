@@ -1,0 +1,29 @@
+{
+  "_nota": "Pieza de mapas 3D (RecMapaRuta). 12 s, 100 BPM (golpe 0,6 s). Golpes clave: 1,2 aparece el mapa · 2,4 barrido arriba · 4,2 ficha · 6,0 barrido abajo · 7,2 pin · subida 8,4–9,0 · pliegue 9,0 · marca 10,2 con cola.",
+  "duracion": 12,
+  "bpm": 100,
+  "fundido": 0.6,
+  "progresion": ["F", "C", "G", "Am"],
+  "inicioProgresion": 0,
+  "caracter": { "brillo": 1.05, "pegadaBombo": 0.45, "arp": 1.0, "lead": 0.7 },
+  "mezcla": { "bombo": [0.6, 0.2], "bajo": [0.36, 0.5], "acordes": [0.5, 0.4], "palmas": [1.1, 0], "charles": [0.8, 0] },
+  "secciones": [
+    { "nombre": "arranque",   "desde": 0,   "hasta": 2.4, "acordes": 0.5, "acordesCorte": 2200, "arp": "A", "arpCorte": [3000, 5000] },
+    { "nombre": "vuelo",      "desde": 2.4, "hasta": 6.0, "groove": true, "acordes": 0.5, "acordesCorte": 2800, "arp": "A", "arpCorte": [4500, 6000] },
+    { "nombre": "llegada",    "desde": 6.0, "hasta": 8.4, "groove": true, "acordes": 0.6, "acordesCorte": 3400, "arp": "B", "arpCorte": [6000, 7000], "lead": true },
+    { "nombre": "corte",      "desde": 8.4, "hasta": 9.0, "palmas": "filtradas" },
+    { "nombre": "cola",       "desde": 9.0, "hasta": 12,  "acordes": 0.45, "acordesCorte": 2200 }
+  ],
+  "eventos": [
+    { "t": 0, "tipo": "golpe", "fuerza": 0.4, "grave": 0.3 },
+    { "t": 1.2, "tipo": "golpe", "fuerza": 0.5, "grave": 0.4 },
+    { "t": 2.4, "tipo": "golpe", "fuerza": 0.6, "grave": 0.4 }, { "t": 2.4, "tipo": "crash", "nivel": 0.45 },
+    { "t": 6.0, "tipo": "golpe", "fuerza": 0.7, "grave": 0.4 }, { "t": 6.0, "tipo": "crash", "nivel": 0.6 },
+    { "t": 7.2, "tipo": "acentos", "tiempos": [7.2, 7.5], "fuerza": 0.6 },
+    { "t": 8.4, "tipo": "subida", "hasta": 8.95, "nivel": 0.35 },
+    { "t": 8.4, "tipo": "redoble", "hasta": 8.95 },
+    { "t": 8.95, "tipo": "silencio", "hasta": 9.0, "nivel": 0.1 },
+    { "t": 9.0, "tipo": "golpe", "fuerza": 0.55, "grave": 0.35 },
+    { "t": 10.2, "tipo": "final", "fuerza": 0.8, "grave": 0.4, "raiz": 33, "notas": [45, 57, 60, 64, 69, 72, 76] }
+  ]
+}

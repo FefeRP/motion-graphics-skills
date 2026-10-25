@@ -1,7 +1,7 @@
 {
   "name": "motion-graphics",
-  "version": "2.0.0",
-  "description": "Motion graphics in Remotion by technique, not by style: a master skill (keyword MOTION GRAPHICS) plus seven combinable technique skills (product UI with a mandatory fidelity process, motion, transitions, kinetic typography, light/backgrounds/shaders, 3D and particles, rhythm and sound) and a ready-to-render kit (60 fps, no GPU).",
+  "version": "2.1.0",
+  "description": "Motion graphics in Remotion by technique, not by style: a master skill (keyword MOTION GRAPHICS) plus eight combinable technique skills (product UI with a mandatory fidelity process, motion, transitions, kinetic typography, light/backgrounds/shaders, 3D and particles, 3D perspective maps, rhythm and sound) and a ready-to-render kit (60 fps, no GPU).",
   "author": {
     "name": "motion-graphics-skills contributors"
   },
@@ -14,6 +14,8 @@
     "launch-video",
     "kinetic-typography",
     "product-video",
-    "social-hooks"
+    "social-hooks",
+    "maps",
+    "3d-maps"
   ]
 }

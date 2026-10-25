@@ -16,6 +16,7 @@ añade otro motor, esos tres ficheros son el adaptador.
 | Tipografía (`motion-tipografia`) | `Descifra`, `Mascara`, `Lineas`, `PorLetra`, `Golpe`, `Contador`, `Neon`, `Anillo`, `Palabra`, `Rodillo`, `FraseVoz`, `Seleccion`, `TecleaLuz`, `TextoBrasa`, `MarcaBrota`, `LetrasCoreografia`, `TrackingRespira`, `EstallidoLetras`, `ContadorRodillo`, `TextoAnillos`, `TextoDeChispas` |
 | Luz y fondo (`motion-luz-fondo`) | `FondoEstilo`, `Halo`, `Aurora`, `Humo`, `Manchas`, `FondoCristal`, `Vineta`, `Grano`, `Bokeh`, `Destello`, `Sombra`, `Hud`, `Resplandor`, `LineaLuz`, `TarjetaBrillo`, `CajaCristal`, `Chispa`, `Asterisco`, `Meteoro`, `Chispas`, `OndaChoque`, `Onda` |
 | 3D y partículas (`motion-3d`) | `Orbitas`, `Tunel`, `ParedPaneles`, `LenteBarril`, `Horizonte`, `NubePuntos` (+ `formaFlor`, `formaRejilla`, `formaEsfera`, `formaToro`, `formaCubo`), `FormaPolar`, `CuboAlambre`, `CintaRayas`, `TramaOnda`, `PuntosDivide`, `PuntoSalta`, `BolaRebote`, `PilaTarjetas`, `Salida3D` |
+| Mapas 3D (`motion-mapas`) | `MapaCanvas`, `generaCiudad`, `rutaPorCruces`, `camaraMapa`, `medirRuta`, `enMapa`, `olaCrece`, `proyectorMapa`, `dibujaMapa`, `PALETAS_MAPA` |
 | Sonido (`motion-ritmo-sonido`) | `Sonido` |
 
 ## Por fichero
@@ -46,6 +47,9 @@ añade otro motor, esos tres ficheros son el adaptador.
   `AnilloIconos`, `IconoApp`, `Glifo` (+ `GLIFOS_APP`), `Pastilla`.
 - `camara.tsx`: `Camara2D` acepta `b` (foco de toda la cámara) en las claves y `ancla` (punto de pantalla fijo de los zooms).
 - `escenas.tsx`: transición `{ tipo: "enfoque" }`. `acabado.tsx`: `VeloEsquina`.
+- `mapa3d.tsx`: mapas 3D en perspectiva por CPU (un canvas 2D): ciudad generada o con tus datos en metros, cámara
+  inclinación/giro/distancia, edificios que crecen, ruta con cabeza, tráfico, flechas, ondas, niebla, desenfoque por
+  submuestras y `enMapa` para anclar HTML. Pieza de ejemplo: `recreaciones/mapa-ruta.tsx` (`RecMapaRuta`).
 
 ## Scripts (`kit/scripts`)
 `render.mjs` (render, stills, `--desde/--hasta/--mudo`, `--solo-audio`), `empalmar.mjs`, `recortar.mjs`, `musica.mjs`,

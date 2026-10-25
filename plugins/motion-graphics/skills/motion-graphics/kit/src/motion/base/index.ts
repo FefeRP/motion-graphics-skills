@@ -19,3 +19,4 @@ export * from "./cobre";
 export * from "./cristal";
 export * from "./enfoque";
 export * from "./producto";
+export * from "./mapa3d";

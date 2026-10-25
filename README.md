@@ -57,6 +57,20 @@ in one piece. It is a **technique piece**, not a 1:1 recreation of one of the re
 
 ![RecSeguimiento](docs/demos/rec-seguimiento.gif)
 
+**Round 6 · 3D perspective maps.** A maps-app concept ad was measured frame by frame (camera pitch and bearing per shot,
+palette, building growth, route trim path, whip zooms, pin drop, the map folding into a card) and turned into a new
+technique skill, `motion-mapas`, with its own CPU engine (`base/mapa3d.tsx`): a whole city drawn in ONE 2D canvas
+(no WebGL, no GPU, no thousands of 3D DOM nodes) with a camera that tilts, turns and follows a dot, extruded buildings
+that grow in a wave, parks, trees, water, roundabouts, a traffic layer, a route that draws itself along the streets,
+ground arrows, ripples, distance fog, motion blur by sub-frames only during whip zooms, and `enMapa()` to pin HTML
+cards and labels to any building. `RecMapaRuta` (12 s, 100 BPM, fictional brand "ruta") puts it together: dot → map,
+tilt while the city grows, whip up, a card anchored to a warehouse, whip down, arrows, the destination rises and a pin
+drops with a ripple, whip up to top view, the map folds into a card and becomes the logo. Checked with stills,
+`medir-ritmo` (0 one-frame jumps; the only still stretch is the final logo hold, 0.7 s) and loudness (−13.9 LUFS, peak −1.4 dBFS); render 282 s for 12 s at 60 fps on 3 CPU cores, no GPU. The skill also explains when to use a generated city, real
+OpenStreetMap data (converted to meters, with attribution) or a generative-video shot.
+
+![RecMapaRuta](docs/demos/rec-mapa-ruta.gif)
+
 ## Rebuilt UI = the real UI (mandatory fidelity process)
 When the video rebuilds your product's interface as animatable components, it has to look **identical** to the real
 one, not "something similar". The base skill makes Claude follow a mandatory process before drawing anything:
@@ -94,6 +108,7 @@ a beat grid, builds the piece with the kit and checks it before showing it to yo
 | `motion-transiciones` | bridge objects that morph, the thread, cuts hidden by speed or light, zoom-through with match cut, light iris to the brand, focus pulls |
 | `motion-tipografia` | kinetic type: blur-to-sharp, word by word, sentences where only one word changes, decode, mask, neon, logotypes that unfold from their initial; no boxes, no emojis |
 | `motion-luz-fondo` | living backgrounds (corner light, halos, auroras, WebGL smoke shader), milky and frosted glass without `backdrop-filter` in 3D, depth of field, light that cools, grain |
+| `motion-mapas` | 3D perspective maps drawn on the CPU: a city that grows, a camera that tilts, turns and follows a dot, routes along the streets, whip zooms with motion blur, pins with ripples, traffic, cards anchored to buildings, the map folding into the logo; generated city vs real map data vs generative video |
 | `motion-3d` | CSS 3D worlds with a travelling camera, parallax layers, icons floating around a sentence, orbits, tunnels, particle clouds that morph |
 | `motion-ritmo-sonido` | strict beat grid, event-by-event script, synthesized music, sound effects locked to the landing frame, −14 LUFS |
 
@@ -120,7 +135,7 @@ claude plugin marketplace add FefeRP/motion-graphics-skills
 # 2. Install the plugin
 claude plugin install motion-graphics@motion-graphics-skills
 
-# 3. Check it loaded: motion-graphics (master) and the seven motion-* technique skills should be listed
+# 3. Check it loaded: motion-graphics (master) and the eight motion-* technique skills should be listed
 claude plugin details motion-graphics
 ```
 
@@ -158,9 +173,10 @@ plugins/motion-graphics/
     motion-graphics/references/          # directions, component catalog, how to learn a reference
     motion-graphics/kit/                 # Remotion kit (engine, directions, demos, recreations, scripts, sounds)
     motion-interfaz/  motion-movimiento/  motion-transiciones/  motion-tipografia/
-    motion-luz-fondo/  motion-3d/  motion-ritmo-sonido/   # technique skills
+    motion-luz-fondo/  motion-3d/  motion-mapas/  motion-ritmo-sonido/   # technique skills
 docs/demos/                              # demo videos and GIFs
 docs/fidelidad/                          # before/after fidelity comparison sheets
+CHANGELOG.md                             # versions
 LICENSE                                  # MIT
 ```
 Only Remotion is supported today; the engine keeps Remotion-specific code in three small files (clock, motion blur,
@@ -171,8 +187,8 @@ sound) so other engines can be added later.
 ## En español
 Skills para Claude Code que hacen motion graphics con ritmo profesional en Remotion, organizadas por técnicas y no
 por estilos: una skill maestra (palabra clave `MOTION GRAPHICS`) que entiende el pedido, decide la idea y el hilo
-conductor, elige y mezcla técnicas y construye la pieza, y siete skills de técnica combinables (interfaz fiel,
-movimiento, transiciones, tipografía, luz y fondos, 3D y partículas, ritmo y sonido), más un kit de Remotion listo
+conductor, elige y mezcla técnicas y construye la pieza, y ocho skills de técnica combinables (interfaz fiel,
+movimiento, transiciones, tipografía, luz y fondos, 3D y partículas, mapas 3D en perspectiva, ritmo y sonido), más un kit de Remotion listo
 para renderizar. Las direcciones visuales (oscuro, claro, agencia y sus variantes) son ajustes mezclables. Cuando recrean la interfaz de tu producto, siguen un proceso obligatorio de fidelidad (fuente de
 verdad, tokens copiados, comparación con capturas reales y lista de comprobación) para que sea idéntica a la real.
 Instalación: `claude plugin marketplace add FefeRP/motion-graphics-skills` y

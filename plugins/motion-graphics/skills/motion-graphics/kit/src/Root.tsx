@@ -12,6 +12,7 @@ import { duracionSeguimiento, RecSeguimiento } from "./motion/recreaciones/segui
 import { duracionPromptCristal, RecPromptCristal } from "./motion/recreaciones/prompt-cristal";
 import { duracionSerifCalido, RecSerifCalido } from "./motion/recreaciones/serif-calido";
 import { duracionRecAgenciaReel, RecAgenciaReel } from "./motion/recreaciones/agencia-reel";
+import { duracionMapaRuta, RecMapaRuta } from "./motion/recreaciones/mapa-ruta";
 
 export const Root: React.FC = () => (
   <>
@@ -27,5 +28,6 @@ export const Root: React.FC = () => (
     <Composition id="RecPromptCristal" component={RecPromptCristal} fps={60} width={1920} height={1080} durationInFrames={Math.round(duracionPromptCristal * 60)} />
     <Composition id="RecSerifCalido" component={RecSerifCalido} fps={60} width={1920} height={1080} durationInFrames={Math.round(duracionSerifCalido * 60)} />
     <Composition id="RecAgenciaReel" component={RecAgenciaReel} fps={60} width={1920} height={1080} durationInFrames={Math.round(duracionRecAgenciaReel * 60)} />
+    <Composition id="RecMapaRuta" component={RecMapaRuta} fps={60} width={1920} height={1080} durationInFrames={duracionMapaRuta * 60} />
   </>
 );

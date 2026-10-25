@@ -1,6 +1,6 @@
 ---
 name: motion-graphics
-description: Skill MAESTRA de motion graphics en Remotion — palabra clave de activación "MOTION GRAPHICS" o /motion-graphics. Entiende el pedido (lanzamiento de producto, promo, gancho para redes, intro, reel, demo de app, logo animado), decide la idea y el hilo conductor, elige y combina técnicas (interfaz fiel al producto real, movimiento, transiciones por objeto, tipografía cinética, luz y shaders, 3D y partículas, ritmo y sonido), escribe el guion por eventos, construye la pieza con el kit Remotion incluido (60 fps, sin GPU) y la verifica con fotogramas, medidas y comparación con capturas reales antes de enseñarla. Úsala SIEMPRE que pidan "MOTION GRAPHICS", "motion graphics", "vídeo animado de mi producto", "vídeo de lanzamiento", "promo animada", "gancho visual", "intro animada", "animar mi app/web/panel", "vídeo de keynote", "launch video", "product promo video", "animated explainer".
+description: Skill MAESTRA de motion graphics en Remotion — palabra clave de activación "MOTION GRAPHICS" o /motion-graphics. Entiende el pedido (lanzamiento de producto, promo, gancho para redes, intro, reel, demo de app, logo animado), decide la idea y el hilo conductor, elige y combina técnicas (interfaz fiel al producto real, movimiento, transiciones por objeto, tipografía cinética, luz y shaders, 3D y partículas, mapas 3D en perspectiva, ritmo y sonido), escribe el guion por eventos, construye la pieza con el kit Remotion incluido (60 fps, sin GPU) y la verifica con fotogramas, medidas y comparación con capturas reales antes de enseñarla. Úsala SIEMPRE que pidan "MOTION GRAPHICS", "motion graphics", "vídeo animado de mi producto", "vídeo de lanzamiento", "promo animada", "gancho visual", "intro animada", "animar mi app/web/panel", "vídeo de keynote", "launch video", "product promo video", "animated explainer", "mapa animado", "ruta animada".
 model: opus
 ---
 
@@ -14,6 +14,7 @@ Esta skill **dirige**: decide qué hacer y en qué orden, y delega el *cómo* en
 - `motion-tipografia` — texto cinético: desenfocado a nítido, palabra a palabra, descifrar, máscaras, logotipos.
 - `motion-luz-fondo` — fondos vivos, luz de esquina, halo, humo con shader, cristal, profundidad de campo, grano.
 - `motion-3d` — profundidad por capas, mundo con cámara, iconos flotando, órbitas, partículas que cambian de forma.
+- `motion-mapas` — mapas 3D en perspectiva: ciudad que crece, cámara que sigue un punto, rutas, pines, tráfico, plegado final.
 - `motion-ritmo-sonido` — rejilla de pulso, guion por eventos, música sintetizada, efectos al fotograma.
 
 **Nunca por estilos** ("plantilla oscura"): por técnicas que se combinan según el producto, la historia y el formato.
@@ -70,6 +71,7 @@ Escríbelo en `BRIEF.md` del vídeo (8–12 líneas).
 | Que se vea caro y no "de IA" | Luz que se mueve, profundidad de campo, grano sutil, cristal | `motion-luz-fondo` |
 | Energía de reel | Rejilla de pulso estricta, morph en cada tiempo, color por compás | `motion-ritmo-sonido` + `motion-transiciones` |
 | Partículas, formas, 3D | Nube de puntos, formas que se transforman, mundo con cámara | `motion-3d` |
+| Un recorrido, una ubicación, reparto, inmobiliaria, "estilo app de mapas" | Ciudad 3D en un canvas, cámara que sigue el punto, ruta que avanza, barridos con desenfoque, pin con onda | `motion-mapas` |
 Combina **1 técnica fuerte (el momento estrella) + 2–4 de apoyo**. Todas las piezas leen la dirección elegida
 (`EstiloProvider`), así que se combinan sin rehacerlas.
 

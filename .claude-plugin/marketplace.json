@@ -1,6 +1,6 @@
 {
   "name": "motion-graphics-skills",
-  "description": "Claude Code skills to make professional, fluid motion graphics in Remotion: one master skill that plans the piece and combinable techniques (faithful product UI, motion, transitions, kinetic type, light and shaders, 3D and particles, rhythm and sound).",
+  "description": "Claude Code skills to make professional, fluid motion graphics in Remotion: one master skill that plans the piece and combinable techniques (faithful product UI, motion, transitions, kinetic type, light and shaders, 3D and particles, 3D perspective maps, rhythm and sound).",
   "owner": {
     "name": "motion-graphics-skills contributors"
   },
@@ -8,7 +8,8 @@
     {
       "name": "motion-graphics",
       "source": "./plugins/motion-graphics",
-      "description": "Say MOTION GRAPHICS: a master skill understands the brief, picks the idea and the thread, mixes techniques and builds a 60 fps Remotion video with the included kit, then checks it (frames, rhythm, fidelity to the real UI)."
+      "description": "Say MOTION GRAPHICS: a master skill understands the brief, picks the idea and the thread, mixes techniques and builds a 60 fps Remotion video with the included kit, then checks it (frames, rhythm, fidelity to the real UI).",
+      "version": "2.1.0"
     }
   ]
 }

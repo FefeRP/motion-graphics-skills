@@ -48,3 +48,4 @@ Parte del plugin de motion graphics (kit en `../motion-graphics/kit`). Es 3D de 
   un producto real, los iconos REALES de cada integración.
 - **Inclinar el plano mientras la cámara viaja**: en una línea de tiempo larga, `Camara` con `rx` 0 → 30° y zoom ×1,2 a
   lo largo del paneo (perspectiva ≈ 1350 px) da profundidad sin cambiar el contenido.
+- **Ciudad 3D con cámara de mapa** (edificios extruidos, rutas, pines): no es 3D CSS, es la skill `motion-mapas` (canvas por CPU).
