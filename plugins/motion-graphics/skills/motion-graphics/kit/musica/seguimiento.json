@@ -1,0 +1,28 @@
+{
+  "_nota": "Producto claro y sobrio (RecSeguimiento). 12 s, 90 BPM (golpe 0,667 s). Golpes clave: 1,333 empuje · 3,333 línea de tiempo · 6,0 anillo · 7,333 cambio de frase · subida 8,667–9,333 y golpe de marca 9,333 con cola.",
+  "duracion": 12,
+  "bpm": 90,
+  "fundido": 0.6,
+  "progresion": ["Am", "F", "C", "G"],
+  "inicioProgresion": 0,
+  "caracter": { "brillo": 1.1, "pegadaBombo": 0.4, "arp": 1.0, "lead": 0.8 },
+  "mezcla": { "bombo": [0.6, 0.2], "bajo": [0.36, 0.5], "acordes": [0.5, 0.4], "palmas": [1.2, 0], "charles": [0.8, 0] },
+  "secciones": [
+    { "nombre": "arranque",   "desde": 0,     "hasta": 3.333, "acordes": 0.55, "acordesCorte": 2400, "arp": "A", "arpCorte": [3000, 5000] },
+    { "nombre": "pulso",      "desde": 3.333, "hasta": 6,     "groove": true, "acordes": 0.5, "acordesCorte": 2800, "arp": "A", "arpCorte": [4500, 6000] },
+    { "nombre": "estribillo", "desde": 6,     "hasta": 8.667, "groove": true, "acordes": 0.6, "acordesCorte": 3400, "arp": "B", "arpCorte": [6000, 7000], "lead": true },
+    { "nombre": "corte",      "desde": 8.667, "hasta": 9.333, "palmas": "filtradas" },
+    { "nombre": "cola",       "desde": 9.333, "hasta": 12,    "acordes": 0.45, "acordesCorte": 2200 }
+  ],
+  "eventos": [
+    { "t": 0, "tipo": "golpe", "fuerza": 0.45, "grave": 0.3 },
+    { "t": 1.333, "tipo": "golpe", "fuerza": 0.5, "grave": 0.4 },
+    { "t": 3.333, "tipo": "golpe", "fuerza": 0.6, "grave": 0.4 }, { "t": 3.333, "tipo": "crash", "nivel": 0.5 },
+    { "t": 6, "tipo": "golpe", "fuerza": 0.7, "grave": 0.4 }, { "t": 6, "tipo": "crash", "nivel": 0.7 },
+    { "t": 7.333, "tipo": "acentos", "tiempos": [7.333], "fuerza": 0.7 },
+    { "t": 8.667, "tipo": "subida", "hasta": 9.25, "nivel": 0.35 },
+    { "t": 8.667, "tipo": "redoble", "hasta": 9.25 },
+    { "t": 9.25, "tipo": "silencio", "hasta": 9.333, "nivel": 0.1 },
+    { "t": 9.333, "tipo": "final", "fuerza": 0.8, "grave": 0.4, "raiz": 33, "notas": [45, 57, 60, 64, 69, 72, 76] }
+  ]
+}

@@ -1,10 +1,19 @@
 {
   "name": "motion-graphics",
-  "version": "1.0.0",
-  "description": "Professional motion graphics in Remotion: a shared engine (60 fps, smooth PCHIP paths, controlled springs, motion blur, morphing objects, kinetic typography, synced sound) and mixable styles (dark keynote, light SaaS, agency) with a ready-to-render kit.",
+  "version": "2.0.0",
+  "description": "Motion graphics in Remotion by technique, not by style: a master skill (keyword MOTION GRAPHICS) plus seven combinable technique skills (product UI with a mandatory fidelity process, motion, transitions, kinetic typography, light/backgrounds/shaders, 3D and particles, rhythm and sound) and a ready-to-render kit (60 fps, no GPU).",
   "author": {
     "name": "motion-graphics-skills contributors"
   },
   "license": "MIT",
-  "keywords": ["remotion", "motion-graphics", "video", "animation", "launch-video", "kinetic-typography"]
+  "keywords": [
+    "remotion",
+    "motion-graphics",
+    "video",
+    "animation",
+    "launch-video",
+    "kinetic-typography",
+    "product-video",
+    "social-hooks"
+  ]
 }

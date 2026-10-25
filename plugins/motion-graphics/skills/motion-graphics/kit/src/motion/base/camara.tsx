@@ -38,18 +38,25 @@ export const ConDesenfoque: React.FC<{ ventanas: [number, number][]; muestras?: 
   return activo ? <CameraMotionBlur samples={muestras} shutterAngle={obturador}>{children}</CameraMotionBlur> : <>{children}</>;
 };
 
-/** Clave de cámara 2D: punto mirado (x, y en px de pantalla 1920×1080), escala s y giro rz. */
-export type ClaveCamara2D = { t: number; x?: number; y?: number; s?: number; rz?: number; para?: boolean };
+/** Clave de cámara 2D: punto mirado (x, y en px de pantalla 1920×1080), escala s, giro rz y foco b (desenfoque en px). */
+export type ClaveCamara2D = { t: number; x?: number; y?: number; s?: number; rz?: number; b?: number; para?: boolean };
+/** Estado de la cámara 2D en t (para calcular cuándo algo entra en cuadro, ver `entraEnCuadro`). */
+export const camara2DEn = (claves: ClaveCamara2D[], t: number) => pista(claves as Clave[], t, ["x", "y", "s", "rz", "b"] as const, { x: 960, y: 540, s: 1, b: 0 });
 /**
  * Cámara 2D (paneos, zooms y giros sobre una escena plana; más barata que <Camara>). Los hijos se colocan en
  * coordenadas de pantalla (centro 960, 540); la cámara mira a (x, y) con zoom s.
+ * - `ancla` [x, y] de pantalla: el punto (x, y) de las claves se pinta AHÍ en vez de en el centro, y los zooms se hacen
+ *   alrededor de ese punto (p. ej. un móvil que "encoge hacia su cabecera": ancla [960, 224]).
+ * - `b` en las claves: foco de toda la cámara (desenfoque en px), para entrar o salir de un plano enfocando. Es 2D: no
+ *   lo uses con hijos `preserve-3d`.
  */
-export const Camara2D: React.FC<{ claves: ClaveCamara2D[]; children: React.ReactNode }> = ({ claves, children }) => {
+export const Camara2D: React.FC<{ claves: ClaveCamara2D[]; ancla?: [number, number]; children: React.ReactNode }> = ({ claves, ancla, children }) => {
   const t = useSeg();
-  const c = pista(claves as Clave[], t, ["x", "y", "s", "rz"] as const, { x: 960, y: 540, s: 1 });
+  const c = camara2DEn(claves, t);
+  const [ax, ay] = ancla ?? [960, 540];
   return (
     <AbsoluteFill style={{ overflow: "hidden" }}>
-      <AbsoluteFill style={{ transformOrigin: "0 0", transform: `translate(960px, 540px) scale(${c.s}) rotate(${c.rz}deg) translate(${-c.x}px, ${-c.y}px)` }}>{children}</AbsoluteFill>
+      <AbsoluteFill style={{ transformOrigin: "0 0", transform: `translate(${ax}px, ${ay}px) scale(${c.s}) rotate(${c.rz}deg) translate(${-c.x}px, ${-c.y}px)`, filter: c.b > 0.05 ? `blur(${c.b}px)` : undefined }}>{children}</AbsoluteFill>
     </AbsoluteFill>
   );
 };

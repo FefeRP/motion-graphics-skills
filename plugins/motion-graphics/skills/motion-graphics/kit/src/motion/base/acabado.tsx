@@ -14,6 +14,22 @@ export const Halo: React.FC<{ color?: string; fuerza?: number; x?: number; y?: n
   return <AbsoluteFill style={{ background: `radial-gradient(ellipse ${r}% ${r * 0.9}% at ${cx}% ${cy}%, ${c}${a(0.32)} 0%, ${c}${a(0.1)} 45%, transparent 75%)` }} />;
 };
 
+/**
+ * Velo de color de esquina POR ENCIMA de todo (no es el fondo): un degradado radial desde una esquina que tiñe lo que
+ * pasa por debajo (las tarjetas blancas se vuelven del color de la luz al cruzarlo). Da atmósfera y "suelo" a los
+ * fondos claros sin oscurecerlos. Medido en una app de seguimiento en claro: #614d8a en la esquina → transparente al
+ * ~65 % de la diagonal, `multiply`. Respira despacio (±4 % de alcance). Ponlo el último, fuera de la cámara.
+ */
+export const VeloEsquina: React.FC<{ color?: string; esquina?: "abajo-derecha" | "abajo-izquierda" | "arriba-derecha" | "arriba-izquierda"; alcance?: number; fuerza?: number; mezcla?: "multiply" | "normal" | "screen" }> = ({ color = "#614D8A", esquina = "abajo-derecha", alcance = 65, fuerza = 1, mezcla = "multiply" }) => {
+  const t = useSeg();
+  const [x, y] = { "abajo-derecha": [100, 100], "abajo-izquierda": [0, 100], "arriba-derecha": [100, 0], "arriba-izquierda": [0, 0] }[esquina];
+  const r = alcance * (1 + Math.sin(t * 0.7) * 0.04);
+  const h = color.replace("#", "");
+  const [cr, cg, cb] = [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16));
+  const a = (n: number) => `rgba(${cr},${cg},${cb},${(Math.min(1, n * fuerza)).toFixed(3)})`;
+  return <AbsoluteFill style={{ pointerEvents: "none", mixBlendMode: mezcla, background: `radial-gradient(${r * 1.85}% ${r * 1.7}% at ${x}% ${y}%, ${a(0.9)} 0%, ${a(0.55)} 22%, ${a(0.28)} 42%, ${a(0.08)} 62%, ${a(0)} 80%)` }} />;
+};
+
 /** Viñeta: oscurece las esquinas. */
 export const Vineta: React.FC<{ fuerza?: number }> = ({ fuerza = 0.55 }) => <AbsoluteFill style={{ pointerEvents: "none", background: `radial-gradient(ellipse 80% 80% at 50% 50%, transparent 55%, rgba(0,0,0,${fuerza}) 100%)` }} />;
 

@@ -1,7 +1,7 @@
 # Motion Graphics Skills for Claude Code
 
 **Professional, fluid motion graphics in [Remotion](https://www.remotion.dev) — made by Claude.**
-Ask *"make me a 30-second launch video in the dark style"* and get a 60 fps video that moves like a keynote: pieces
+Say *"MOTION GRAPHICS: a 30-second launch video for my app"* and get a 60 fps video that moves like a keynote: pieces
 that fly in and rearrange, objects that morph into the next scene, kinetic typography, light, motion blur and
 sound effects locked to every landing. No slideshows.
 
@@ -9,7 +9,7 @@ sound effects locked to every landing. No slideshows.
 |---|---|---|
 | ![dark](docs/demos/oscuro.gif) | ![light](docs/demos/claro.gif) | ![agency](docs/demos/agencia.gif) |
 
-**One scene, any style — styles are mixable settings, not templates:**
+**One scene, any direction — directions are mixable settings, not templates:**
 
 | dark | light | agency | light-lime | dark + agency type & rhythm |
 |---|---|---|---|---|
@@ -47,6 +47,16 @@ land on the same frames; color = mean chroma difference, < 8 = same palette):
 
 The original reference videos are not included (they belong to their authors); only our recreations are.
 
+**Round 5 · light product motion.** Three light product videos (an app intro, a tracking flow, an integrations
+page) were measured frame by frame and turned into reusable techniques: words that land one by one from blur and
+scale, a sentence where only the ending changes, phones rising in a depth stack, a status timeline the camera travels,
+a tilted ring of app icons around a sentence, a radial focus pull, a swirl into a light flood and a logotype that
+types itself and re-centers. `RecSeguimiento` (12 s, 90 BPM, `claro-lavanda`, fictional brand "ruta") puts them together
+in one piece. It is a **technique piece**, not a 1:1 recreation of one of the references, so it has no
+`comparar-video.mjs` score; it was checked with stills, `medir-ritmo` (no frame jumps) and loudness (−14 LUFS).
+
+![RecSeguimiento](docs/demos/rec-seguimiento.gif)
+
 ## Rebuilt UI = the real UI (mandatory fidelity process)
 When the video rebuilds your product's interface as animatable components, it has to look **identical** to the real
 one, not "something similar". The base skill makes Claude follow a mandatory process before drawing anything:
@@ -70,16 +80,23 @@ the real screenshot in 24 % of the pixels; following the process, 0 %.
 
 ![fidelity demo](docs/demos/fidelidad.gif)
 
-## What's inside
-- **`motion-graphics`** (base skill): how to study the user's material (website, screenshots, logo, code) and copy it
-  faithfully — with a **mandatory fidelity process** for rebuilt interfaces (source of truth, copied tokens, comparison
-  with real screenshots, checklist); **three ways to show an interface** — rebuild it as components (animated piece by piece), use the full
-  screenshot in a browser/phone frame, or **cut parts** of the screenshot (a button, a card, a chart) as standalone
-  pieces (with a script to crop, remove flat backgrounds and pad them); the rules measured on 9 professional
-  references; the mixable style system; the workflow and how to measure the result.
-- **`motion-oscuro`** · dark keynote style (+ variants `oscuro-halo`, `oscuro-brasa`, `oscuro-turquesa`).
-- **`motion-claro`** · light SaaS-intro style (+ variant `claro-lima`).
-- **`motion-agencia`** · agency reel style (one saturated color per bar, wide display type, HUD).
+## What's inside: one master skill + combinable techniques (not styles)
+Say **`MOTION GRAPHICS`** (or `/motion-graphics`) and describe what you want. The master skill works like a motion
+director: it writes a short brief, decides the idea, the **thread** (the object that crosses the whole video and
+changes role) and the hero moment, picks 1 strong technique + 2–4 supporting ones, writes the event-by-event script on
+a beat grid, builds the piece with the kit and checks it before showing it to you.
+
+| Skill | What it knows |
+|---|---|
+| **`motion-graphics`** (master) | brief → idea and thread → techniques → script → build → verify → deliver; starting *directions* (dark keynote, light SaaS, agency and their variants) as mixable settings, not templates |
+| `motion-interfaz` | showing a product: rebuild its UI as components with a **mandatory fidelity process** (source of truth, copied tokens, comparison with real screenshots, checklist), animated cut-outs instead of full screenshots, phone screens, depth stacks of screens, status timelines the camera travels |
+| `motion-movimiento` | asymmetric curves, PCHIP paths with no stop-and-go, capped springs, squash & stretch, 2D/3D camera that never stops, motion blur only where it's fast, framing |
+| `motion-transiciones` | bridge objects that morph, the thread, cuts hidden by speed or light, zoom-through with match cut, light iris to the brand, focus pulls |
+| `motion-tipografia` | kinetic type: blur-to-sharp, word by word, sentences where only one word changes, decode, mask, neon, logotypes that unfold from their initial; no boxes, no emojis |
+| `motion-luz-fondo` | living backgrounds (corner light, halos, auroras, WebGL smoke shader), milky and frosted glass without `backdrop-filter` in 3D, depth of field, light that cools, grain |
+| `motion-3d` | CSS 3D worlds with a travelling camera, parallax layers, icons floating around a sentence, orbits, tunnels, particle clouds that morph |
+| `motion-ritmo-sonido` | strict beat grid, event-by-event script, synthesized music, sound effects locked to the landing frame, −14 LUFS |
+
 - **A Remotion kit** (`plugins/motion-graphics/skills/motion-graphics/kit`): the shared engine (`src/motion/base`),
   the styles (`src/motion/capas`), one demo per style, a style-mixing demo, an effects catalog, synthesized sound
   effects and music (no third-party rights), and scripts to render, take stills, crop pieces, generate music,
@@ -103,7 +120,7 @@ claude plugin marketplace add FefeRP/motion-graphics-skills
 # 2. Install the plugin
 claude plugin install motion-graphics@motion-graphics-skills
 
-# 3. Check it loaded: the skills motion-graphics, motion-oscuro, motion-claro and motion-agencia should be listed
+# 3. Check it loaded: motion-graphics (master) and the seven motion-* technique skills should be listed
 claude plugin details motion-graphics
 ```
 
@@ -121,16 +138,15 @@ node scripts/render.mjs render DemoMezcla ../path/to/props.json   # e.g. {"estil
 ```
 
 ## Use it
-Just ask Claude in a Remotion project, for example:
-- *"Make a 25 s launch video for my app in the dark style. Here are screenshots of the dashboard and the logo."*
-- *"Same video but light style, with my brand color #FF3B5C."*
-- *"Agency style but with the calmer rhythm of the dark style."*
-- *"Cut the pricing card and the CPU chart from this screenshot and animate them as separate pieces."*
-- *"Rebuild our dashboard from the code in ../app exactly as it is, and animate the numbers."*
+Start with the keyword in a Remotion project (or an empty folder), for example:
+- *"MOTION GRAPHICS: a 25 s launch video for my app. The code is in ../app, here is the logo."*
+- *"MOTION GRAPHICS: a 10 s vertical hook for Instagram that shows how an order travels to the customer's door."*
+- *"MOTION GRAPHICS: same video, light direction, with my brand color #FF3B5C and the energy of the agency rhythm."*
+- *"Cut the pricing card and the CPU chart from this screenshot and animate them as separate pieces."* (technique skill on its own)
 
-Claude will study your material, choose one of the three ways to show the UI, write the event-by-event script
-(one event per beat), build it with the kit, render stills to check framing, render the video, and measure it
-(rhythm, stillness, frame jumps, loudness) before showing it to you.
+Claude will study your material, decide the idea and the thread, choose and mix techniques, write the event-by-event
+script (one event per beat), build it with the kit, compare rebuilt screens with real screenshots, render stills to
+check framing, render the video and measure it (rhythm, stillness, frame jumps, loudness) before showing it to you.
 
 ## Repository layout
 ```
@@ -138,11 +154,11 @@ Claude will study your material, choose one of the three ways to show the UI, wr
 plugins/motion-graphics/
   .claude-plugin/plugin.json             # the plugin
   skills/
-    motion-graphics/SKILL.md             # base skill
-    motion-graphics/kit/                 # Remotion kit (engine, styles, demos, scripts, sounds)
-    motion-oscuro/SKILL.md
-    motion-claro/SKILL.md
-    motion-agencia/SKILL.md
+    motion-graphics/SKILL.md             # master skill (keyword MOTION GRAPHICS)
+    motion-graphics/references/          # directions, component catalog, how to learn a reference
+    motion-graphics/kit/                 # Remotion kit (engine, directions, demos, recreations, scripts, sounds)
+    motion-interfaz/  motion-movimiento/  motion-transiciones/  motion-tipografia/
+    motion-luz-fondo/  motion-3d/  motion-ritmo-sonido/   # technique skills
 docs/demos/                              # demo videos and GIFs
 docs/fidelidad/                          # before/after fidelity comparison sheets
 LICENSE                                  # MIT
@@ -153,10 +169,11 @@ sound) so other engines can be added later.
 ---
 
 ## En español
-Skills para Claude Code que hacen motion graphics con ritmo profesional en Remotion: una base común (cámara, piezas
-con trayectoria, objetos que se transforman, transiciones, tipografía cinética, sonido al fotograma, 60 fps sin
-tirones) y estilos que son ajustes mezclables (oscuro, claro, agencia y sus variantes), más un kit de Remotion listo
-para renderizar. Cuando recrean la interfaz de tu producto, siguen un proceso obligatorio de fidelidad (fuente de
+Skills para Claude Code que hacen motion graphics con ritmo profesional en Remotion, organizadas por técnicas y no
+por estilos: una skill maestra (palabra clave `MOTION GRAPHICS`) que entiende el pedido, decide la idea y el hilo
+conductor, elige y mezcla técnicas y construye la pieza, y siete skills de técnica combinables (interfaz fiel,
+movimiento, transiciones, tipografía, luz y fondos, 3D y partículas, ritmo y sonido), más un kit de Remotion listo
+para renderizar. Las direcciones visuales (oscuro, claro, agencia y sus variantes) son ajustes mezclables. Cuando recrean la interfaz de tu producto, siguen un proceso obligatorio de fidelidad (fuente de
 verdad, tokens copiados, comparación con capturas reales y lista de comprobación) para que sea idéntica a la real.
 Instalación: `claude plugin marketplace add FefeRP/motion-graphics-skills` y
 `claude plugin install motion-graphics@motion-graphics-skills`. Las skills están escritas en español.

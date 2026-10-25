@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "license": "MIT",
-  "description": "Kit de motion graphics para Remotion: base común (cámara, piezas, efectos, tipografía cinética) + estilos mezclables.",
+  "description": "Kit de motion graphics para Remotion: motor común y técnicas combinables (interfaz fiel, movimiento, transiciones, tipografía, luz, 3D, ritmo y sonido).",
   "scripts": {
     "dev": "remotion studio",
     "check": "tsc --noEmit",

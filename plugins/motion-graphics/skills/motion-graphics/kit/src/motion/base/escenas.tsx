@@ -15,11 +15,14 @@ export type Transicion =
   /** El nuevo se destapa con una máscara circular desde (x, y) (0–1). */
   | { tipo: "circulo"; dur?: number; x?: number; y?: number }
   /** Un bloque de color cruza la pantalla y deja detrás la escena nueva (cortinilla de agencia). */
-  | { tipo: "cortina"; dur?: number; color: string; dir?: "izquierda" | "arriba" };
+  | { tipo: "cortina"; dur?: number; color: string; dir?: "izquierda" | "arriba" }
+  /** Cambio de foco: el viejo se desenfoca (0 → 22 px, ease-in, primer 30 %) y el nuevo entra desde muy desenfocado
+   *  (36 → 0 px, expo-out). Sin escala ni fundido: el desenfoque tapa el corte. Ideal entre interfaces claras. */
+  | { tipo: "enfoque"; dur?: number };
 
 export type Escena = { dur: number; contenido: React.ReactNode; fondo?: string; entrada?: Transicion };
 
-const durT = (tr?: Transicion) => (!tr || tr.tipo === "corte" ? 0 : tr.dur ?? (tr.tipo === "barrido" ? 0.3 : tr.tipo === "cortina" ? 0.45 : 0.4));
+const durT = (tr?: Transicion) => (!tr || tr.tipo === "corte" ? 0 : tr.dur ?? (tr.tipo === "barrido" ? 0.3 : tr.tipo === "cortina" ? 0.45 : tr.tipo === "enfoque" ? 0.47 : 0.4));
 
 /** Duración total de una lista de escenas (restando los solapes de las transiciones). */
 export const duracionEscenas = (escenas: Escena[]) => escenas.reduce((s, e, i) => s + e.dur - (i > 0 ? durT(e.entrada) : 0), 0);
@@ -41,6 +44,10 @@ const Capa: React.FC<{ tr?: Transicion; sale?: Transicion; dur: number; fondo?: 
       estilo = { transform: `scale(${1.25 - 0.25 * q})`, filter: `blur(${(1 - q) * 22}px)`, opacity: Math.min(1, q * 2.5) };
     } else if (tr.tipo === "circulo") {
       mascara = `circle(${p * 150}% at ${(tr.x ?? 0.5) * 100}% ${(tr.y ?? 0.5) * 100}%)`;
+    } else if (tr.tipo === "enfoque") {
+      // el entrante solo existe desde el pico (30 %): antes lo tapa el saliente desenfocado
+      const q = tramo(t, dE * 0.3, dE, CURVAS.expo);
+      estilo = { filter: `blur(${36 * (1 - q) ** 1.5}px)`, opacity: t < dE * 0.3 ? 0 : 1 };
     } else if (tr.tipo === "cortina") {
       // la escena aparece cuando la cortina pasa por la mitad
       estilo.opacity = t > dE * 0.5 ? 1 : 0;
@@ -55,6 +62,9 @@ const Capa: React.FC<{ tr?: Transicion; sale?: Transicion; dur: number; fondo?: 
     } else if (sale.tipo === "zoom") {
       const q = tramo(t, dur - dS, dur, CURVAS.acelera);
       estilo = { transform: `scale(${1 + 0.6 * q})`, filter: `blur(${q * 26}px)`, opacity: 1 - q };
+    } else if (sale.tipo === "enfoque") {
+      const q = tramo(t, dur - dS, dur - dS * 0.7, CURVAS.acelera);
+      estilo = { filter: `blur(${q * 22}px)`, opacity: t > dur - dS * 0.7 ? 0 : 1 };
     }
   }
   return (

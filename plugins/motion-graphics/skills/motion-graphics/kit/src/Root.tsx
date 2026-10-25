@@ -8,6 +8,7 @@ import { DemoMezcla, duracionMezcla, type PropsMezcla } from "./motion/demos/mez
 import { DemoEfectos2, duracionEfectos2 } from "./motion/demos/efectos-2";
 import { DemoFidelidad, duracionFidelidad } from "./motion/demos/fidelidad";
 import { duracionReelPantalla, RecReelPantalla } from "./motion/recreaciones/reel-pantalla";
+import { duracionSeguimiento, RecSeguimiento } from "./motion/recreaciones/seguimiento";
 import { duracionPromptCristal, RecPromptCristal } from "./motion/recreaciones/prompt-cristal";
 import { duracionSerifCalido, RecSerifCalido } from "./motion/recreaciones/serif-calido";
 import { duracionRecAgenciaReel, RecAgenciaReel } from "./motion/recreaciones/agencia-reel";
@@ -22,6 +23,7 @@ export const Root: React.FC = () => (
     <Composition id="DemoEfectos2" component={DemoEfectos2} fps={60} width={1920} height={1080} durationInFrames={duracionEfectos2 * 60} />
     <Composition id="DemoFidelidad" component={DemoFidelidad} fps={60} width={1920} height={1080} durationInFrames={duracionFidelidad * 60} />
     <Composition id="RecReelPantalla" component={RecReelPantalla} fps={60} width={1920} height={1080} durationInFrames={duracionReelPantalla} />
+    <Composition id="RecSeguimiento" component={RecSeguimiento} fps={60} width={1920} height={1080} durationInFrames={duracionSeguimiento * 60} />
     <Composition id="RecPromptCristal" component={RecPromptCristal} fps={60} width={1920} height={1080} durationInFrames={Math.round(duracionPromptCristal * 60)} />
     <Composition id="RecSerifCalido" component={RecSerifCalido} fps={60} width={1920} height={1080} durationInFrames={Math.round(duracionSerifCalido * 60)} />
     <Composition id="RecAgenciaReel" component={RecAgenciaReel} fps={60} width={1920} height={1080} durationInFrames={Math.round(duracionRecAgenciaReel * 60)} />
