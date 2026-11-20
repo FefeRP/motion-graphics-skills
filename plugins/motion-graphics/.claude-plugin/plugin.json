@@ -1,7 +1,7 @@
 {
   "name": "motion-graphics",
-  "version": "2.1.0",
-  "description": "Motion graphics in Remotion by technique, not by style: a master skill (keyword MOTION GRAPHICS) plus eight combinable technique skills (product UI with a mandatory fidelity process, motion, transitions, kinetic typography, light/backgrounds/shaders, 3D and particles, 3D perspective maps, rhythm and sound) and a ready-to-render kit (60 fps, no GPU).",
+  "version": "3.0.0",
+  "description": "Motion graphics by technique, not by style, rendered with HyperFrames (HTML + CSS + GSAP to video, pinned 0.9.34, no telemetry): a master skill (keyword MOTION GRAPHICS) plus eight combinable technique skills, a ready-to-render kit (60 fps, no GPU, 13 mixable directions), AI-generated elements (objects, backgrounds, textures, characters, products, seamless loops) integrated with cut-out, alpha, color and sync, and a frozen Remotion kit for the pieces not yet ported.",
   "author": {
     "name": "motion-graphics-skills contributors"
   },
@@ -16,6 +16,11 @@
     "product-video",
     "social-hooks",
     "maps",
-    "3d-maps"
+    "3d-maps",
+    "hyperframes",
+    "gsap",
+    "html-to-video",
+    "ai-elements",
+    "higgsfield"
   ]
 }

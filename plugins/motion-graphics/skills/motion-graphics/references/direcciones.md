@@ -5,8 +5,10 @@ técnicas: lo que cambia es **un puñado de ajustes** (fondo, luz, letra, BPM, c
 más**. Por eso ahora son direcciones de partida dentro de la skill maestra: eliges una (o una mezcla) en el paso 2 y
 las técnicas salen de las skills de técnica.
 
-Todas son `TokensEstilo` en `kit/src/motion/capas` (`ESTILOS` y `TODOS_ESTILOS` en `capas/todos.ts`) y se mezclan con
-`mezclar()`. Cada una tiene su demo o su recreación verificada contra el original.
+Todas están en `MG.ESTILOS` (`kit/comun/mg.js`, las 13 por nombre, con sus fuentes locales en `kit/comun/fuentes`) y se
+mezclan con `MG.mezclar()`; la escena `kit/piezas/mezcla.html` las enseña todas con `--variables '{"estilo":"<nombre>"}'`.
+En el kit secundario son `TokensEstilo` en `kit-remotion/src/motion/capas` (`TODOS_ESTILOS`). Cada una tiene su demo o
+su recreación verificada contra el original.
 
 **La interfaz del producto NO cambia con la dirección.** Si el vídeo recrea una pantalla real, lleva los colores, la
 letra, los radios, los iconos y los textos del producto (skill `motion-interfaz`, proceso F1–F6). La dirección solo

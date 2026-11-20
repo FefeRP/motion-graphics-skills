@@ -1,6 +1,6 @@
 ---
 name: motion-graphics
-description: Skill MAESTRA de motion graphics en Remotion — palabra clave de activación "MOTION GRAPHICS" o /motion-graphics. Entiende el pedido (lanzamiento de producto, promo, gancho para redes, intro, reel, demo de app, logo animado), decide la idea y el hilo conductor, elige y combina técnicas (interfaz fiel al producto real, movimiento, transiciones por objeto, tipografía cinética, luz y shaders, 3D y partículas, mapas 3D en perspectiva, ritmo y sonido), escribe el guion por eventos, construye la pieza con el kit Remotion incluido (60 fps, sin GPU) y la verifica con fotogramas, medidas y comparación con capturas reales antes de enseñarla. Úsala SIEMPRE que pidan "MOTION GRAPHICS", "motion graphics", "vídeo animado de mi producto", "vídeo de lanzamiento", "promo animada", "gancho visual", "intro animada", "animar mi app/web/panel", "vídeo de keynote", "launch video", "product promo video", "animated explainer", "mapa animado", "ruta animada".
+description: Skill MAESTRA de motion graphics con HyperFrames (HTML + CSS + GSAP a vídeo; Remotion como motor secundario) — palabra clave de activación "MOTION GRAPHICS" o /motion-graphics. Entiende el pedido (lanzamiento de producto, promo, gancho para redes, intro, reel, demo de app, logo animado), decide la idea y el hilo conductor, elige y combina técnicas (interfaz fiel al producto real, movimiento, transiciones por objeto, tipografía cinética, luz y shaders, 3D y partículas, mapas 3D en perspectiva, ritmo y sonido), escribe el guion por eventos, decide qué se hace por código y qué con elementos generados con IA (Higgsfield: objetos, fondos, texturas, personajes, productos, en imagen o en bucle, siempre con presupuesto máximo y precio estimado antes), construye la pieza con el kit HyperFrames incluido (60 fps, sin GPU) y la verifica con fotogramas, medidas y comparación con capturas reales antes de enseñarla. Úsala SIEMPRE que pidan "MOTION GRAPHICS", "motion graphics", "vídeo animado de mi producto", "vídeo de lanzamiento", "promo animada", "gancho visual", "intro animada", "animar mi app/web/panel", "vídeo de keynote", "launch video", "product promo video", "animated explainer", "mapa animado", "ruta animada", "motion graphics con IA", "con Higgsfield".
 model: opus
 ---
 
@@ -21,10 +21,14 @@ Esta skill **dirige**: decide qué hacer y en qué orden, y delega el *cómo* en
 Las antiguas skills de estilo son ahora **direcciones de partida** (ajustes de paleta, letra y ritmo) en
 [references/direcciones.md](references/direcciones.md).
 
-**Kit**: carpeta `kit/` junto a este fichero — proyecto Remotion (1920×1080, 60 fps) con el motor
-(`kit/src/motion/base`), las direcciones (`kit/src/motion/capas`), demos y recreaciones verificadas, efectos de sonido y
-músicas sintetizadas y scripts (render, fotogramas, recortes, música, medir ritmo, capturas, tokens, fidelidad,
-comparar vídeo). Copia el kit (o `src/motion` + `scripts` + `public` en tu proyecto Remotion) y `npm install`.
+**Kit principal**: carpeta `kit/` junto a este fichero — **HyperFrames** (HTML + CSS + GSAP a vídeo, versión fijada
+0.9.34, sin telemetría ni nube), 1920×1080 a 60 fps: motor `kit/comun/mg.js` (`MG.*`: tiempo, curvas, PCHIP, muelles,
+cámara 2D/3D con desenfoque, piezas, texto cinético, efectos, luz, 13 direcciones, elementos externos), demos en
+`kit/piezas/`, efectos y músicas sintetizados en `kit/comun/` y scripts (`mg.mjs` render/fotogramas/lint, `alfa.mjs`,
+`bucle.mjs`, `medir-bucle.mjs`, música, medir ritmo, capturas, tokens, fidelidad, comparar vídeo).
+`npm install --ignore-scripts` en `kit/`. Cómo se escribe una pieza: [references/hyperframes.md](references/hyperframes.md).
+**Kit secundario** `kit-remotion/` (congelado): lo que aún no está portado (recreaciones de cobre, cristal, punto,
+taller, seguimiento, mapas 3D, `DemoEfectos2`, fidelidad). Úsalo solo para eso; las técnicas nuevas van a HyperFrames.
 
 ## Reglas de la casa (siempre)
 - **Sobrio y profesional**: sin emojis ni pegatinas, rótulos y subtítulos **sin caja** detrás, una o dos familias.
@@ -33,8 +37,12 @@ comparar vídeo). Copia el kit (o `src/motion` + `scripts` + `public` en tu proy
 - **Recortes animados, no capturas enteras con zoom**: las partes de una interfaz se despegan y se animan como piezas
   2D/3D; una ventana entera con un zoom lento es una diapositiva.
 - **Nada quieto, nada de fundidos de diapositiva**: algo nuevo cada 0,2–0,5 s; cada plano nace de un objeto del anterior.
-- **No gastes dinero sin permiso**: todo lo del kit es local (música y efectos sintetizados). Si algo necesita una API
-  de pago (voz, vídeo o imágenes con IA), estima el precio y pide el visto bueno antes.
+- **No gastes dinero sin permiso**: todo lo del kit es local (música y efectos sintetizados). Lo generado con IA
+  (Higgsfield u otro) va SIEMPRE con un **presupuesto máximo** acordado y el **precio estimado antes** de cada
+  generación (`estimate_*_cost`); sin presupuesto, saldo o prueba activa, no se genera: se hace por código.
+- **Nada que parezca IA**: ni piel de cera, ni texto deformado, ni manos raras, ni brillo plástico, ni cámaras
+  imposibles. Lo generado se integra (recorte, alfa, color de la dirección, grano y luz comunes) o no entra. Si un
+  plano generado es realista (personas, lugares), avisa de que lleva aviso de contenido generado con IA al publicarlo.
 - Trabaja con el modelo más capaz disponible y con esfuerzo alto: el motion graphics se nota muchísimo.
 
 ## Paso 1 · Entender el pedido (brief)
@@ -73,28 +81,41 @@ Escríbelo en `BRIEF.md` del vídeo (8–12 líneas).
 | Partículas, formas, 3D | Nube de puntos, formas que se transforman, mundo con cámara | `motion-3d` |
 | Un recorrido, una ubicación, reparto, inmobiliaria, "estilo app de mapas" | Ciudad 3D en un canvas, cámara que sigue el punto, ruta que avanza, barridos con desenfoque, pin con onda | `motion-mapas` |
 Combina **1 técnica fuerte (el momento estrella) + 2–4 de apoyo**. Todas las piezas leen la dirección elegida
-(`EstiloProvider`), así que se combinan sin rehacerlas.
+(`MG.montar({ estilo })`; en kit-remotion, `EstiloProvider`), así que se combinan sin rehacerlas.
+
+## Paso 3b · Código, IA o mezcla (y presupuesto)
+| Por **código** (siempre) | Con **IA** (Higgsfield), si hay presupuesto | **Mezcla** (lo normal) |
+|---|---|---|
+| Texto exacto, cifras, interfaz, logos, iconos, gráficos de datos: todo lo que tenga que ser fiel o legible | Lo orgánico o cinematográfico: humo, agua, tela, fuego, luz volumétrica, materiales, un producto físico que gira, un personaje, un fondo fotográfico o pictórico, texturas | Fondo o elemento generado (en bucle, con alfa) + interfaz, texto y logo por código encima, con la misma cámara, color y ritmo |
+
+Modo **motion graph entero con IA** (planos generados montados con transiciones y rótulos por código): solo si el
+pedido es atmosférico o de marca y hay presupuesto; nunca para enseñar una interfaz. Antes de generar nada: lista de
+elementos con modelo, duración y resolución, **precio estimado de cada uno y total**, y visto bueno con el presupuesto
+máximo. Recetas, modelos, prompts, descarga e integración: [references/elementos-ia.md](references/elementos-ia.md).
 
 ## Paso 4 · Guion por eventos y sonido
 Una fila por pulso: `t · golpe · qué entra · de qué objeto nace · cámara · sonido` (`motion-ritmo-sonido`). Elige el BPM
 y la música (`scripts/musica.mjs`, sintetizada) ANTES de animar. Escribe el guion en `GUION.md` del vídeo.
 
 ## Paso 5 · Construir
-1. Copia el kit (o úsalo dentro de tu proyecto Remotion) y `npm install`.
+1. Copia el kit y `npm install --ignore-scripts` (ffmpeg en el PATH o en la variable `FFMPEG`).
 2. Si hay interfaz: F1–F4 de `motion-interfaz` (tokens del producto con su origen) antes de dibujar nada.
-3. Escribe la composición en `src/motion/videos/<nombre>.tsx` partiendo de la demo o la recreación más cercana a la
-   dirección (`kit/src/motion/demos`, `kit/src/motion/recreaciones`). Regístrala en `src/Root.tsx` a `fps={60}`
-   (1920×1080, o 1080×1920 en vertical).
-4. Una escena = un componente con su tiempo local (`Sequence`); los tiempos salen de la tabla del guion.
-5. `npx tsc --noEmit` sin errores.
+3. Escribe la pieza en `kit/piezas/<nombre>.html` partiendo de la demo más cercana (`oscuro`, `claro`, `agencia`,
+   `mezcla`, `elementos`): una función pura `escena(t)` que devuelve el árbol con `MG.h()` y los componentes `MG.*`,
+   y `MG.montar({ id, duracion, fps: 60, estilo, escena })`. Sonido en el bloque JSON `mg-sonido`. Elementos generados
+   en `kit/comun/elementos/`. Detalle y reglas del motor: [references/hyperframes.md](references/hyperframes.md).
+4. Los tiempos salen de la tabla del guion (una constante por evento; los efectos de sonido usan los mismos tiempos).
+5. `node scripts/mg.mjs lint <pieza>`: 0 errores.
 
 ## Paso 6 · Verificar (antes de enseñar nada)
-1. **Fotogramas**: `node scripts/render.mjs stills <Comp> [props.json] 0.5 1.2 …` y hoja de contacto
+1. **Fotogramas**: `node scripts/mg.mjs stills <pieza> 0.5,1.2,3 [--variables JSON]` (≈9 s) y hoja de contacto
    (`ffmpeg -i v.mp4 -vf "fps=4,scale=320:-1,tile=8x5" hoja.jpg`): encuadre, solapes, texto legible, rótulos dentro
    del cuadro (en 9:16 sobre todo), restos de captura.
 2. **Interfaz**: F5 (comparación con la captura real, con cifras) y lista F6 de `motion-interfaz`.
-3. **Render**: `node scripts/render.mjs render <Comp> [props.json]` (≈15–30 s de render por segundo de vídeo a 60 fps
-   en 3 núcleos). Para corregir un tramo: `--desde a --hasta b --mudo` + `node scripts/empalmar.mjs`.
+3. **Render**: `node scripts/mg.mjs render <pieza> -o salida/x.mp4 [--variables JSON]` (≈6–7 s de render por segundo
+   de vídeo a 60 fps con 3 núcleos y sin GPU; con Remotion eran 15–30). Un tramo: `--desde a --hasta b`; borrador:
+   `--calidad draft`. Con clips generados: costura de los bucles (`scripts/medir-bucle.mjs`) y el clip pegado a la
+   escena fotograma a fotograma.
 4. **Medir**: `node scripts/medir-ritmo.cjs v.mp4` (quieto ≤ 10 %, racha ≤ 0,5 s, saltos ≈ 0) y
    `ffmpeg -i v.mp4 -af ebur128=peak=true -f null -` (−14 LUFS para redes, pico < −1 dBFS).
 5. **Revisión**: si tienes un revisor de vídeo con IA, pásale el MP4 con lo que debe juzgar; contrasta cada fallo que
@@ -107,5 +128,7 @@ qué queda (desviaciones de la interfaz, textos por confirmar).
 
 ## Referencias
 - [references/direcciones.md](references/direcciones.md): las direcciones de partida (antes, skills de estilo) y cómo mezclarlas.
-- [references/catalogo.md](references/catalogo.md): todos los componentes del kit, por técnica y por fichero.
+- [references/hyperframes.md](references/hyperframes.md): el motor principal: cómo se escribe una pieza, reglas, sonido, render.
+- [references/elementos-ia.md](references/elementos-ia.md): elementos generados con Higgsfield: cuándo, modelo, prompt, presupuesto, descarga, alfa, bucle e integración.
+- [references/catalogo.md](references/catalogo.md): todos los componentes de los dos kits, por técnica.
 - [references/aprender-referencia.md](references/aprender-referencia.md): cómo aprender un vídeo de referencia y meterlo en el kit.

@@ -1,0 +1,22 @@
+{
+  "_nota": "Pad tonal sin batería para la recreación «prompt de cristal» (RecPromptCristal). 21,73 s, 100 BPM, solo acordes graves + sub en los golpes grandes; se apaga en 19–21,7 s.",
+  "duracion": 21.733,
+  "bpm": 100,
+  "fundido": 2.7,
+  "progresion": ["Am", "F", "C", "G"],
+  "inicioProgresion": 0,
+  "caracter": { "brillo": 0.6, "acordes": 1.2 },
+  "mezcla": { "acordes": [0.9, 0], "reverb": [1.6, 0], "bajo": [0.5, 0] },
+  "secciones": [
+    { "nombre": "pad", "desde": 0, "hasta": 21.733, "acordes": 0.75, "acordesCorte": 1100, "acordesTransp": -12, "bajo": true }
+  ],
+  "eventos": [
+    { "t": 3.1, "tipo": "golpe", "fuerza": 0.6, "grave": 1.3 },
+    { "t": 7.25, "tipo": "golpe", "fuerza": 0.75, "grave": 1.4 },
+    { "t": 9.26, "tipo": "golpe", "fuerza": 0.55, "grave": 1.3 },
+    { "t": 11.75, "tipo": "golpe", "fuerza": 0.55, "grave": 1.3 },
+    { "t": 14.45, "tipo": "golpe", "fuerza": 0.5, "grave": 1.3 },
+    { "t": 16.3, "tipo": "subida", "hasta": 16.95, "nivel": 0.3 },
+    { "t": 18.35, "tipo": "golpe", "fuerza": 0.55, "grave": 1.3 }
+  ]
+}

@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1920, height=1080">
+  <title>Demo claro</title>
+  <link rel="stylesheet" href="comun/fuentes.css">
+  <script src="comun/vendor/gsap.min.js"></script>
+  <script src="comun/mg.js"></script>
+</head>
+<body>
+  <!-- Demo de la dirección CLARO (intros de SaaS). 10 s, 60 fps: todo entra en 0,12–0,17 s desde desenfocado/grande,
+       lo rápido lleva estela y cada escena sale de un objeto de la anterior. Marca ficticia «ruta» (app de viajes). -->
+  <div id="claro" data-composition-id="claro" data-start="0" data-duration="10" data-width="1920" data-height="1080" data-fps="60" style="width:1920px;height:1080px"></div>
+  <script type="application/json" id="mg-sonido">
+    { "musica": "musica/musica-claro.wav", "volumenMusica": 0.65, "fundido": 0, "volumen": 1, "sfx": [
+      { "t": 0.0, "n": "impacto", "vol": 0.45 }, { "t": 0.6, "n": "impacto", "vol": 0.4 }, { "t": 1.15, "n": "whoosh-suave", "vol": 0.3 }, { "t": 1.9, "n": "whoosh-rapido", "vol": 0.35 },
+      { "t": 2.33, "n": "pop", "vol": 0.45 }, { "t": 3.42, "n": "whoosh-suave", "vol": 0.3 }, { "t": 3.8, "n": "tic", "vol": 0.25 }, { "t": 4.05, "n": "whoosh-rapido", "vol": 0.35 },
+      { "t": 4.4, "n": "click", "vol": 0.35 }, { "t": 4.55, "n": "whoosh", "vol": 0.35 },
+      { "t": 5.0, "n": "tic", "vol": 0.3 }, { "t": 5.3, "n": "tic", "vol": 0.3 }, { "t": 5.6, "n": "tic", "vol": 0.3 }, { "t": 5.9, "n": "tic", "vol": 0.3 }, { "t": 6.2, "n": "tic", "vol": 0.3 },
+      { "t": 6.5, "n": "whoosh-rapido", "vol": 0.45 }, { "t": 6.66, "n": "impacto", "vol": 0.5 },
+      { "t": 7.85, "n": "whoosh-suave", "vol": 0.35 }, { "t": 8.15, "n": "subida", "vol": 0.25 }, { "t": 9.0, "n": "click", "vol": 0.6 }, { "t": 9.5, "n": "impacto", "vol": 0.4 } ] }
+  </script>
+  <script>
+    const { h, F, capa, Movil, Forma, Tarjeta, Teclea, Palabra, Flash, FugaLuz, FondoEstilo, Camara2D, tramo, interp, CURVAS, ESTILOS } = MG;
+    const E = ESTILOS.claro, FUENTE = E.fuente;
+    const AZUL = "#2B35E0", TINTA = "#1D1D1F";
+    const RUEDA = ["#2B35E0", "#7A2FD0", "#D0306E", "#E8571C", "#5DBB63"];
+    // AbsoluteFill de Remotion: capa flex en columna (los hijos se apilan y se centran con align/justify).
+    const centro = (style, ...kids) => capa({ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", ...style }, ...kids);
+
+    /** Marca «ruta»: cuadrado azul con flecha + palabra. */
+    const logo = (tam = 120, palabra = true) => h("div", { style: { display: "flex", alignItems: "center", gap: tam * 0.25 } },
+      h("div", { style: { width: tam, height: tam, borderRadius: tam * 0.28, background: AZUL, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: E.sombra } },
+        h("svg", { width: tam * 0.56, height: tam * 0.56, viewBox: "0 0 10 10" }, h("path", { d: "M2 8 L8 2 M4 2 H8 V6", stroke: "#fff", strokeWidth: 1.4, fill: "none", strokeLinecap: "round", strokeLinejoin: "round" }))),
+      palabra ? h("div", { style: { fontFamily: FUENTE, fontWeight: 700, fontSize: tam * 0.95, letterSpacing: "-0.04em", color: TINTA } }, "ruta") : null);
+
+    // mapa: estallido con sobrepaso SIN rebote (0,15→1,4 en 8 f, luego 1,4→1 expo)
+    const mapaPop = (t) => {
+      if (t < 2.33 || t > 3.45) return null;
+      const f = (t - 2.33) * 60;
+      const s = f < 8 ? interp(f, [0, 8], [0.15, 1.4]) : interp(f, [8, 26], [1.4, 1], CURVAS.expo);
+      const blur = interp(f, [0, 8, 20], [10, 6, 0]);
+      const sale = tramo(t, 3.3, 3.45, CURVAS.acelera);
+      return h("div", { style: { position: "absolute", left: 1240 - 230, top: 300 - 150, width: 460, height: 300, transform: `scale(${1.35 * s * (1 - 0.3 * sale)})`, filter: blur > 0.2 ? `blur(${blur}px)` : undefined, opacity: 1 - sale, borderRadius: 28, overflow: "hidden", boxShadow: E.sombra, background: "#DDE9F7" } },
+        h("svg", { width: 460, height: 300 },
+          Array.from({ length: 9 }, (_, i) => h("line", { x1: 0, y1: i * 38, x2: 460, y2: i * 38 + 40, stroke: "#C5D7EE", strokeWidth: 10 })),
+          h("path", { d: "M60 240 C 160 120, 260 220, 400 70", stroke: AZUL, strokeWidth: 6, fill: "none", strokeDasharray: "12 10" }),
+          h("circle", { cx: 400, cy: 70, r: 14, fill: "#0A84FF" }), h("circle", { cx: 60, cy: 240, r: 10, fill: TINTA })));
+    };
+
+    const escena1 = (t) => {
+      if (t > 3.45) return null;
+      // logo con destello: entra 2,2→1 en 10 fotogramas
+      const lg = tramo(t, 0.02, 0.19), lgSale = tramo(t, 1.05, 1.2, CURVAS.acelera);
+      return F(
+        t < 1.25 ? centro({}, h("div", { style: { transform: `scale(${interp(lg, [0, 1], [2.2, 1]) * (1 - 0.3 * lgSale)})`, opacity: 1 - lgSale, filter: lg < 0.98 ? `blur(${(1 - lg) * 12}px)` : undefined } }, logo())) : null,
+        // widget de vuelo: entra desde más grande (1,2→1)
+        Movil(t, { key: "widget", claves: [{ t: 1.15, x: 760, y: 560, s: 1.2, o: 0, b: 8 }, { t: 1.65, x: 760, y: 560, s: 1, o: 1, b: 0 }, { t: 3.3, x: 740, y: 570, s: 1, o: 1 }, { t: 3.45, x: 740, y: 570, o: 0 }] },
+          Tarjeta({ ancho: 760, alto: 400, padding: 48 },
+            h("div", { style: { fontSize: 40, color: "#6E6E73" } }, "Próximo viaje"),
+            h("div", { style: { fontSize: 96, fontWeight: 700, letterSpacing: "-0.03em", marginTop: 8 } }, "Lisboa"),
+            h("div", { style: { fontSize: 40, color: "#6E6E73", marginTop: 34 } }, "Vie 18 · 08:40 · Puerta B12"))),
+        // el avión despega (expo-in con estela vertical) y se convierte en punto azul que estalla en el mapa
+        Movil(t, { key: "avion", estela: 0.35, claves: [{ t: 1.6, x: 960, y: 520, o: 0, s: 1 }, { t: 1.7, x: 960, y: 520, o: 1 }, { t: 1.9, x: 960, y: 520 }, { t: 2.23, x: 1180, y: -40, s: 0.45, para: true }] },
+          h("svg", { width: 90, height: 90, viewBox: "0 0 24 24" }, h("path", { d: "M2 16l20-8-20-8 4 8-4 8z", fill: TINTA, transform: "rotate(-50 12 12)" }))),
+        Forma(t, { key: "punto", fondo: "#0A84FF", colorLuz: "#0A84FF", claves: [{ t: 2.2, x: 1240, y: 300, w: 22, h: 22, r: 11, luz: 0.8, o: 0 }, { t: 2.25, x: 1240, y: 300, w: 22, h: 22, luz: 0.8, o: 1 }, { t: 2.33, x: 1240, y: 300, w: 22, h: 22, o: 1 }, { t: 2.36, o: 0 }] }),
+        mapaPop(t));
+    };
+
+    /** Logo → barra de búsqueda (se estira en ease-in, gira −4°→0, el relleno se vacía) → lista con scroll e impulso. */
+    const RESULTADOS = ["Casa Alfama · 4,8", "Hotel Baixa · 4,6", "Rio Tejo Suites · 4,9", "LX Factory Lofts · 4,7", "Belém Garden · 4,8", "Miradouro Inn · 4,5"];
+    const posScroll = (tt) => interp(tt, [3.95, 4.05, 4.37, 4.55], [0, 30, -700, -820]);
+    const escena2 = (t) => {
+      if (t < 3.3 || t > 4.6) return null;
+      const vacia = tramo(t, 3.62, 3.8), scroll = posScroll(t), v = Math.abs(scroll - posScroll(t - 1 / 60)), sel = tramo(t, 4.4, 4.6);
+      return F(
+        Forma(t, { key: "barra", fondo: `rgba(43,53,224,${1 - vacia})`, colorBorde: "#C9CACF", claves: [
+          { t: 3.3, x: 960, y: 300, w: 92, h: 92, r: 26, rz: 0, o: 0 }, { t: 3.35, x: 960, y: 300, w: 92, h: 92, o: 1 }, { t: 3.42, w: 92, h: 92 },
+          { t: 3.62, x: 960, y: 300, w: 960, h: 120, r: 60, rz: -4, borde: 0 }, { t: 3.8, x: 960, y: 300, w: 960, h: 120, rz: 0, borde: 2 }, { t: 4.6, x: 960, y: 300, w: 960, h: 120, rz: 0, borde: 2 }] },
+          h("div", { style: { display: "flex", alignItems: "center", height: "100%", padding: "0 48px", fontFamily: FUENTE, fontSize: 44, color: TINTA, opacity: vacia } },
+            h("span", { style: { color: "#8E8E93", marginRight: 22 } }, "⌕"), Teclea(t, { texto: "Hoteles en Lisboa", t0: 3.8, letrasPorSeg: 70, cursor: true }))),
+        // resultados: suben con anticipación y cola larga, desenfoque SOLO vertical según la velocidad
+        capa({ clipPath: "inset(380px 0 0 0)" }, capa({ transform: `translateY(${scroll}px)`, filter: v > 1 ? `blur(${Math.min(12, v * 0.2)}px)` : undefined, opacity: tramo(t, 3.85, 3.95) },
+          RESULTADOS.map((r, i) => h("div", { style: { position: "absolute", left: 480, top: 470 + i * 150, width: 960 } },
+            Tarjeta({ ancho: 960, alto: 120, padding: 30, brillo: i === 5 ? sel : 0 },
+              h("div", { style: { fontSize: 40, fontWeight: 600 } }, r + " ", h("span", { style: { color: "#8E8E93", fontWeight: 400 } }, "· desde 89 €")))))))
+      );
+    };
+
+    /** Tras la fuga de luz: gris vacío y palabras gigantes, una por pulso (0,3 s), cada una de un color. */
+    const escena3 = (t) => {
+      if (t < 4.75 || t > 6.68) return null;
+      // zoom a través del logo: escala exponencial acelerada, el azul llena el cuadro
+      const z = tramo(t, 6.48, 6.66, CURVAS.lineal), s = Math.pow(9, z * z * z);
+      return F(
+        ["Así", "de", "fácil", "y", "rápido."].map((p, i) => Palabra(t, { texto: p, t0: 5.0 + i * 0.3, dur: 0.3, color: RUEDA[i], tam: 300 })),
+        t > 6.47 ? centro({ transform: `scale(${s})`, transformOrigin: "48% 50%", filter: z > 0.3 ? `blur(${(z - 0.3) * 20}px)` : undefined, opacity: tramo(t, 6.47, 6.5) }, logo(180, false)) : null);
+    };
+
+    /** Contador sobre el azul con desenfoque según la velocidad de las cifras; cortinilla suave; botón línea↔píldora. */
+    const escena4 = (t) => {
+      if (t < 6.64) return null;
+      const x = tramo(t, 6.75, 7.92, CURVAS.lineal), vel = (3 * Math.pow(1 - x, 2)) / 1.17; // derivada de easeOutCubic
+      const corte = interp(t, [7.85, 8.02], [108, -8], CURVAS.inOut);
+      // botón: nace de una línea (ancho y alto con cubic-out), se pulsa en 9,0 y vuelve a línea en 9,6
+      const w = interp(t, [8.15, 8.98], [114, 1240], CURVAS.suave), al = interp(t, [8.15, 8.65], [18, 240], CURVAS.suave);
+      const clic = tramo(t, 9.0, 9.05), sale = tramo(t, 9.6, 9.8, CURVAS.acelera);
+      const pulsa = t > 9.0 && t < 9.17 ? 1 - 0.04 * (1 - tramo(t, 9.0, 9.17)) : 1;
+      const mascara = t > 7.85 ? `linear-gradient(90deg, #000 ${corte - 7}%, transparent ${corte}%)` : undefined;
+      return F(
+        t < 8.05 ? centro({ background: AZUL, webkitMaskImage: mascara, maskImage: mascara },
+          h("div", { style: { fontFamily: FUENTE, fontWeight: 800, fontSize: 260, color: "#FFFFFF", letterSpacing: "-0.04em", fontVariantNumeric: "tabular-nums", filter: vel > 0.3 ? `blur(${Math.min(6, vel * 3)}px)` : undefined } },
+            MG.Contador(t, { hasta: 5000, t0: 6.75, dur: 1.17, sufijo: " €" })),
+          h("div", { style: { fontFamily: FUENTE, fontSize: 48, color: "rgba(255,255,255,0.8)", marginTop: -10 } }, "ahorrados en viajes este año")) : null,
+        t > 8.1 ? centro({},
+          h("div", { style: { width: w * (1 - 0.32 * sale), height: al * (1 - 0.93 * sale), borderRadius: 200, background: clic > 0.5 ? "#2E2D33" : "#E5173B", transform: `scale(${pulsa * (1 + 0.12 * tramo(t, 8.6, 9.6, CURVAS.lineal))})`, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", opacity: 1 - tramo(t, 9.8, 9.87) } },
+            h("div", { style: { fontFamily: FUENTE, fontWeight: 650, fontSize: 104, color: "#FFFFFF", opacity: tramo(t, 8.6, 8.8) * (1 - sale), whiteSpace: "nowrap" } }, clic > 0.5 ? "Listo." : "Empieza gratis"))) : null);
+    };
+
+    // Deriva perpetua + corte con zoom sobre la acción (0,6 s: ×1,9 descentrado, sin transición) que vuelve en 1,05.
+    const CAM = [
+      { t: 0, x: 960, y: 540, s: 1 }, { t: 0.59, x: 960, y: 540, s: 1.03 }, { t: 0.6, x: 860, y: 560, s: 1.9 }, { t: 1.04, x: 860, y: 560, s: 1.95 },
+      { t: 1.05, x: 960, y: 540, s: 1.1 }, { t: 2.2, x: 900, y: 500, s: 1.25 }, { t: 3.3, x: 1020, y: 440, s: 1.42, rz: -1 }, { t: 3.32, x: 960, y: 520, s: 1.12 },
+      { t: 4.6, x: 960, y: 560, s: 1.25 }, { t: 6.3, x: 960, y: 540, s: 1.06 }, { t: 10, x: 960, y: 540, s: 1.1 }];
+
+    const escena = (t) => capa({},
+      FondoEstilo(t),
+      MG.desenfoque(t, { ventanas: [[6.52, 6.68]], muestras: 5 }, (u) => Camara2D(u, { claves: CAM }, escena1(u), escena2(u), escena3(u))),
+      escena4(t),
+      Flash(t, { t0: 0.0, dur: 0.18, color: "#B8F5C8", fuerza: 0.6 }),
+      FugaLuz(t, { t0: 4.5, dur: 0.45 }),
+      t > 4.62 && t < 5.0 ? capa({ background: "#D9DBDF", opacity: 1 - tramo(t, 4.9, 5.0) }) : null);
+
+    MG.montar({ id: "claro", duracion: 10, fps: 60, estilo: E, escena });
+  </script>
+</body>
+</html>

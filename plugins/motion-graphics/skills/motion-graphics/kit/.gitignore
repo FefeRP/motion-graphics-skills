@@ -1,2 +1,6 @@
-node_modules
-out
+node_modules/
+index.html
+salida/
+.hyperframes/
+renders/
+.obras/

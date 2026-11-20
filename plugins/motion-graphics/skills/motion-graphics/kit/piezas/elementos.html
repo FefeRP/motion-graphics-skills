@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1920, height=1080">
+  <title>Prueba de elementos externos</title>
+  <link rel="stylesheet" href="comun/fuentes.css">
+  <script src="comun/vendor/gsap.min.js"></script>
+  <script src="comun/mg.js"></script>
+</head>
+<body>
+  <!-- Prueba de integración de elementos externos (imagen PNG con alfa + clip VP9 con alfa en bucle). Los elementos
+       son sustitutos hechos por código; con Higgsfield se cambian los ficheros y nada más. -->
+  <div id="elementos" data-composition-id="elementos" data-start="0" data-duration="4" data-width="1920" data-height="1080" data-fps="60" style="width:1920px;height:1080px">
+    <!-- el clip va FIJO en el HTML (HyperFrames lo decodifica y sincroniza); la escena solo lo coloca -->
+    <video id="luz" class="clip" src="comun/elementos/orbe.webm" data-start="0" data-duration="4" muted playsinline style="position:absolute;left:0;top:0;width:1280px;height:720px;z-index:1"></video>
+  </div>
+  <script>
+    const { h, capa, FondoEstilo, Elemento, PorPalabra, Movil, colocaMedio, tramo, ESTILOS, titular } = MG;
+    const escena = (t) => {
+      // el clip: entra con la escala y se funde en pantalla (mezcla "screen" además del alfa)
+      const k = tramo(t, 0, 0.8);
+      colocaMedio("luz", { left: 320 + "px", top: 180 + "px", transform: `scale(${1.25 + 0.15 * k})`, opacity: k, mixBlendMode: "screen" });
+      return capa({},
+        FondoEstilo(t),
+        Movil(t, { queda: true, ancho: 640, alto: 360, claves: [{ t: 0.4, x: 1500, y: 300, s: 0.7, o: 0, b: 12 }, { t: 1.2, x: 1500, y: 300, s: 1, o: 1, b: 0 }] },
+          Elemento(t, { src: "comun/elementos/orbe.png", ancho: 640, alto: 360, ajuste: "contain", mascara: "radial-gradient(closest-side, #000 60%, transparent)", color: { color: "#D0FB46", fuerza: 0.5, modo: "color" } })),
+        h("div", { style: { position: "absolute", left: 120, top: 760, ...titular(110), zIndex: 2 } }, PorPalabra(t, { texto: "Luz que respira.", t0: 0.9 })));
+    };
+    MG.montar({ id: "elementos", duracion: 4, fps: 60, estilo: ESTILOS.oscuro, escena });
+  </script>
+</body>
+</html>

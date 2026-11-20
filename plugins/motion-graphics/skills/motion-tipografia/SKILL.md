@@ -1,11 +1,11 @@
 ---
 name: motion-tipografia
-description: Técnica de motion graphics de TIPOGRAFÍA CINÉTICA en Remotion — texto que nunca "aparece" sino que se descifra, se teclea con luz, sube por máscara, golpea, entra gigante de desenfocado a nítido, se escribe palabra a palabra cambiando solo lo que cambia, sigue a la voz, se dibuja con neón, gira en cilindros y anillos 3D o se despliega desde una letra del logo; jerarquía, pesos, tracking que respira y rótulos sobrios sin cajas. La usa la skill maestra motion-graphics; úsala también sola para titulares, rótulos, frases de gancho y logotipos animados.
+description: Técnica de motion graphics de TIPOGRAFÍA CINÉTICA con HyperFrames (HTML + CSS + GSAP a vídeo; Remotion como motor secundario) — texto que nunca "aparece" sino que se descifra, se teclea con luz, sube por máscara, golpea, entra gigante de desenfocado a nítido, se escribe palabra a palabra cambiando solo lo que cambia, sigue a la voz, se dibuja con neón, gira en cilindros y anillos 3D o se despliega desde una letra del logo; jerarquía, pesos, tracking que respira y rótulos sobrios sin cajas. La usa la skill maestra motion-graphics; úsala también sola para titulares, rótulos, frases de gancho y logotipos animados.
 ---
 
 # Tipografía cinética
 
-Parte del plugin de motion graphics (kit en `../motion-graphics/kit`). Componentes en `texto.tsx`, `efectos.tsx`,
+Parte del plugin de motion graphics. Motor principal: **HyperFrames** (HTML + CSS + GSAP a vídeo; kit en `../motion-graphics/kit`): los componentes de esta skill son `MG.<Nombre>` de `kit/comun/mg.js`, con los mismos nombres y parámetros (`Movil(t, {claves}, ...hijos)`: el tiempo va primero). Los que aún no están en `MG` (lista en `../motion-graphics/references/catalogo.md`) siguen en el kit secundario `../motion-graphics/kit-remotion` (rutas `src/motion/...`). Componentes en `texto.tsx`, `efectos.tsx`,
 `efectos-2.tsx`, `cristal.tsx`, `cobre.tsx`, `taller.tsx` y `puntos.tsx`.
 
 ## Reglas

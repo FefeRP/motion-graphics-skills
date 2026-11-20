@@ -1,11 +1,11 @@
 ---
 name: motion-movimiento
-description: Técnica de motion graphics para que TODO SE MUEVA COMO UN PROFESIONAL en Remotion — curvas asimétricas (expo-out, ease-in), trayectorias PCHIP sin frenazos en las claves, muelles con el sobrepaso limitado, squash & stretch, cámara 2D/3D que nunca se queda quieta, piezas con trayectoria y estela, desenfoque de movimiento solo en lo rápido, deriva continua y encuadre que llena el cuadro. La usa la skill maestra motion-graphics; úsala también sola cuando una animación se vea lenta, robótica, a tirones o "de diapositiva".
+description: Técnica de motion graphics para que TODO SE MUEVA COMO UN PROFESIONAL con HyperFrames (HTML + CSS + GSAP a vídeo; Remotion como motor secundario) — curvas asimétricas (expo-out, ease-in), trayectorias PCHIP sin frenazos en las claves, muelles con el sobrepaso limitado, squash & stretch, cámara 2D/3D que nunca se queda quieta, piezas con trayectoria y estela, desenfoque de movimiento solo en lo rápido, deriva continua y encuadre que llena el cuadro. La usa la skill maestra motion-graphics; úsala también sola cuando una animación se vea lenta, robótica, a tirones o "de diapositiva".
 ---
 
 # Movimiento: curvas, muelles, cámara y piezas
 
-Parte del plugin de motion graphics (kit en `../motion-graphics/kit`). Todo a **60 fps**.
+Parte del plugin de motion graphics. Motor principal: **HyperFrames** (HTML + CSS + GSAP a vídeo; kit en `../motion-graphics/kit`): los componentes de esta skill son `MG.<Nombre>` de `kit/comun/mg.js`, con los mismos nombres y parámetros (`Movil(t, {claves}, ...hijos)`: el tiempo va primero). Los que aún no están en `MG` (lista en `../motion-graphics/references/catalogo.md`) siguen en el kit secundario `../motion-graphics/kit-remotion` (rutas `src/motion/...`). Todo a **60 fps**.
 
 ## Reglas (medidas en 13 referencias profesionales; no negociables)
 1. **Nunca quieto**: algo nuevo cada 0,2–0,5 s; la cámara deriva siempre (+1,5–2,5 %/s de zoom o ≈30 px/s). Objetivo
@@ -53,7 +53,9 @@ Squash & stretch: +30 % de alto al caer, 1,65:1 al saltar y 2:1 al aterrizar (`B
 - **Paneo largo con desenfoque**: `Camara2D` 1650 px en vertical + `ConDesenfoque` solo en la ventana del paneo.
 - **Recorrido de una estructura** (línea de tiempo, mosaico, mapa): la cámara baja o avanza a velocidad casi constante
   mientras cada elemento se enciende al cruzar una línea fija del cuadro (ver `motion-interfaz` §4).
-- `ConDesenfoque` (`@remotion/motion-blur`) solo en sus ventanas: encarece el render (36 s: 22 → 35 min).
+- Desenfoque de movimiento solo en sus ventanas: en HyperFrames `MG.desenfoque(t, { ventanas: [[a, b]], muestras: 6, obturador: 270 }, (t) => escena)`
+  (misma fórmula que `ConDesenfoque`/`CameraMotionBlur` de Remotion: N copias en `t + 1/fps − obturador/360 · k/N/fps`,
+  `plus-lighter` a 1/N). Cada muestra repinta la escena: el render de esa ventana cuesta ×N.
 
 ## Piezas con trayectoria
 - `Movil claves={…} estela={0.35}`: cualquier contenido con trayectoria propia (x, y, z, giros, escala, opacidad, blur).

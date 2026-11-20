@@ -1,11 +1,11 @@
 ---
 name: motion-luz-fondo
-description: Técnica de motion graphics de LUZ, FONDOS, MATERIALES Y SHADERS en Remotion — fondos que nunca están planos ni quietos (foco, halo que late, luz de esquina, auroras, humo y gas con shader WebGL propio, manchas de color por escena), cristal lechoso y cristal esmerilado sin backdrop-filter en 3D, profundidad de campo, sombras de contacto, temperatura de la luz (todo llega con luz y se enfría), grano, viñeta, bokeh y destellos. La usa la skill maestra motion-graphics; úsala también sola cuando un vídeo se vea plano, barato o "de plantilla".
+description: Técnica de motion graphics de LUZ, FONDOS, MATERIALES Y SHADERS con HyperFrames (HTML + CSS + GSAP a vídeo; Remotion como motor secundario) — fondos que nunca están planos ni quietos (foco, halo que late, luz de esquina, auroras, humo y gas con shader WebGL propio, manchas de color por escena), cristal lechoso y cristal esmerilado sin backdrop-filter en 3D, profundidad de campo, sombras de contacto, temperatura de la luz (todo llega con luz y se enfría), grano, viñeta, bokeh y destellos. La usa la skill maestra motion-graphics; úsala también sola cuando un vídeo se vea plano, barato o "de plantilla".
 ---
 
 # Luz, fondos, materiales y shaders
 
-Parte del plugin de motion graphics (kit en `../motion-graphics/kit`). Componentes en `acabado.tsx`, `humo.tsx`,
+Parte del plugin de motion graphics. Motor principal: **HyperFrames** (HTML + CSS + GSAP a vídeo; kit en `../motion-graphics/kit`): los componentes de esta skill son `MG.<Nombre>` de `kit/comun/mg.js`, con los mismos nombres y parámetros (`Movil(t, {claves}, ...hijos)`: el tiempo va primero). Los que aún no están en `MG` (lista en `../motion-graphics/references/catalogo.md`) siguen en el kit secundario `../motion-graphics/kit-remotion` (rutas `src/motion/...`). Componentes en `acabado.tsx`, `humo.tsx`,
 `cristal.tsx`, `cobre.tsx` y `efectos-2.tsx`.
 
 ## Reglas
@@ -44,7 +44,10 @@ Parte del plugin de motion graphics (kit en `../motion-graphics/kit`). Component
 - **Sombra de contacto**: elipse muy desenfocada bajo el objeto que se encoge cuando el objeto sube.
 - **Tarjeta con brillo**: filo de luz #FFFFE8 y halo del acento (`TarjetaBrillo`).
 
-## Humo / gas con shader (`Humo`)
+## Humo / gas con shader (`Humo`, solo en kit-remotion)
+En HyperFrames: `MG.Manchas`/`MG.Aurora` para color que deriva, o un **clip de humo generado con IA sobre negro** en
+bucle perfecto (`scripts/bucle.mjs`) y con alfa (`scripts/alfa.mjs --modo negro`), integrado como `<video class="clip">`
+con mezcla `screen` (`../motion-graphics/references/elementos-ia.md`). El shader de Remotion:
 Shader WebGL propio (ruido de gradiente, fbm con domain warping doble y dithering ±1/255). Props: `colores` (2–4),
 `zona`, `brillo`, `vel`, `escala` (más = volutas más pequeñas), `densidad`, `torsion` (1–1,6 gas; 3+ mármol: no detrás
 de texto), `estira` (>1 velos de aurora), `semilla`, `calidad`, `mezcla`. Determinista; necesita

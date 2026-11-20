@@ -1,0 +1,30 @@
+{
+  "_nota": "Enérgica, con pegada (agencia/tech). 11,25 s, 128 BPM (compás 1,875 s). Impacto+crash en cada compás, subida 9,4–10,25, silencio 10,25–10,31, golpe final 10,3125 y cola.",
+  "duracion": 11.25,
+  "bpm": 128,
+  "fundido": 0.94,
+  "progresion": ["Am", "F", "C", "G"],
+  "inicioProgresion": 0,
+  "caracter": { "brillo": 1.15, "pegadaBombo": 1.7, "arp": 1.1 },
+  "mezcla": { "bombo": [1.1, 0], "bajo": [0.7, 0.85], "fx": [0.85, 0] },
+  "secciones": [
+    { "nombre": "arranque", "desde": 0,      "hasta": 1.875,  "groove": true, "acordes": 0.7, "arp": "A", "arpCorte": [3000, 5500] },
+    { "nombre": "groove",   "desde": 1.875,  "hasta": 5.625,  "groove": true, "arp": "A", "arpCorte": [5500, 5500] },
+    { "nombre": "cumbre",   "desde": 5.625,  "hasta": 9.375,  "groove": true, "arp": "B", "arpCorte": [6000, 6500], "lead": true },
+    { "nombre": "subida",   "desde": 9.375,  "hasta": 10.25,  "bombo": true, "charles": true, "acordes": 0.6, "acordesCorte": 3000, "arp": "A", "arpCorte": [3000, 8000] },
+    { "nombre": "hueco",    "desde": 10.25,  "hasta": 10.3125 },
+    { "nombre": "final",    "desde": 10.3125,"hasta": 11.25 }
+  ],
+  "eventos": [
+    { "t": 0,     "tipo": "golpe", "fuerza": 0.9 }, { "t": 0,     "tipo": "crash", "nivel": 0.9 },
+    { "t": 1.875, "tipo": "golpe", "fuerza": 0.8 }, { "t": 1.875, "tipo": "crash", "nivel": 0.85 },
+    { "t": 3.75,  "tipo": "golpe", "fuerza": 0.8 }, { "t": 3.75,  "tipo": "crash", "nivel": 0.85 },
+    { "t": 5.625, "tipo": "golpe", "fuerza": 0.9 }, { "t": 5.625, "tipo": "crash", "nivel": 0.9 },
+    { "t": 7.5,   "tipo": "golpe", "fuerza": 0.8 }, { "t": 7.5,   "tipo": "crash", "nivel": 0.85 },
+    { "t": 9.375, "tipo": "golpe", "fuerza": 0.9 }, { "t": 9.375, "tipo": "crash", "nivel": 0.9 },
+    { "t": 9.4,   "tipo": "subida", "hasta": 10.25, "nivel": 0.5 },
+    { "t": 9.4,   "tipo": "redoble", "hasta": 10.25 },
+    { "t": 10.25, "tipo": "silencio", "hasta": 10.3125, "nivel": 0.02 },
+    { "t": 10.3125, "tipo": "final", "fuerza": 1.4 }
+  ]
+}

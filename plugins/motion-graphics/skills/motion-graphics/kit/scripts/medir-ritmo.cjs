@@ -10,6 +10,7 @@ const a = difs(raw("fps=10,scale=160:90,format=gray"), 160 * 90);
 const media = a.reduce((x, y) => x + y, 0) / a.length, quietos = a.filter((x) => x < 0.6).length / a.length, cortes = a.filter((x) => x > 25).length;
 let r = 0, max = 0; for (const x of a) { r = x < 0.6 ? r + 1 : 0; max = Math.max(max, r); }
 const b = difs(raw("scale=320:180,format=gray"), 320 * 180);
-let picos = 0; for (let i = 1; i < b.length - 1; i++) { const v = (b[i - 1] + b[i + 1]) / 2; if (v > 1 && b[i] > 3 * v) picos++; }
+const fpsNat = b.length / (a.length / 10);
+let picos = 0; const donde = []; for (let i = 1; i < b.length - 1; i++) { const v = (b[i - 1] + b[i + 1]) / 2; if (v > 1 && b[i] > 3 * v) { picos++; donde.push(((i + 1) / fpsNat).toFixed(2)); } }
 const dur = a.length / 10;
-console.log(`${et}: ${dur.toFixed(0)} s · dif media ${media.toFixed(2)} · quieto ${(100 * quietos).toFixed(0)} % · racha quieta ${(max / 10).toFixed(1)} s · cortes duros ${(cortes / dur * 60).toFixed(0)}/min · saltos de 1 fotograma ${picos} (${(picos / dur).toFixed(2)}/s)`);
+console.log(`${et}: ${dur.toFixed(0)} s · dif media ${media.toFixed(2)} · quieto ${(100 * quietos).toFixed(0)} % · racha quieta ${(max / 10).toFixed(1)} s · cortes duros ${(cortes / dur * 60).toFixed(0)}/min · saltos de 1 fotograma ${picos} (${(picos / dur).toFixed(2)}/s)${donde.length ? " en " + donde.join(", ") + " s" : ""}`);

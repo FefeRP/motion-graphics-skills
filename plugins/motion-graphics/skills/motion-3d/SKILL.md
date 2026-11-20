@@ -1,13 +1,15 @@
 ---
 name: motion-3d
-description: Técnica de motion graphics de PROFUNDIDAD, 3D Y PARTÍCULAS en Remotion sin GPU ni Three.js — piezas que flotan en un espacio 3D CSS y una cámara que viaja entre ellas, capas con parallax, objetos que llegan volteándose, iconos que flotan u orbitan alrededor de un texto, túneles, portales, horizontes, cintas, nubes de cientos de puntos que cambian de forma (flor, rejilla, esfera, toro, cubo) y formas que se transforman. La usa la skill maestra motion-graphics; úsala también sola para "darle profundidad" o "algo 3D".
+description: Técnica de motion graphics de PROFUNDIDAD, 3D Y PARTÍCULAS con HyperFrames (HTML + CSS + GSAP a vídeo; Remotion como motor secundario) sin GPU ni Three.js — piezas que flotan en un espacio 3D CSS y una cámara que viaja entre ellas, capas con parallax, objetos que llegan volteándose, iconos que flotan u orbitan alrededor de un texto, túneles, portales, horizontes, cintas, nubes de cientos de puntos que cambian de forma (flor, rejilla, esfera, toro, cubo) y formas que se transforman. La usa la skill maestra motion-graphics; úsala también sola para "darle profundidad" o "algo 3D".
 ---
 
 # Profundidad, 3D y partículas
 
-Parte del plugin de motion graphics (kit en `../motion-graphics/kit`). Es 3D de CSS (`perspective` +
-`preserve-3d`) y canvas/SVG: corre en cualquier máquina sin GPU. Para 3D real con modelos (glTF), usa Three.js con
-`@remotion/three` aparte; casi nunca hace falta.
+Parte del plugin de motion graphics. Motor principal: **HyperFrames** (HTML + CSS + GSAP a vídeo; kit en `../motion-graphics/kit`): los componentes de esta skill son `MG.<Nombre>` de `kit/comun/mg.js`, con los mismos nombres y parámetros (`Movil(t, {claves}, ...hijos)`: el tiempo va primero). Los que aún no están en `MG` (lista en `../motion-graphics/references/catalogo.md`) siguen en el kit secundario `../motion-graphics/kit-remotion` (rutas `src/motion/...`). Es 3D de CSS (`perspective` +
+`preserve-3d`) y canvas/SVG: corre en cualquier máquina sin GPU. Para 3D real con modelos (glTF), usa three.js dentro de la
+pieza HTML (HyperFrames captura WebGL; sin GPU va por SwiftShader y es lento); casi nunca hace falta. Para un objeto
+orgánico o fotográfico que gira (producto, personaje), mejor un clip generado con IA integrado como elemento
+(`../motion-graphics/references/elementos-ia.md`).
 
 ## Reglas
 1. **Capas antes que 3D**: 3 planos con escala, blur y velocidad distintos ya dan profundidad (parallax 1 : 0,6 : 0,3).

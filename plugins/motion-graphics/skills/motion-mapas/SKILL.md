@@ -1,13 +1,14 @@
 ---
 name: motion-mapas
-description: Técnica de motion graphics de MAPAS 3D EN PERSPECTIVA en Remotion sin GPU — estilo navegador de mapas: ciudad con edificios extruidos que crecen desde el suelo, cámara que se inclina, gira y sigue un punto, ruta que se dibuja por las calles con su cabeza, barridos con desenfoque de movimiento, capa de tráfico, flechas en el suelo, pin que cae con onda, tarjetas ancladas a un edificio y cierre con el mapa plegado en una tarjeta. Para logística y reparto, movilidad, inmobiliarias, turismo, locales, "dónde estamos" y cualquier recorrido. La usa la skill maestra motion-graphics; úsala también sola para "un mapa animado", "una ruta en 3D", "estilo Google Maps / mapa de navegación".
+description: Técnica de motion graphics de MAPAS 3D EN PERSPECTIVA sin GPU (de momento en el kit secundario de Remotion; el canvas se porta tal cual a HyperFrames) — estilo navegador de mapas: ciudad con edificios extruidos que crecen desde el suelo, cámara que se inclina, gira y sigue un punto, ruta que se dibuja por las calles con su cabeza, barridos con desenfoque de movimiento, capa de tráfico, flechas en el suelo, pin que cae con onda, tarjetas ancladas a un edificio y cierre con el mapa plegado en una tarjeta. Para logística y reparto, movilidad, inmobiliarias, turismo, locales, "dónde estamos" y cualquier recorrido. La usa la skill maestra motion-graphics; úsala también sola para "un mapa animado", "una ruta en 3D", "estilo Google Maps / mapa de navegación".
 ---
 
 # Mapas 3D en perspectiva
 
-Parte del plugin de motion graphics (kit en `../motion-graphics/kit`). Motor: `kit/src/motion/base/mapa3d.tsx`, un solo
+Parte del plugin de motion graphics. Motor principal: **HyperFrames** (HTML + CSS + GSAP a vídeo; kit en `../motion-graphics/kit`): los componentes de esta skill son `MG.<Nombre>` de `kit/comun/mg.js`, con los mismos nombres y parámetros (`Movil(t, {claves}, ...hijos)`: el tiempo va primero). Los que aún no están en `MG` (lista en `../motion-graphics/references/catalogo.md`) siguen en el kit secundario `../motion-graphics/kit-remotion` (rutas `src/motion/...`). **Esta técnica solo está en el kit secundario (Remotion)**; para HyperFrames, el canvas de `mapa3d.tsx` es JavaScript
+sin React y se porta tal cual a una pieza HTML (dibujar en un `<canvas>` dentro de `escena(t)`). Motor: `kit-remotion/src/motion/base/mapa3d.tsx`, un solo
 `<canvas>` 2D dibujado por CPU (proyección propia, sin WebGL ni Three.js). Pieza de ejemplo verificada:
-`kit/src/motion/recreaciones/mapa-ruta.tsx` (`RecMapaRuta`, 12 s, 60 fps): **cópiala y cambia la ruta y los textos**.
+`kit-remotion/src/motion/recreaciones/mapa-ruta.tsx` (`RecMapaRuta`, 12 s, 60 fps): **cópiala y cambia la ruta y los textos**.
 
 ## Lo que hace que parezca un anuncio de mapas (medido en la referencia)
 - **La cámara sigue a un punto** (el usuario, el repartidor): el punto queda casi fijo en pantalla y el mundo se mueve.

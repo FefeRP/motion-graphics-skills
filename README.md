@@ -1,9 +1,15 @@
 # Motion Graphics Skills for Claude Code
 
-**Professional, fluid motion graphics in [Remotion](https://www.remotion.dev) — made by Claude.**
+**Professional, fluid motion graphics in [HyperFrames](https://github.com/heygen-com/hyperframes) (HTML + CSS + GSAP → video) — made by Claude.**
 Say *"MOTION GRAPHICS: a 30-second launch video for my app"* and get a 60 fps video that moves like a keynote: pieces
 that fly in and rearrange, objects that morph into the next scene, kinetic typography, light, motion blur and
 sound effects locked to every landing. No slideshows.
+
+**v3.0 · new engine.** Pieces are now plain HTML pages animated with GSAP and rendered by HyperFrames (pinned
+0.9.34, telemetry off, local only). The demos below were rebuilt in HyperFrames and checked against the Remotion
+versions; Remotion stays as a frozen secondary kit (`kit-remotion/`) for the pieces not ported yet. The skills also
+know when to bring **AI-generated elements** (objects, backgrounds, textures, characters, products, seamless loops)
+into a piece and how to integrate them — always with a budget and a price estimate first.
 
 | Dark (keynote) | Light (SaaS intro) | Agency (reel) |
 |---|---|---|
@@ -15,13 +21,40 @@ sound effects locked to every landing. No slideshows.
 |---|---|---|---|---|
 | ![](docs/demos/mezcla-oscuro.gif) | ![](docs/demos/mezcla-claro.gif) | ![](docs/demos/mezcla-agencia.gif) | ![](docs/demos/mezcla-claro-lima.gif) | ![](docs/demos/mezcla-oscuro-agencia.gif) |
 
-**Effects catalog** (`DemoEfectos2`, 24 s — liquid blobs, voice-synced phrase, chromatic flash, elastic pill tabs,
+**Effects catalog** (secondary Remotion kit, `DemoEfectos2`, 24 s — liquid blobs, voice-synced phrase, chromatic flash, elastic pill tabs,
 negative strobe, barrel-lens panel wall, light line, glowing card stack, orbits, word selection, tunnel, portal,
 horizon logo reveal):
 
 ![effects](docs/demos/efectos.gif)
 
 Full-quality MP4s are in [`docs/demos/`](docs/demos).
+
+## HyperFrames vs Remotion (same demos, measured)
+Each demo was ported line by line (same keyframes, curves, springs, seeded randomness and motion-blur formula) and
+compared with `scripts/comparar-video.mjs` (timing = correlation of the motion curves; 1 = events on the same frames),
+`medir-ritmo.cjs` and EBU R128 loudness:
+
+| Demo | Timing (offset) | Loudness HF / Remotion | Render, 1080p60, 3 CPU cores, no GPU |
+|---|---|---|---|
+| `oscuro` (10 s) | 1.00 (0 s) | −17.9 / −17.9 LUFS | 68 s (Remotion ≈ 150–300 s) |
+| `claro` (10 s) | 1.00 (0 s) | −16.9 / −16.9 LUFS | 72 s |
+| `agencia` (11.25 s) | 1.00 (0 s) | −18.1 / −18.2 LUFS | 75 s |
+| `mezcla` × 5 directions | 1.00 (0 s) in all five | same | 63–133 s |
+
+The only visible difference: the counter now always groups thousands ("4.663 €"). Where Chrome without a GPU clips a
+large blurred `box-shadow` into a square, the HyperFrames demo uses a radial gradient instead.
+
+## AI-generated elements (optional, with a budget)
+Text, numbers, UI and logos are always code. Organic or cinematic things — smoke, water, fabric, a product that turns,
+a character, a photographic background, a texture — can be generated (the skill documents Higgsfield models) and
+integrated as pieces: `scripts/alfa.mjs` cuts them out (chroma, black, white or exact black/white difference),
+`scripts/bucle.mjs` closes a clip into a seamless loop and measures the seam, `MG.Elemento` places images with crop,
+mask and a palette tint clipped to the image alpha, and `<video class="clip">` + `MG.colocaMedio` places VP9-alpha clips
+frame-accurately. Before anything is generated the skill lists every element with its estimated price and asks for a
+maximum budget; without budget it builds the same idea in code. The `elementos` demo piece shows the integration with
+code-made stand-ins:
+
+![elementos](docs/demos/elementos.gif)
 
 ## Learned from references, frame by frame
 Every style and variant comes from studying real motion graphics frame by frame (timing, easing measured per frame,
@@ -112,10 +145,12 @@ a beat grid, builds the piece with the kit and checks it before showing it to yo
 | `motion-3d` | CSS 3D worlds with a travelling camera, parallax layers, icons floating around a sentence, orbits, tunnels, particle clouds that morph |
 | `motion-ritmo-sonido` | strict beat grid, event-by-event script, synthesized music, sound effects locked to the landing frame, −14 LUFS |
 
-- **A Remotion kit** (`plugins/motion-graphics/skills/motion-graphics/kit`): the shared engine (`src/motion/base`),
-  the styles (`src/motion/capas`), one demo per style, a style-mixing demo, an effects catalog, synthesized sound
-  effects and music (no third-party rights), and scripts to render, take stills, crop pieces, generate music,
-  measure rhythm, capture reference screenshots, extract design tokens from code and compare renders with the real UI.
+- **A HyperFrames kit** (`plugins/motion-graphics/skills/motion-graphics/kit`): the engine (`comun/mg.js`), 13 mixable
+  directions with local fonts, the demos (`piezas/`), synthesized sound effects and music (no third-party rights) and
+  scripts to render, take stills, lint, cut out and loop AI elements, generate music, measure rhythm, capture reference
+  screenshots, extract design tokens from code and compare renders with the real UI.
+- **A frozen Remotion kit** (`kit-remotion/`) with the recreations, the effects catalog, the fidelity demo and the 3D
+  maps that are not ported yet.
 
 ### The engine in one paragraph
 Everything runs at 60 fps on smooth PCHIP trajectories (no stop-and-go at keyframes, no overshoot unless asked),
@@ -125,8 +160,8 @@ transitions (flash, light leak, chromatic flash, negative strobe), liquid color 
 mask, punch, per-letter, neon, voice-synced phrases) and sound effects placed on the exact landing frame.
 
 ## Install
-Requirements: [Claude Code](https://code.claude.com), Node.js 18+ (22 recommended), and ffmpeg for the helper
-scripts (Remotion brings its own ffmpeg for rendering).
+Requirements: [Claude Code](https://code.claude.com), Node.js 22+, ffmpeg in the PATH (or `FFMPEG`) and Chrome (or
+the headless shell HyperFrames downloads).
 
 ```bash
 # 1. Add the marketplace
@@ -146,14 +181,14 @@ motion-graphics@motion-graphics-skills`.
 ```bash
 cp -r ~/.claude/plugins/…/motion-graphics/skills/motion-graphics/kit my-video   # or copy it from this repo
 cd my-video
-npm install
-npm run dev               # Remotion Studio with all demos
-npm run render:demos      # renders the three style demos to out/
-node scripts/render.mjs render DemoMezcla ../path/to/props.json   # e.g. {"estilo":"claro","ajustes":{"acento":"#FF3B5C"}}
+npm install --ignore-scripts
+node scripts/mg.mjs stills oscuro 1,3,6          # frames + contact sheet in salida/
+node scripts/mg.mjs render oscuro                # salida/oscuro.mp4
+node scripts/mg.mjs render mezcla -o salida/lima.mp4 --variables '{"estilo":"claro-lima"}'
 ```
 
 ## Use it
-Start with the keyword in a Remotion project (or an empty folder), for example:
+Start with the keyword in an empty folder or next to your product's code, for example:
 - *"MOTION GRAPHICS: a 25 s launch video for my app. The code is in ../app, here is the logo."*
 - *"MOTION GRAPHICS: a 10 s vertical hook for Instagram that shows how an order travels to the customer's door."*
 - *"MOTION GRAPHICS: same video, light direction, with my brand color #FF3B5C and the energy of the agency rhythm."*
@@ -170,8 +205,9 @@ plugins/motion-graphics/
   .claude-plugin/plugin.json             # the plugin
   skills/
     motion-graphics/SKILL.md             # master skill (keyword MOTION GRAPHICS)
-    motion-graphics/references/          # directions, component catalog, how to learn a reference
-    motion-graphics/kit/                 # Remotion kit (engine, directions, demos, recreations, scripts, sounds)
+    motion-graphics/references/          # engine guide, AI elements, directions, component catalog, learning a reference
+    motion-graphics/kit/                 # HyperFrames kit (engine, directions, demos, scripts, sounds)
+    motion-graphics/kit-remotion/        # frozen Remotion kit (recreations, effects catalog, fidelity demo, maps)
     motion-interfaz/  motion-movimiento/  motion-transiciones/  motion-tipografia/
     motion-luz-fondo/  motion-3d/  motion-mapas/  motion-ritmo-sonido/   # technique skills
 docs/demos/                              # demo videos and GIFs
@@ -179,17 +215,19 @@ docs/fidelidad/                          # before/after fidelity comparison shee
 CHANGELOG.md                             # versions
 LICENSE                                  # MIT
 ```
-Only Remotion is supported today; the engine keeps Remotion-specific code in three small files (clock, motion blur,
-sound) so other engines can be added later.
+HyperFrames is the main engine; the Remotion kit is kept frozen and documented with a Remotion → HyperFrames
+equivalence table (`references/hyperframes.md`) for porting the remaining pieces.
 
 ---
 
 ## En español
-Skills para Claude Code que hacen motion graphics con ritmo profesional en Remotion, organizadas por técnicas y no
+Skills para Claude Code que hacen motion graphics con ritmo profesional con HyperFrames (HTML + CSS + GSAP a vídeo; Remotion queda como kit secundario congelado), organizadas por técnicas y no
 por estilos: una skill maestra (palabra clave `MOTION GRAPHICS`) que entiende el pedido, decide la idea y el hilo
 conductor, elige y mezcla técnicas y construye la pieza, y ocho skills de técnica combinables (interfaz fiel,
-movimiento, transiciones, tipografía, luz y fondos, 3D y partículas, mapas 3D en perspectiva, ritmo y sonido), más un kit de Remotion listo
-para renderizar. Las direcciones visuales (oscuro, claro, agencia y sus variantes) son ajustes mezclables. Cuando recrean la interfaz de tu producto, siguen un proceso obligatorio de fidelidad (fuente de
+movimiento, transiciones, tipografía, luz y fondos, 3D y partículas, mapas 3D en perspectiva, ritmo y sonido), más un kit de HyperFrames listo
+para renderizar (y un kit de Remotion secundario). Saben cuándo usar elementos generados con IA (objetos, fondos,
+texturas, personajes, productos, bucles) y cómo integrarlos, siempre con presupuesto máximo y precio estimado antes.
+Las direcciones visuales (oscuro, claro, agencia y sus variantes) son ajustes mezclables. Cuando recrean la interfaz de tu producto, siguen un proceso obligatorio de fidelidad (fuente de
 verdad, tokens copiados, comparación con capturas reales y lista de comprobación) para que sea idéntica a la real.
 Instalación: `claude plugin marketplace add FefeRP/motion-graphics-skills` y
 `claude plugin install motion-graphics@motion-graphics-skills`. Las skills están escritas en español.

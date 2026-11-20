@@ -1,5 +1,26 @@
 # Changelog
 
+## 3.0.0 · 2026-11-20 · HyperFrames engine and AI-generated elements
+- **New main engine: HyperFrames** (HTML + CSS + GSAP to video), pinned to 0.9.34, launched with telemetry off and no
+  cloud rendering. New kit in `kit/`: the engine as one plain script (`comun/mg.js`, `window.MG`: pure `escena(t)`
+  functions reconciled to the DOM, driven by a paused GSAP timeline), local OFL fonts, synthesized sounds and music,
+  and `scripts/mg.mjs` (render, stills, lint, preview; sound written as `<audio>` tags from a JSON block; isolated
+  work folders so several runs never collide).
+- **Demos rebuilt** in HyperFrames (`oscuro`, `claro`, `agencia`, `mezcla` with five directions) and compared side by
+  side with the Remotion ones: timing 1.00 with zero offset, same loudness (±0.1 LUFS), same cut frames; motion blur,
+  seeded randomness and springs use the same formulas. Render is ~2–4× faster (≈6.5 s per second of 1080p60 video on
+  3 CPU cores, no GPU).
+- **All 13 directions** are now in `MG.ESTILOS` (adds `agencia-punto`, `oscuro-cobre`, `oscuro-cristal`, `taller`,
+  `taller-claro`, `claro-lavanda` with their fonts).
+- **AI-generated elements** (`references/elementos-ia.md`): when to use code, AI or both; budget and price estimate
+  before every generation; model per element (objects, products, backgrounds, textures, living matter, characters);
+  prompt templates that avoid the "AI look"; cut-out and alpha (`scripts/alfa.mjs`), seamless loops
+  (`scripts/bucle.mjs` + `medir-bucle.mjs`), download and log; integration with `MG.Elemento` (crop, mask, tint clipped
+  to the image alpha, blend) and fixed `<video class="clip">` (VP9 with alpha) placed by `MG.colocaMedio`. Demo piece
+  `elementos` with code-made stand-ins.
+- **Remotion** moves to `kit-remotion/` as a frozen secondary kit for what is not ported yet (the round 4–6
+  recreations, `DemoEfectos2`, the fidelity demo, 3D maps). Skills point to HyperFrames first.
+
 ## 2.1.0 · 2026-10-26 · Round 6: 3D perspective maps
 - **New technique skill `motion-mapas`**: maps-app style 3D perspective maps (camera that tilts, turns and follows a
   dot; buildings that grow in a wave; routes along the streets; whip zooms with motion blur; ground arrows; pin drop

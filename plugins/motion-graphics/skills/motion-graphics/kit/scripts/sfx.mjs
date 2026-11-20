@@ -1,4 +1,4 @@
-// Sintetiza los efectos de sonido (sin ficheros de terceros ni licencias) → assets/sfx/*.wav.
+// Sintetiza los efectos de sonido (sin ficheros de terceros ni licencias) → comun/sfx/*.wav.
 // Síntesis propia de efectos, suave: aquí acompañan a una voz, no a una promo.
 import fs from "node:fs";
 import path from "node:path";
@@ -107,7 +107,7 @@ const escribeWav = (f, [L, R]) => {
   fs.writeFileSync(f, b);
 };
 
-const dir = path.join(RAIZ, "public", "sfx");
+const dir = path.join(RAIZ, "comun", "sfx");
 fs.mkdirSync(dir, { recursive: true });
 escribeWav(path.join(dir, "whoosh.wav"), whoosh({ dur: 0.55, f: [300, 2200, 600], pico: 0.5, dir: 1 }));
 escribeWav(path.join(dir, "whoosh-suave.wav"), whoosh({ dur: 0.5, f: [700, 1400, 300], pico: 0.4, semilla: 11, dir: -1 }));

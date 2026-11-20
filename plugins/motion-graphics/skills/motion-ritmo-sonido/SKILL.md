@@ -1,11 +1,11 @@
 ---
 name: motion-ritmo-sonido
-description: Técnica de motion graphics de RITMO, GUION POR EVENTOS, MÚSICA Y EFECTOS DE SONIDO en Remotion — rejilla de pulso estricta (cada evento en un tiempo o medio tiempo), guion escrito como tabla de eventos antes del código, música sintetizada sin derechos de terceros con golpes en los cortes, efectos de sonido clavados al fotograma en que aterriza cada objeto, silencios antes del golpe grande, mezcla sin saturar y volumen final a −14 LUFS. La usa la skill maestra motion-graphics; úsala también sola para sincronizar un vídeo con su música o ponerle sonido.
+description: Técnica de motion graphics de RITMO, GUION POR EVENTOS, MÚSICA Y EFECTOS DE SONIDO con HyperFrames (HTML + CSS + GSAP a vídeo; Remotion como motor secundario) — rejilla de pulso estricta (cada evento en un tiempo o medio tiempo), guion escrito como tabla de eventos antes del código, música sintetizada sin derechos de terceros con golpes en los cortes, efectos de sonido clavados al fotograma en que aterriza cada objeto, silencios antes del golpe grande, mezcla sin saturar y volumen final a −14 LUFS. La usa la skill maestra motion-graphics; úsala también sola para sincronizar un vídeo con su música o ponerle sonido.
 ---
 
 # Ritmo, guion, música y sonido
 
-Parte del plugin de motion graphics (kit en `../motion-graphics/kit`).
+Parte del plugin de motion graphics. Motor principal: **HyperFrames** (HTML + CSS + GSAP a vídeo; kit en `../motion-graphics/kit`): los componentes de esta skill son `MG.<Nombre>` de `kit/comun/mg.js`, con los mismos nombres y parámetros (`Movil(t, {claves}, ...hijos)`: el tiempo va primero). Los que aún no están en `MG` (lista en `../motion-graphics/references/catalogo.md`) siguen en el kit secundario `../motion-graphics/kit-remotion` (rutas `src/motion/...`).
 
 ## Rejilla de pulso
 - Elige el BPM antes de animar: 100 (sereno), 120 (producto), 124–128 (energía), 128,6 = 28 fotogramas a 60 fps.
@@ -31,8 +31,12 @@ derechos de terceros. En el JSON: duración, BPM, progresión, secciones (`SECCI
 subida, silencio) y mezcla; se normaliza a −14 LUFS / −1 dBTP. Ejemplos en `musica/*.json` (oscuro, claro, agencia).
 Sin música, deja la prop `musica` como hueco y monta todo igualmente a un BPM.
 
-## Efectos (`Sonido sfx={[{t, f, v}]}`)
-Sonidos sintetizados en `public/sfx` (`node scripts/sfx.mjs`): `tic`, `click`, `pop`, `whoosh`, `whoosh-suave`,
+## Efectos (bloque `mg-sonido`; en kit-remotion `Sonido sfx={[{t, f, v}]}`)
+En HyperFrames el sonido va en la pieza como JSON: `<script type="application/json" id="mg-sonido">{ "musica":
+"musica/x.wav", "volumenMusica": 0.55, "volumen": 0.75, "fundido": 0.6, "sfx": [{ "t": 1.5, "n": "impacto", "vol": 0.8 }] }</script>`;
+`scripts/mg.mjs` lo escribe como etiquetas `<audio class="clip">` (el audio creado por JS no suena en el render). Los `t`
+salen de la misma tabla de tiempos que anima la escena, así nunca se desincronizan.
+Sonidos sintetizados en `comun/sfx` (kit-remotion: `public/sfx`; `node scripts/sfx.mjs`): `tic`, `click`, `pop`, `whoosh`, `whoosh-suave`,
 `whoosh-rapido`, `impacto`, `subida`, `glitch`…
 - pop/clic/tic cuando el objeto **aterriza** (no cuando empieza a moverse); whoosh **centrado** en el barrido;
   impacto en el golpe; subida que termina en el golpe.
@@ -44,7 +48,7 @@ Sonidos sintetizados en `public/sfx` (`node scripts/sfx.mjs`): `tic`, `click`, `
   golpe (o medio golpe) y los iris/focos TERMINAN en el golpe (empiezan 0,4 s antes).
 - Sin música con derechos: la referencia solo tenía una canción comercial; la crítica fue la falta de efectos. Pon un
   `tic` por nodo/estado, `whoosh-suave` en los empujes a profundidad, `whoosh` en el foco e `impacto` cuando cubre.
-- Música propia a 90 BPM: `node scripts/musica.mjs public/musica/x.wav --config musica/seguimiento.json`
+- Música propia a 90 BPM: `node scripts/musica.mjs comun/musica/x.wav --config musica/seguimiento.json`
   (en el kit; con la subida y el silencio de 80 ms antes del golpe de marca).
 
 ## Comprobar

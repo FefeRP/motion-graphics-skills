@@ -1,12 +1,11 @@
 ---
 name: motion-interfaz
-description: Técnica de motion graphics para ENSEÑAR UNA INTERFAZ O UN PRODUCTO en vídeo con Remotion — estudiar el producto real, elegir entre recrear la interfaz como componentes, la captura entera o recortar piezas, y el proceso OBLIGATORIO de fidelidad (fuente de verdad, tokens copiados, comparación con capturas, lista de comprobación) para que la interfaz recreada sea idéntica a la real. Incluye pantallas de móvil y pilas de pantallas con profundidad, líneas de tiempo de estados que la cámara recorre, tarjetas, consolas, gráficas y botones vivos. La usa la skill maestra motion-graphics; úsala también sola cuando pidan animar un panel, una app, una web o un dashboard.
+description: Técnica de motion graphics para ENSEÑAR UNA INTERFAZ O UN PRODUCTO en vídeo con HyperFrames (o Remotion) — estudiar el producto real, elegir entre recrear la interfaz como componentes, la captura entera o recortar piezas, y el proceso OBLIGATORIO de fidelidad (fuente de verdad, tokens copiados, comparación con capturas, lista de comprobación) para que la interfaz recreada sea idéntica a la real. Incluye pantallas de móvil y pilas de pantallas con profundidad, líneas de tiempo de estados que la cámara recorre, tarjetas, consolas, gráficas y botones vivos. La usa la skill maestra motion-graphics; úsala también sola cuando pidan animar un panel, una app, una web o un dashboard.
 ---
 
 # Enseñar una interfaz o un producto
 
-Parte del plugin de motion graphics: la skill maestra `motion-graphics` decide cuándo entra esta técnica. El kit
-Remotion está en `../motion-graphics/kit` (aquí, rutas relativas a esa carpeta).
+La skill maestra `motion-graphics` decide cuándo entra esta técnica. Parte del plugin de motion graphics. Motor principal: **HyperFrames** (HTML + CSS + GSAP a vídeo; kit en `../motion-graphics/kit`): los componentes de esta skill son `MG.<Nombre>` de `kit/comun/mg.js`, con los mismos nombres y parámetros (`Movil(t, {claves}, ...hijos)`: el tiempo va primero). Los que aún no están en `MG` (lista en `../motion-graphics/references/catalogo.md`) siguen en el kit secundario `../motion-graphics/kit-remotion` (rutas `src/motion/...`). Aquí, rutas relativas a `kit/`.
 
 ## 1. Antes de animar: estudia el producto real a fondo
 1. **Recoge lo real**: su web y su app (capturas de referencia con `node scripts/capturar.mjs`, ver §3), su logo (SVG o
@@ -33,8 +32,9 @@ filas que se reordenan, botones que se pulsan).
 **Obligatorio: el proceso de fidelidad del §3.** Una recreación "parecida" se nota al instante. Se construye con los
 tokens DEL PRODUCTO, no con los de la dirección del vídeo: la dirección solo decide fondo, luz, ritmo, transiciones y
 rótulos que van FUERA de la interfaz.
-Cómo: componentes React con la MISMA estructura que el original (grid/flex igual: Remotion pinta con Chrome, el mismo
-CSS da el mismo resultado), cada pieza dentro de un `Movil` con trayectoria propia. Recetas:
+Cómo: componentes (funciones `h()` en HyperFrames, React en kit-remotion) con la MISMA estructura que el original
+(grid/flex igual: los dos motores pintan con Chrome, el mismo CSS da el mismo resultado; en HyperFrames puedes pegar
+el HTML/CSS real del producto casi tal cual), cada pieza dentro de un `Movil` con trayectoria propia. Recetas:
 - tarjeta con barras que se llenan (un `div` cuyo ancho anima `tramo` + `Contador`); consola que se escribe línea a línea (`Teclea`, 200–260
   letras/s); gráfica SVG que se dibuja (`strokeDasharray` 1→0) y sigue viva (`Math.sin(i*0.55 + t*2.2)`);
 - selector de planes donde el elegido pasa al frente (z +220, escala 1,06–1,12, borde de acento) y los demás se
@@ -68,8 +68,8 @@ No dibujes ni un componente hasta tener F1–F4. No des una escena por buena sin
    componentes de la pantalla (estructura y estados) y los textos. `node scripts/extraer-tokens.mjs <carpeta> --salida
    fidelidad/tokens.md` lista variables, colores, radios, sombras, familias, tamaños, pesos, librería de iconos y SVG de
    logo con `fichero:línea`, ordenados por frecuencia. Después LEE los ficheros que señala.
-2. Recursos de marca: logos en SVG (tal cual, nunca redibujados ni recoloreados), fuentes (`@remotion/google-fonts/<F>`
-   o sus .woff2 con `useFuenteLocal`) e iconos.
+2. Recursos de marca: logos en SVG (tal cual, nunca redibujados ni recoloreados), fuentes (sus .woff2 en local con
+   `@font-face` en `kit/comun/fuentes.css`: el render no usa red; en kit-remotion, `useFuenteLocal`) e iconos.
 3. Capturas de referencia de cada pantalla al tamaño real: `node scripts/capturar.mjs <url | fichero.html>
    referencias/<pantalla>.png --ancho 1440 --alto 900` (o 390×844 para móvil). Solo para medir y comparar.
 4. Sin código ni capturas: pídelos; si no los hay, avisa de que la recreación será aproximada.
@@ -87,7 +87,7 @@ modo="encima" opacidad={0.5} />`.
 real de números, monedas y fechas. Prohibido "Lorem ipsum", "John Doe" o cifras redondas inventadas.
 
 **F5 · Compara con la captura real** (escena quieta, cámara a escala 1):
-`node scripts/render.mjs stills <Comp> [props.json] <t> --escala 1` y `node scripts/comparar-fidelidad.mjs
+`node scripts/mg.mjs stills <pieza> <t> -o out/f` (kit-remotion: `render.mjs stills <Comp> <t> --escala 1`) y `node scripts/comparar-fidelidad.mjs
 referencias/x.png out/<Comp>-<t>.png out/fidelidad.jpg --recorte x,y,ancho,alto` → hoja con referencia | render, mapa
 de diferencias y calco, más dos cifras. Objetivo: diferencia media < 6 y < 4 % de píxeles distintos (el ejemplo «a ojo»
 da 46 y 24 %). Corrige en el origen y repite.

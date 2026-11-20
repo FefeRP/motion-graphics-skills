@@ -1,11 +1,11 @@
 ---
 name: motion-transiciones
-description: Técnica de motion graphics para PASAR DE UN PLANO A OTRO SIN CORTES DE DIAPOSITIVA en Remotion — objeto puente que se transforma (punto → píldora → tarjeta → logo), hilo conductor, corte por continuidad de velocidad, zoom a través con match cut, iris y foco de luz que se abre, destellos y flashes cromáticos, estroboscopio, manchas líquidas, barrido radial, eco de zoom, glitch, desenfoque de profundidad que traspasa el foco. La usa la skill maestra motion-graphics; úsala también sola cuando un vídeo "parezca un PowerPoint" o tenga fundidos.
+description: Técnica de motion graphics para PASAR DE UN PLANO A OTRO SIN CORTES DE DIAPOSITIVA con HyperFrames (HTML + CSS + GSAP a vídeo; Remotion como motor secundario) — objeto puente que se transforma (punto → píldora → tarjeta → logo), hilo conductor, corte por continuidad de velocidad, zoom a través con match cut, iris y foco de luz que se abre, destellos y flashes cromáticos, estroboscopio, manchas líquidas, barrido radial, eco de zoom, glitch, desenfoque de profundidad que traspasa el foco. La usa la skill maestra motion-graphics; úsala también sola cuando un vídeo "parezca un PowerPoint" o tenga fundidos.
 ---
 
 # Transiciones: cada plano nace del anterior
 
-Parte del plugin de motion graphics (kit en `../motion-graphics/kit`).
+Parte del plugin de motion graphics. Motor principal: **HyperFrames** (HTML + CSS + GSAP a vídeo; kit en `../motion-graphics/kit`): los componentes de esta skill son `MG.<Nombre>` de `kit/comun/mg.js`, con los mismos nombres y parámetros (`Movil(t, {claves}, ...hijos)`: el tiempo va primero). Los que aún no están en `MG` (lista en `../motion-graphics/references/catalogo.md`) siguen en el kit secundario `../motion-graphics/kit-remotion` (rutas `src/motion/...`).
 
 ## Reglas
 1. **Ni cortes ni fundidos de diapositiva**: las referencias tienen 0–9 cortes secos en 10–30 s y casi todos
