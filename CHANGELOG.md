@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.1.1 · 2026-11-22 · The master skill loads again
+- The `motion-graphics` master skill description was longer than 1,024 characters, so Claude Code skipped the skill
+  (only the 8 technique skills appeared). It is now 980 characters and keeps every trigger.
+
 ## 3.1.0 · 2026-11-22 · Product promo guide and anti-boredom checklist
 - **New guide `references/promo-producto.md`** for SaaS product promos and launches, learned from 10 real launch videos
   (Linear, Vercel v0, Raycast, Arc, Framer, Notion, Stripe) measured at 5 fps and from large public samples: 10 laws
