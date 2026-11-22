@@ -1,5 +1,18 @@
 # Changelog
 
+## 3.1.0 · 2026-11-22 · Product promo guide and anti-boredom checklist
+- **New guide `references/promo-producto.md`** for SaaS product promos and launches, learned from 10 real launch videos
+  (Linear, Vercel v0, Raycast, Arc, Framer, Notion, Stripe) measured at 5 fps and from large public samples: 10 laws
+  with numbers (product in frame 0, one event every ≤ 1.8 s, vary scale and layout, live close-up UI with cursor,
+  typing and push-ins, all-different transitions, sound with a signature, a climax before the logo), structure
+  templates per second for 15, 30, 45 and 60 s, a rhythm table template, hook and transition recipes, how to show a
+  real UI without boring, and the tells of an AI or template promo.
+- **New `references/checklist-promo.md`**: the anti-boredom checklist (script, frames, measurements and a reviewer
+  prompt with a 1–10 "is it boring?" score) that a promo must pass before delivery.
+- **New `kit/scripts/revisar-guion.mjs`**: checks the GUION.md rhythm table automatically (event at 0, product before
+  3.5 s, gaps ≤ 1.8 s, no scale three rows in a row, no transition more than twice, short texts).
+- The master skill points to the guide before the script and to the checklist before delivery.
+
 ## 3.0.0 · 2026-11-20 · HyperFrames engine and AI-generated elements
 - **New main engine: HyperFrames** (HTML + CSS + GSAP to video), pinned to 0.9.34, launched with telemetry off and no
   cloud rendering. New kit in `kit/`: the engine as one plain script (`comun/mg.js`, `window.MG`: pure `escena(t)`

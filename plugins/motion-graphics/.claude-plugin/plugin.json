@@ -1,6 +1,6 @@
 {
   "name": "motion-graphics",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Motion graphics by technique, not by style, rendered with HyperFrames (HTML + CSS + GSAP to video, pinned 0.9.34, no telemetry): a master skill (keyword MOTION GRAPHICS) plus eight combinable technique skills, a ready-to-render kit (60 fps, no GPU, 13 mixable directions), AI-generated elements (objects, backgrounds, textures, characters, products, seamless loops) integrated with cut-out, alpha, color and sync, and a frozen Remotion kit for the pieces not yet ported.",
   "author": {
     "name": "motion-graphics-skills contributors"

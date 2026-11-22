@@ -1,6 +1,6 @@
 ---
 name: motion-graphics
-description: Skill MAESTRA de motion graphics con HyperFrames (HTML + CSS + GSAP a vídeo; Remotion como motor secundario) — palabra clave de activación "MOTION GRAPHICS" o /motion-graphics. Entiende el pedido (lanzamiento de producto, promo, gancho para redes, intro, reel, demo de app, logo animado), decide la idea y el hilo conductor, elige y combina técnicas (interfaz fiel al producto real, movimiento, transiciones por objeto, tipografía cinética, luz y shaders, 3D y partículas, mapas 3D en perspectiva, ritmo y sonido), escribe el guion por eventos, decide qué se hace por código y qué con elementos generados con IA (Higgsfield: objetos, fondos, texturas, personajes, productos, en imagen o en bucle, siempre con presupuesto máximo y precio estimado antes), construye la pieza con el kit HyperFrames incluido (60 fps, sin GPU) y la verifica con fotogramas, medidas y comparación con capturas reales antes de enseñarla. Úsala SIEMPRE que pidan "MOTION GRAPHICS", "motion graphics", "vídeo animado de mi producto", "vídeo de lanzamiento", "promo animada", "gancho visual", "intro animada", "animar mi app/web/panel", "vídeo de keynote", "launch video", "product promo video", "animated explainer", "mapa animado", "ruta animada", "motion graphics con IA", "con Higgsfield".
+description: Skill MAESTRA de motion graphics con HyperFrames (HTML + CSS + GSAP a vídeo; Remotion como motor secundario) — palabra clave de activación "MOTION GRAPHICS" o /motion-graphics. Entiende el pedido (lanzamiento de producto, promo, gancho para redes, intro, reel, demo de app, logo animado), decide la idea y el hilo conductor, elige y combina técnicas (interfaz fiel al producto real, movimiento, transiciones por objeto, tipografía cinética, luz y shaders, 3D y partículas, mapas 3D en perspectiva, ritmo y sonido), escribe el guion por eventos, decide qué se hace por código y qué con elementos generados con IA (Higgsfield: objetos, fondos, texturas, personajes, productos, en imagen o en bucle, siempre con presupuesto máximo y precio estimado antes), construye la pieza con el kit HyperFrames incluido (60 fps, sin GPU) y la verifica con fotogramas, medidas y comparación con capturas reales antes de enseñarla. Úsala SIEMPRE que pidan "MOTION GRAPHICS", "motion graphics", "vídeo animado de mi producto", "vídeo de lanzamiento", "promo animada", "gancho visual", "intro animada", "animar mi app/web/panel", "vídeo de keynote", "launch video", "product promo video", "animated explainer", "promo de producto", "promo SaaS", "la promo es aburrida", "más impacto", "mapa animado", "ruta animada", "motion graphics con IA", "con Higgsfield".
 model: opus
 ---
 
@@ -44,6 +44,14 @@ taller, seguimiento, mapas 3D, `DemoEfectos2`, fidelidad). Úsalo solo para eso;
   imposibles. Lo generado se integra (recorte, alfa, color de la dirección, grano y luz comunes) o no entra. Si un
   plano generado es realista (personas, lugares), avisa de que lleva aviso de contenido generado con IA al publicarlo.
 - Trabaja con el modelo más capaz disponible y con esfuerzo alto: el motion graphics se nota muchísimo.
+
+## Promo de producto o lanzamiento: lee esto primero
+Si es una promo, un lanzamiento o una alternativa a la competencia, **antes del guion** lee
+[references/promo-producto.md](references/promo-producto.md): las 10 leyes con números (producto en el fotograma 0,
+un evento cada ≤ 1,8 s, variar escala y molde, UI viva y de cerca, transiciones todas distintas, sonido con firma,
+cierre con clímax), plantillas por segundos de 15, 30, 45 y 60 s y recetas de hooks y transiciones. Y antes de
+entregar, la [checklist anti-aburrimiento](references/checklist-promo.md) (bloque A automático con
+`node scripts/revisar-guion.mjs GUION.md`). Cumplir la rejilla y meter 3D no basta: aburre lo predecible.
 
 ## Paso 1 · Entender el pedido (brief)
 Saca del pedido (pregunta **solo** lo que falte y cambie la decisión, en una tanda):
@@ -94,7 +102,7 @@ elementos con modelo, duración y resolución, **precio estimado de cada uno y t
 máximo. Recetas, modelos, prompts, descarga e integración: [references/elementos-ia.md](references/elementos-ia.md).
 
 ## Paso 4 · Guion por eventos y sonido
-Una fila por pulso: `t · golpe · qué entra · de qué objeto nace · cámara · sonido` (`motion-ritmo-sonido`). Elige el BPM
+Una fila por pulso: `t · golpe · escala · qué entra · de qué objeto nace · transición · cámara · texto · sonido` (`motion-ritmo-sonido`; plantilla en `references/promo-producto.md`). Comprueba la tabla con `node scripts/revisar-guion.mjs GUION.md` antes de animar. Elige el BPM
 y la música (`scripts/musica.mjs`, sintetizada) ANTES de animar. Escribe el guion en `GUION.md` del vídeo.
 
 ## Paso 5 · Construir
@@ -121,12 +129,16 @@ y la música (`scripts/musica.mjs`, sintetizada) ANTES de animar. Escribe el gui
 5. **Revisión**: si tienes un revisor de vídeo con IA, pásale el MP4 con lo que debe juzgar; contrasta cada fallo que
    diga con los fotogramas antes de corregir (inventa desfases y erratas).
 6. Si hay una referencia: `node scripts/comparar-video.mjs ref.mp4 tuyo.mp4 comp.mp4` (timing ≥ 0,8, color < 8–10).
+7. **Promo o lanzamiento**: [checklist anti-aburrimiento](references/checklist-promo.md) entera (guion, fotogramas,
+   medidas y revisor con su prompt): no se entrega hasta que todo esté en verde y el revisor dé ≥ 8 en «¿aburre?».
 
 ## Paso 7 · Entregar
 Resumen corto: idea e hilo conductor, técnicas usadas y por qué, qué se ha comprobado (cifras de F5, ritmo, sonido) y
 qué queda (desviaciones de la interfaz, textos por confirmar).
 
 ## Referencias
+- [references/promo-producto.md](references/promo-producto.md): promos y lanzamientos SaaS de primer nivel: leyes con números, plantillas por segundos, recetas de hooks, transiciones y UI viva, sonido, antipatrones.
+- [references/checklist-promo.md](references/checklist-promo.md): la checklist anti-aburrimiento (guion, fotogramas, medidas, prompt del revisor).
 - [references/direcciones.md](references/direcciones.md): las direcciones de partida (antes, skills de estilo) y cómo mezclarlas.
 - [references/hyperframes.md](references/hyperframes.md): el motor principal: cómo se escribe una pieza, reglas, sonido, render.
 - [references/elementos-ia.md](references/elementos-ia.md): elementos generados con Higgsfield: cuándo, modelo, prompt, presupuesto, descarga, alfa, bucle e integración.

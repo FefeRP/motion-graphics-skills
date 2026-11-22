@@ -56,6 +56,14 @@ code-made stand-ins:
 
 ![elementos](docs/demos/elementos.gif)
 
+## Product promos that are not boring
+A promo can follow the beat grid, use 3D and real screens, and still bore. `references/promo-producto.md` gathers what
+10 real SaaS launch videos (Linear, Vercel v0, Raycast, Arc, Framer, Notion, Stripe) do, measured at 5 fps: the product
+moving in frame 0, one event every ≤ 1.8 s, a different trick for every feature, live close-up UI (cursor, typing,
+push-ins), all-different transitions, sound with a signature and a climax before the logo, with structure templates per
+second and hook and transition recipes. `references/checklist-promo.md` is the checklist a promo must pass before
+delivery, and `kit/scripts/revisar-guion.mjs` checks the rhythm table of the script automatically.
+
 ## Learned from references, frame by frame
 Every style and variant comes from studying real motion graphics frame by frame (timing, easing measured per frame,
 sampled palettes, type, layers, sound) and then **recreating them in this engine and checking the recreation against
@@ -205,7 +213,7 @@ plugins/motion-graphics/
   .claude-plugin/plugin.json             # the plugin
   skills/
     motion-graphics/SKILL.md             # master skill (keyword MOTION GRAPHICS)
-    motion-graphics/references/          # engine guide, AI elements, directions, component catalog, learning a reference
+    motion-graphics/references/          # engine guide, product promo guide + anti-boredom checklist, AI elements, directions, component catalog, learning a reference
     motion-graphics/kit/                 # HyperFrames kit (engine, directions, demos, scripts, sounds)
     motion-graphics/kit-remotion/        # frozen Remotion kit (recreations, effects catalog, fidelity demo, maps)
     motion-interfaz/  motion-movimiento/  motion-transiciones/  motion-tipografia/

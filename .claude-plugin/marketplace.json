@@ -9,7 +9,7 @@
       "name": "motion-graphics",
       "source": "./plugins/motion-graphics",
       "description": "Say MOTION GRAPHICS: a master skill understands the brief, picks the idea and the thread, mixes techniques, decides code vs AI-generated elements (with a budget and price estimate first) and builds a 60 fps video with the included HyperFrames kit, then checks it (frames, rhythm, loudness, fidelity to the real UI).",
-      "version": "3.0.0"
+      "version": "3.1.0"
     }
   ]
 }

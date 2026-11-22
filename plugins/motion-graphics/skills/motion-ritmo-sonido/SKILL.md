@@ -51,6 +51,14 @@ Sonidos sintetizados en `comun/sfx` (kit-remotion: `public/sfx`; `node scripts/s
 - Música propia a 90 BPM: `node scripts/musica.mjs comun/musica/x.wav --config musica/seguimiento.json`
   (en el kit; con la subida y el silencio de 80 ms antes del golpe de marca).
 
+## Promos de producto: sonido con firma (medido en lanzamientos)
+- Un sonido por tipo de acción (tecla por carácter, clic de cursor, confirmación de dos notas, envío, impacto grave,
+  riser), no el mismo whoosh en cada cambio: **máximo 3 veces el mismo**, alterna variantes y tono.
+- Whoosh 80–100 ms antes del movimiento con el pico en el corte; riser que se corta en seco, **100–200 ms de silencio**
+  e impacto en el downbeat (giro y logo). Un solo sonido dominante por pulso.
+- Si hay voz: frases de ≤ 6 palabras, ≥ 1 compás de solo música, ducking de 6–10 dB. Guía completa:
+  `../motion-graphics/references/promo-producto.md`.
+
 ## Comprobar
 `ffmpeg -i v.mp4 -af ebur128=peak=true -f null -` → integrado −14 LUFS (redes) y pico < −1 dBFS. Un revisor de vídeo
 con IA a 4 fps da desfases falsos de ~250 ms: compruébalo a 60 fps con los fotogramas antes de mover nada.
