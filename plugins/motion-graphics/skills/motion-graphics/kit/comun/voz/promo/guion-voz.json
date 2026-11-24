@@ -1,0 +1,7 @@
+{ "motor": "edge", "voz": "es-ES-AlvaroNeural",
+  "lineas": [
+    { "id": "P1", "texto": "¿Cuántas pestañas abres para cobrar una sola factura?", "sub": "¿Cuántas pestañas abres para cobrar una sola factura?" },
+    { "id": "R1", "texto": "Hay otra forma.", "sub": "Hay otra forma." },
+    { "id": "M", "texto": "Nubo.", "sub": "Nubo." },
+    { "id": "C", "texto": "Cobra en treinta segundos, desde nubo punto, i, ó.", "sub": "Cobra en 30 segundos, desde nubo.io" }
+  ] }

@@ -31,8 +31,8 @@ MP4 final. Cada punto es medible; si uno falla, se corrige y se vuelve a pasar. 
 
 ## D · Revisor de vídeo con IA (a 4–5 fps), con este prompt
 ```
-Eres un director de motion graphics exigente. Compara esta promo con lanzamientos de Linear, Raycast, Vercel, Arc y
-Apple. Con marcas mm:ss.d:
+Eres un director de motion graphics exigente. Compara esta promo con los mejores vídeos de lanzamiento de productos
+de software que conozcas. Con marcas mm:ss.d:
 1) ¿Qué hay en el fotograma 0? ¿Cuándo sale la primera palabra y cuándo el producto?
 2) Intervalo medio y máximo entre eventos.
 3) ¿Hay tramos que aburran? ¿Dónde y por qué?
@@ -46,4 +46,16 @@ Termina con una nota del 1 al 10 en «¿aburre?» (10 = nada) y un veredicto: PU
 - [ ] D1. Veredicto PUBLICABLE y nota de «¿aburre?» ≥ 8.
 - [ ] D2. Cada fallo que señale está contrastado con los fotogramas: el revisor inventa desfases de ~250 ms y erratas.
 
-Solo cuando A, B, C y D estén en verde se entrega el vídeo.
+## E · Promo con voz en off ([promo-recetas.md](promo-recetas.md))
+- [ ] E1. `node scripts/voz.mjs revisar guion-voz.json` sin avisos (o cada aviso decidido) ANTES de generar la voz.
+- [ ] E2. Título del hook y subtítulos salen de `voz-tiempos.json` (nada a ojo) y ningún subtítulo cruza el revelado.
+- [ ] E3. `node scripts/franjas.mjs v.mp4` y `--zona arriba`: OK (o cada candidato confirmado con fotogramas).
+- [ ] E4. `node scripts/audio.mjs medir …`: mediana ≥ 8 dB y p10 ≥ 3 dB en cada frase (las de < 0,8 s, escuchadas).
+- [ ] E5. Silencio antes del golpe: `volumedetect` en [G − 0,13, G] ≤ −60 dB, y el logo llega en G + 0,04.
+- [ ] E6. Revelado: anticipación, banda, halo, aro, logo con rebote y sombra, nombre con máscara de degradado y el
+  conjunto centrado (fotogramas en G − 0,1, G + 0,12, G + 0,3, G + 0,6 y G + 1,2).
+- [ ] E7. Un solo material y una sola dimensión: ningún elemento 3D, brillante o de otro estilo en una pieza plana.
+- [ ] E8. Versión nueva: la lista ACUMULADA de cambios pedidos, cada uno comprobado con su mm:ss, y lo no tocado
+  idéntico (voz bit a bit, imagen por MD5 o diferencia de fotogramas). Cambiar solo la música: `audio.mjs remezclar`.
+
+Solo cuando A, B, C, D (y E si hay voz) estén en verde se entrega el vídeo.

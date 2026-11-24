@@ -1,0 +1,143 @@
+[
+ {
+  "id": "P1",
+  "texto": "¿Cuántas pestañas abres para cobrar una sola factura?",
+  "sub": "¿Cuántas pestañas abres para cobrar una sola factura?",
+  "inicio": 0.1,
+  "fin": 2.825,
+  "palabras": [
+   {
+    "p": "Cuántas",
+    "i": 0.1,
+    "f": 0.512
+   },
+   {
+    "p": "pestañas",
+    "i": 0.525,
+    "f": 1.012
+   },
+   {
+    "p": "abres",
+    "i": 1.025,
+    "f": 1.288
+   },
+   {
+    "p": "para",
+    "i": 1.3,
+    "f": 1.462
+   },
+   {
+    "p": "cobrar",
+    "i": 1.475,
+    "f": 1.775
+   },
+   {
+    "p": "una",
+    "i": 1.788,
+    "f": 1.938
+   },
+   {
+    "p": "sola",
+    "i": 1.95,
+    "f": 2.2
+   },
+   {
+    "p": "factura",
+    "i": 2.212,
+    "f": 2.825
+   }
+  ]
+ },
+ {
+  "id": "R1",
+  "texto": "Hay otra forma.",
+  "sub": "Hay otra forma.",
+  "inicio": 3.688,
+  "fin": 4.725,
+  "palabras": [
+   {
+    "p": "Hay",
+    "i": 3.688,
+    "f": 3.962
+   },
+   {
+    "p": "otra",
+    "i": 3.975,
+    "f": 4.175
+   },
+   {
+    "p": "forma",
+    "i": 4.188,
+    "f": 4.725
+   }
+  ]
+ },
+ {
+  "id": "M",
+  "texto": "Nubo.",
+  "sub": "Nubo.",
+  "inicio": 5.588,
+  "fin": 6.112,
+  "palabras": [
+   {
+    "p": "Nubo",
+    "i": 5.588,
+    "f": 6.112
+   }
+  ]
+ },
+ {
+  "id": "C",
+  "texto": "Cobra en treinta segundos, desde nubo punto, i, ó.",
+  "sub": "Cobra en 30 segundos, desde nubo.io",
+  "inicio": 6.975,
+  "fin": 10.75,
+  "palabras": [
+   {
+    "p": "Cobra",
+    "i": 6.975,
+    "f": 7.35
+   },
+   {
+    "p": "en",
+    "i": 7.362,
+    "f": 7.463
+   },
+   {
+    "p": "treinta",
+    "i": 7.475,
+    "f": 7.75
+   },
+   {
+    "p": "segundos",
+    "i": 7.763,
+    "f": 8.325
+   },
+   {
+    "p": "desde",
+    "i": 8.55,
+    "f": 8.787
+   },
+   {
+    "p": "nubo",
+    "i": 8.8,
+    "f": 9.063
+   },
+   {
+    "p": "punto",
+    "i": 9.075,
+    "f": 9.5
+   },
+   {
+    "p": "i",
+    "i": 9.825,
+    "f": 10
+   },
+   {
+    "p": "ó",
+    "i": 10.5,
+    "f": 10.75
+   }
+  ]
+ }
+]

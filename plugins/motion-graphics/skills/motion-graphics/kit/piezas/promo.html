@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1920, height=1080">
+  <title>Promo de producto con voz (plantilla)</title>
+  <link rel="stylesheet" href="comun/fuentes.css">
+  <script src="comun/vendor/gsap.min.js"></script>
+  <script src="comun/mg.js"></script>
+</head>
+<body>
+  <!-- Plantilla de PROMO DE PRODUCTO con voz en off (13 s, 60 fps). Marca ficticia «Nubo» (cobrar facturas).
+       Aplica las recetas de references/promo-recetas.md: pregunta que plantea el problema (hook palabra a palabra
+       clavado a la voz) → «hay otra forma» → silencio y revelado del logo en el golpe G (drop de la música) →
+       la respuesta con la interfaz. Fondo de malla a sangre sin velos, subtítulos en píldora de cristal sacados de los
+       tiempos de la voz, un solo material (cristal) y todo plano 2D (coherencia).
+       Para tu promo: genera la voz con scripts/voz.mjs, pega sus tiempos en VOZ, ajusta SUBS y G, y haz la música
+       con el golpe en G (scripts/musica.mjs) y el ducking con scripts/audio.mjs. -->
+  <div id="promo" data-composition-id="promo" data-start="0" data-duration="13" data-width="1920" data-height="1080" data-fps="60" style="width:1920px;height:1080px"></div>
+  <script type="application/json" id="mg-sonido">
+    { "musica": "musica/musica-promo.wav", "volumenMusica": 0.6, "fundido": 0.8, "volumen": 0.8, "sfx": [
+      { "t": 0.0, "n": "whoosh-suave", "vol": 0.3 },
+      { "t": 1.43, "n": "pop", "vol": 0.3 }, { "t": 1.52, "n": "pop", "vol": 0.26 }, { "t": 1.61, "n": "pop", "vol": 0.3 }, { "t": 1.7, "n": "pop", "vol": 0.26 }, { "t": 1.79, "n": "pop", "vol": 0.3 },
+      { "t": 3.85, "n": "whoosh", "vol": 0.32 }, { "t": 4.62, "n": "tic", "vol": 0.3 },
+      { "t": 6.02, "n": "whoosh-suave", "vol": 0.2 },
+      { "t": 7.4, "n": "whoosh-suave", "vol": 0.22 }, { "t": 9.25, "n": "pop", "vol": 0.36 },
+      { "t": 9.72, "n": "click", "vol": 0.16 }, { "t": 9.98, "n": "click", "vol": 0.16 }, { "t": 10.74, "n": "click", "vol": 0.16 }, { "t": 11.42, "n": "click", "vol": 0.16 } ] }
+  </script>
+  <script>
+    const { h, F, capa, tramo, interp, CURVAS, clamp, azar, mezclar, ESTILOS, Grano, Onda } = MG;
+    const V = MG.variables({ vozInicio: 0.9 });
+    const VI = Number(V.vozInicio);      // dónde empieza voz.wav en el vídeo (mismo valor que "vozInicio" del sonido)
+    const G = 6.0;                       // golpe del revelado = drop de la música (150 ms de silencio antes)
+    const DUR = 13;
+    const E = mezclar(ESTILOS.oscuro, { fondo: "#070A18", texto: "#F4F6FF", acento: "#4C7DFF", fuente: "'Inter', system-ui, sans-serif", fuenteTexto: "'Inter', system-ui, sans-serif" });
+    const FUENTE = E.fuente, TINTA = "#0E1222", CX = 960, CY = 540;
+
+    // ── Voz: tiempos por palabra de voz-tiempos.json (segundos desde el principio de voz.wav) ──
+    const VOZ = [
+      { id: "P1", palabras: [["cuántas", 0.10, 0.51], ["pestañas", 0.53, 1.01], ["abres", 1.02, 1.29], ["para", 1.30, 1.46], ["cobrar", 1.48, 1.77], ["una", 1.79, 1.94], ["sola", 1.95, 2.20], ["factura", 2.21, 2.83]] },
+      { id: "R1", palabras: [["hay", 3.69, 3.96], ["otra", 3.98, 4.18], ["forma", 4.19, 4.73]] },
+      { id: "M", palabras: [["nubo", 5.59, 6.11]] },
+      { id: "C", palabras: [["cobra", 6.98, 7.35], ["en", 7.36, 7.46], ["treinta", 7.48, 7.75], ["segundos", 7.76, 8.32], ["desde", 8.55, 8.79], ["nubo", 8.80, 9.06], ["punto", 9.07, 9.50], ["i", 9.82, 10.00], ["ó", 10.50, 10.75]] },
+    ];
+    const PAL = VOZ.flatMap((l) => l.palabras.map(([p, i, f]) => ({ id: l.id, p, i: i + VI, f: f + VI })));
+    // buscar POR PALABRA (no por índice): si cambia el texto, lo que no cuadre falla a la vista
+    const pal = (id, p, n = 0) => PAL.filter((w) => w.id === id && w.p === p)[n] || { i: 0, f: 0 };
+
+    // ── Subtítulos: [lo que se LEE, frase, nº de palabras HABLADAS] (la voz dice «treinta», se lee «30») ──
+    const SUBS = [["Hay otra forma.", "R1", 3], ["Cobra en 30 segundos,", "C", 4], ["desde nubo.io", "C", 5]];
+    const TROZOS = (() => {
+      const usados = {}, out = [];
+      for (const [texto, id, n] of SUBS) {
+        const ws = PAL.filter((w) => w.id === id), k = usados[id] || 0; usados[id] = k + n;
+        if (k + n > ws.length) console.warn(`subtítulos: «${texto}» pide más palabras de ${id} de las que hay`);
+        const a = ws[k], b = ws[Math.min(ws.length, k + n) - 1];
+        out.push({ texto, a: a.i - 0.08, b: b.f + 0.3 });
+      }
+      for (const id of new Set(SUBS.map((s) => s[1]))) if ((usados[id] || 0) !== PAL.filter((w) => w.id === id).length) console.warn(`subtítulos: ${id} no cuadra con la voz`);
+      for (let i = 0; i < out.length - 1; i++) if (out[i + 1].a - out[i].b < 0.35) out[i].b = out[i + 1].a;   // huecos cortos se cierran
+      for (const s of out) if (s.a < G && s.b > G - 0.02) s.b = G - 0.02;                                       // ninguno cruza el revelado
+      return out;
+    })();
+
+    /** Píldora de cristal: entra en 0,12 s (opacidad) y se posa en 0,32 s; sale en 0,25 s; sin fundido entre trozos pegados. */
+    const Pildora = (t) => {
+      const i = TROZOS.findIndex((s) => t >= s.a && t < s.b); if (i < 0) return null;
+      const s = TROZOS[i], pegadoAntes = i > 0 && TROZOS[i - 1].b === s.a, pegadoDespues = i < TROZOS.length - 1 && TROZOS[i + 1].a === s.b;
+      const o = pegadoAntes ? 1 : tramo(t, s.a, s.a + 0.12, CURVAS.lineal), p = pegadoAntes ? 1 : tramo(t, s.a, s.a + 0.32);
+      const sal = pegadoDespues ? 0 : tramo(t, s.b - 0.25, s.b, CURVAS.acelera), k = p * (1 - sal);
+      return h("div", { style: { position: "absolute", left: 0, top: 952, width: 1920, display: "flex", justifyContent: "center" } },
+        h("div", { style: {
+          fontFamily: FUENTE, fontSize: 42, fontWeight: "560", letterSpacing: "-0.01em", lineHeight: "1.25", padding: "12px 34px", borderRadius: 999, whiteSpace: "nowrap", color: TINTA,
+          background: "rgba(255,255,255,0.72)", backdropFilter: "blur(18px) saturate(1.2)", webkitBackdropFilter: "blur(18px) saturate(1.2)",
+          boxShadow: `0 0 0 1.5px rgba(255,255,255,.75), 0 0 0 2.5px rgba(12,34,25,.05), 0 ${4 + 8 * k}px ${12 + 22 * k}px rgba(12,34,25,${(0.12 * k).toFixed(3)})`,
+          opacity: o * (1 - sal), transform: `translateY(${(8 * (1 - p) + 4 * sal).toFixed(2)}px) scale(${(0.985 + 0.015 * p).toFixed(4)})`, filter: p < 0.98 ? `blur(${(3 * (1 - p)).toFixed(2)}px)` : undefined } }, s.texto));
+    };
+
+    // ── Fondo: malla determinista por t, a sangre (cubre el lienzo entero; nada de velos ni degradados encima) ──
+    const BLOBS = [["#2F5BFF", 28, 34, 16, 10, 0.11, 0.0, 62], ["#7B4DFF", 74, 28, 12, 14, 0.09, 1.7, 56], ["#12C2B0", 62, 80, 18, 9, 0.1, 3.1, 58],
+      ["#E0529C", 16, 84, 10, 12, 0.12, 4.4, 46], ["#0C1A5C", 90, 72, 8, 10, 0.08, 2.2, 70]];
+    const malla = (t, viva = 1) => capa({
+      background: BLOBS.map(([c, x0, y0, ax, ay, v, f, r]) => `radial-gradient(circle at ${(x0 + ax * Math.sin(t * v * 6.283 + f)).toFixed(2)}% ${(y0 + ay * Math.cos(t * v * 5.1 + f * 1.3)).toFixed(2)}%, ${c} 0%, transparent ${r}%)`).join(", ") + ", #070A18",
+      filter: viva < 1 ? `saturate(${(0.3 + 0.7 * viva).toFixed(3)}) brightness(${(0.42 + 0.58 * viva).toFixed(3)})` : undefined });
+
+    // ── Hook: enjambre de pestañas desenfocadas por profundidad; las de delante se abren con «pestañas» ──
+    const ETIQUETAS = ["Banco", "Hoja de cálculo", "Correo", "Portal del cliente", "PDF", "Pasarela", "Contabilidad", "Recordatorio", "Chat", "Extracto", "Factura.pdf", "Calendario", "Notas", "Transferencia", "Soporte", "Firmas"];
+    const DELANTE = [[300, 250], [1610, 240], [250, 830], [1660, 840], [960, 150]];
+    const VENTANAS = ETIQUETAS.map((e, k) => {
+      const z = k < 5 ? 1 : 0.42 + 0.4 * azar(`z${k}`);
+      const [x, y] = k < 5 ? DELANTE[k] : [140 + 1640 * azar(`x${k}`), 120 + 840 * azar(`y${k}`)];
+      return { e, k, z, x, y, t0: k < 5 ? pal("P1", "pestañas").i + k * 0.09 : 0.04 * (k - 5) };
+    }).sort((a, b) => a.z - b.z);
+    const colapsa = (t, k) => tramo(t, 3.85 + k * 0.022, 4.55 + k * 0.006, CURVAS.inOutFuerte);
+
+    const ventana = (t, w) => {
+      const entra = w.k < 5 ? tramo(t, w.t0, w.t0 + 0.42) : tramo(t, w.t0, w.t0 + 0.5, CURVAS.suave);
+      if (entra <= 0) return null;
+      const c = colapsa(t, w.k); if (c >= 1) return null;
+      const empuje = 1 + 0.07 * w.z * Math.min(t, 3.85) / 3.85;                  // la cámara avanza (más lo de delante)
+      const flota = 4 * Math.sin((t / 1.8) * 6.283 + w.k);                       // flotación de 4 px cada 1,8 s
+      const px = CX + (w.x - CX) * empuje, py = CY + (w.y - CY) * empuje + flota;
+      const x = px + (CX - px) * c, y = py + (CY - py) * c;
+      const s = w.z * (w.k < 5 ? 0.6 + 0.4 * entra : 1) * (1 - 0.95 * c);
+      const vel = Math.abs(colapsa(t + 1 / 60, w.k) - c) * 60;                   // desenfoque por velocidad al colapsar
+      const blur = (1 - w.z) * 14 + (w.k < 5 ? 6 * (1 - entra) : 0) + Math.min(10, vel * 6);
+      return h("div", { key: "v" + w.k, style: {
+        position: "absolute", left: 0, top: 0, width: 380, height: 240, borderRadius: 18, overflow: "hidden",
+        transform: `translate(${(x - 190).toFixed(1)}px, ${(y - 120).toFixed(1)}px) scale(${s.toFixed(4)})`,
+        background: "rgba(255,255,255,0.10)", boxShadow: "inset 0 0 0 1.5px rgba(255,255,255,0.22), 0 1px 2px rgba(0,0,0,.25), 0 6px 14px rgba(0,0,0,.22), 0 18px 40px rgba(0,0,0,.25), 0 40px 80px rgba(0,0,0,.2)",
+        opacity: (w.k < 5 ? entra : 0.75 * entra) * (1 - tramo(t, 4.35, 4.6)), filter: blur > 0.3 ? `blur(${blur.toFixed(2)}px)` : undefined } },
+        h("div", { style: { height: 40, display: "flex", alignItems: "center", gap: 8, padding: "0 16px", background: "rgba(255,255,255,0.08)" } },
+          ["#FF5F57", "#FEBC2E", "#28C840"].map((col) => h("div", { style: { width: 11, height: 11, borderRadius: 6, background: col, opacity: 0.85 } })),
+          h("div", { style: { marginLeft: 12, fontFamily: FUENTE, fontSize: 17, fontWeight: "560", color: "rgba(244,246,255,0.85)", whiteSpace: "nowrap" } }, w.e)),
+        h("div", { style: { padding: "22px 20px" } }, [0.82, 0.6, 0.7, 0.45].map((a, i) => h("div", { style: { height: 12, width: `${(a * 100).toFixed(0)}%`, borderRadius: 6, marginBottom: 14, background: `rgba(255,255,255,${i === 0 ? 0.32 : 0.16})` } }))));
+    };
+
+    /** Título del hook: cada palabra entra con su palabra de la voz (sube 40 px, desenfoque 10 → 0 en 0,42 s). */
+    const LINEAS = [["¿Cuántas", "pestañas", "abres"], ["para", "cobrar", "una", "sola", "factura?"]];
+    const titulo = (t) => {
+      if (t > 4.2) return null;
+      const reduce = tramo(t, pal("P1", "pestañas").i, pal("P1", "pestañas").i + 0.5), sale = tramo(t, 3.78, 4.12, CURVAS.acelera);
+      let n = 0;
+      return capa({ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", transform: `translateY(${(-30 * sale).toFixed(1)}px) scale(${(1.25 - 0.25 * reduce).toFixed(4)})`, opacity: 1 - sale, filter: sale > 0.01 ? `blur(${(12 * sale).toFixed(2)}px)` : undefined },
+        LINEAS.map((ln) => h("div", { style: { display: "flex", gap: 28, fontFamily: FUENTE, fontSize: 108, fontWeight: 700, letterSpacing: "-0.035em", lineHeight: "1.08", color: E.texto, whiteSpace: "nowrap", textShadow: "0 2px 30px rgba(4,6,20,0.45)" } },
+          ln.map((p) => { const w = PAL.filter((x) => x.id === "P1")[n++], e = tramo(t, w.i - 0.05, w.i + 0.37), b = tramo(t, w.i - 0.05, w.i + 0.25);
+            return h("span", { style: { display: "inline-block", opacity: e, transform: `translateY(${(40 * (1 - e)).toFixed(1)}px)`, filter: b < 0.99 ? `blur(${(10 * (1 - b)).toFixed(2)}px)` : undefined } }, p); }))));
+    };
+
+    // ── Hilo conductor: las pestañas colapsan en un punto de cristal que anticipa el revelado ──
+    const punto = (t) => {
+      if (t < 4.5 || t > G + 0.03) return null;
+      const nace = tramo(t, 4.5, 4.65), crece = tramo(t, G - 0.16, G - 0.04), aire = tramo(t, G - 0.04, G, CURVAS.inOut);
+      const d = (10 + 1.2 * Math.sin((t - 4.6) * 6.283 * 0.9)) * nace + 7 * crece - 3.1 * aire;   // respira; 10 → 17; toma aire (−18 %)
+      const o = 1 - tramo(t, G, G + 0.03, CURVAS.lineal);
+      return F(
+        capa({ background: `radial-gradient(circle at ${CX}px ${CY}px, rgba(160,190,255,${(0.35 * nace * o).toFixed(3)}) 0px, transparent ${(60 + 90 * crece).toFixed(0)}px)` }),
+        h("div", { style: { position: "absolute", left: CX - d / 2, top: CY - d / 2, width: d, height: d, borderRadius: "50%", opacity: o,
+          background: "radial-gradient(circle at 35% 30%, #FFFFFF 0%, rgba(230,238,255,0.92) 45%, rgba(180,200,255,0.7) 100%)", boxShadow: "0 0 0 1px rgba(255,255,255,0.6)" } }));
+    };
+
+    // ── Revelado en G: círculo con banda esmerilada, halo según la velocidad, aro, eco, estelas, grano y malla que se enfoca ──
+    const RADIO = (tt) => { const u = clamp((tt - G) / 0.92); return tt < G ? 0 : 12 + (1 - Math.pow(1 - u, 4.2)) * 1138; };
+    const VEL = (tt) => { const u = clamp((tt - G) / 0.92); return tt < G || u >= 1 ? 0 : (1138 * 4.2 * Math.pow(1 - u, 3.2)) / 0.92; };
+    const mallaRevelada = (t) => { const f = tramo(t, G, G + 0.6, CURVAS.suave), sc = 1.08 - 0.08 * tramo(t, G, G + 1.3);
+      return capa({ left: -60, top: -60, width: 2040, height: 1200, transform: `scale(${sc.toFixed(4)})`, filter: f < 0.995 ? `blur(${(14 * (1 - f)).toFixed(2)}px) saturate(${(1.22 - 0.22 * f).toFixed(3)})` : undefined }, malla(t, 1)); };
+    const revelado = (t) => {
+      if (t < G) return null;
+      const R = RADIO(t), fin = t > G + 0.95, v = VEL(t);
+      if (fin) return mallaRevelada(t);
+      const Rd = R + Math.min(34, RADIO(t + 0.015) - R + 8), circ = (r) => `circle(${r.toFixed(1)}px at ${CX}px ${CY}px)`;
+      const u = clamp((t - G) / 0.92), eco = RADIO(t - 0.08);
+      const ESTELAS = Array.from({ length: 14 }, (_, k) => { const d = 0.012 + (0.1 * k) / 13, vida = 0.34 + (0.2 * k) / 13, a = t - G;
+        return a > d && a < vida ? h("circle", { cx: CX, cy: CY, r: RADIO(t - d).toFixed(1), fill: "none", stroke: "#FFFFFF", strokeWidth: 1.6, strokeOpacity: (0.09 * (1 - a / vida)).toFixed(3) }) : null; });
+      return F(
+        capa({ clipPath: circ(Rd) }, capa({ left: -60, top: -60, width: 2040, height: 1200, filter: "blur(24px) saturate(1.1)" }, malla(t, 1)), capa({ background: "rgba(255,255,255,0.10)" })),
+        capa({ clipPath: circ(R) }, mallaRevelada(t), capa({}, Grano(t, { fuerza: 0.16 * (1 - tramo(t, G, G + 0.7, CURVAS.lineal)) }))),
+        h("svg", { width: 1920, height: 1080, style: { position: "absolute", left: 0, top: 0, overflow: "visible" } },
+          h("defs", {}, h("filter", { id: "haloF", x: "-50%", y: "-50%", width: "200%", height: "200%" }, h("feGaussianBlur", { stdDeviation: 6 }))),
+          h("circle", { cx: CX, cy: CY, r: R.toFixed(1), fill: "none", stroke: "#DDE6FF", strokeWidth: (10 + Math.min(40, v * 0.0085)).toFixed(1), strokeOpacity: (0.4 * (1 - u)).toFixed(3), filter: "url(#haloF)" }),
+          h("circle", { cx: CX, cy: CY, r: R.toFixed(1), fill: "none", stroke: "#FFFFFF", strokeWidth: 2.5, strokeOpacity: (0.9 * (1 - u * u)).toFixed(3) }),
+          R > 380 && eco > 0 ? h("circle", { cx: CX, cy: CY, r: eco.toFixed(1), fill: "none", stroke: "#FFFFFF", strokeWidth: 1.5, strokeOpacity: (0.32 * clamp((R - 380) / 160) * (1 - u)).toFixed(3) }) : null,
+          ESTELAS));
+    };
+
+    // ── Logo: símbolo con rebote, sombra que se posa y nombre con máscara de degradado (el conjunto se recentra) ──
+    const simbolo = (tam) => h("svg", { width: tam, height: tam, viewBox: "0 0 100 100" },
+      h("defs", {}, h("linearGradient", { id: "nuboG", x1: 0, y1: 0, x2: 1, y2: 1 }, h("stop", { offset: "0%", stopColor: "#6A95FF" }), h("stop", { offset: "100%", stopColor: "#14C6B4" }))),
+      h("rect", { x: 0, y: 0, width: 100, height: 100, rx: 28, fill: "url(#nuboG)" }),
+      h("path", { d: "M30 68 H71 A12 12 0 0 0 69 44 A18 18 0 0 0 36 41 A13.5 13.5 0 0 0 30 68 Z", fill: "#FFFFFF" }));
+    const rebote = (x, k = 0.55) => { const y = x - 1; return 1 + (k + 1) * y * y * y + k * y * y; };
+    const logo = (t) => {
+      if (t < G + 0.04) return null;
+      const x = clamp((t - G - 0.04) / 0.55), esc = 0.86 + 0.14 * rebote(x), nitido = clamp((t - G - 0.04) / 0.18), som = tramo(t, G + 0.04, G + 0.6);
+      const nom = tramo(t, G + 0.45, G + 1.0), pos = -12 + 124 * nom;
+      const sube = tramo(t, 7.35, 7.95), fl = 3 * Math.sin(((t - G) / 1.8) * 6.283) * tramo(t, G + 1, G + 1.6);
+      const mascara = nom < 1 ? `linear-gradient(90deg, #000 ${(pos - 9).toFixed(1)}%, transparent ${(pos + 3).toFixed(1)}%)` : undefined;
+      return capa({ display: "flex", alignItems: "center", justifyContent: "center", transform: `translateY(${(-262 * sube + fl).toFixed(1)}px) scale(${(1 - 0.36 * sube).toFixed(4)})` },
+        h("div", { style: { display: "flex", alignItems: "center" } },
+          h("div", { style: { transform: `scale(${esc.toFixed(4)})`, opacity: tramo(t, G + 0.04, G + 0.16, CURVAS.lineal), filter: `drop-shadow(0 ${(2 + 7 * som).toFixed(1)}px ${(4 + 16 * som).toFixed(1)}px rgba(4,8,30,0.16))${nitido < 1 ? ` blur(${(7 * (1 - nitido)).toFixed(2)}px)` : ""}` } }, simbolo(168)),
+          h("div", { style: { width: (410 * nom).toFixed(1), overflow: "visible", whiteSpace: "nowrap" } },
+            h("div", { style: { paddingLeft: 40, fontFamily: FUENTE, fontSize: 176, fontWeight: 700, letterSpacing: "-0.045em", color: "#FFFFFF", lineHeight: "1", textShadow: "0 4px 24px rgba(4,8,30,0.18)",
+              transform: `translateX(${(-26 * (1 - nom)).toFixed(1)}px)`, webkitMaskImage: mascara, maskImage: mascara, opacity: nom > 0 ? 1 : 0 } }, "Nubo"))));
+    };
+
+    // ── La respuesta: la factura se cobra en «treinta segundos» (mismo cristal que la píldora) ──
+    const tarjeta = (t) => {
+      if (t < 7.55) return null;
+      const e = tramo(t, 7.6, 8.15), tr = pal("C", "treinta"), seg = pal("C", "segundos");
+      const prog = tramo(t, tr.i, seg.f, CURVAS.inOut), cobrada = t >= seg.f + 0.03, pop = tramo(t, seg.f + 0.03, seg.f + 0.33);
+      const n = Math.round(30 * prog), flota = 4 * Math.sin(((t - 8) / 1.8) * 6.283) * tramo(t, 8.2, 8.8);
+      // dominio letra a letra con su sonido: «nubo» al decirlo, el punto con «punto», la «i» y la «o» con su letra
+      const D = pal("C", "nubo", 0), P = pal("C", "punto"), I = pal("C", "i"), O = pal("C", "ó");
+      const letras = [["n", D.i], ["u", D.i + 0.07], ["b", D.i + 0.14], ["o", D.i + 0.21], [".", P.i], ["i", I.i], ["o", O.i]];
+      const escrito = letras.filter(([, tt]) => t >= tt).map(([l]) => l).join(""), cursorOn = Math.floor(t * 2.2) % 2 === 0;
+      return h("div", { style: { position: "absolute", left: CX - 430, top: 430, width: 860, transform: `translateY(${(60 * (1 - e) + flota).toFixed(1)}px) scale(${(0.96 + 0.04 * e).toFixed(4)})`, opacity: tramo(t, 7.6, 7.75, CURVAS.lineal), filter: e < 0.98 ? `blur(${(8 * (1 - e)).toFixed(2)}px)` : undefined } },
+        h("div", { style: { borderRadius: 34, padding: "38px 44px 34px", fontFamily: FUENTE, color: TINTA, background: "rgba(255,255,255,0.72)", backdropFilter: "blur(18px) saturate(1.2)", webkitBackdropFilter: "blur(18px) saturate(1.2)",
+          boxShadow: "0 0 0 1.5px rgba(255,255,255,.75), 0 0 0 2.5px rgba(12,34,25,.05), 0 2px 4px rgba(12,20,60,.06), 0 12px 34px rgba(12,20,60,.12), 0 40px 90px rgba(12,20,60,.16)" } },
+          h("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end" } },
+            h("div", {}, h("div", { style: { fontSize: 24, fontWeight: "560", color: "#5A6178" } }, "Factura 0142 · vence hoy"), h("div", { style: { fontSize: 50, fontWeight: 700, letterSpacing: "-0.03em", marginTop: 6 } }, "Estudio Lumen")),
+            h("div", { style: { fontSize: 58, fontWeight: 700, letterSpacing: "-0.03em", fontVariantNumeric: "tabular-nums" } }, "240,00 €")),
+          h("div", { style: { display: "flex", alignItems: "center", gap: 22, marginTop: 30 } },
+            h("div", { style: { flex: 1, height: 12, borderRadius: 6, background: "rgba(14,18,34,0.08)", overflow: "hidden" } },
+              h("div", { style: { width: `${(prog * 100).toFixed(2)}%`, height: "100%", borderRadius: 6, background: "linear-gradient(90deg, #6A95FF, #14C6B4)" } })),
+            h("div", { style: { width: 96, textAlign: "right", fontSize: 30, fontWeight: 650, fontVariantNumeric: "tabular-nums", color: "#3A4160" } }, `${n} s`),
+            h("div", { style: { position: "relative", width: 190, height: 52 } },
+              h("div", { style: { position: "absolute", left: 0, top: 0, width: 190, height: 52, borderRadius: 26, display: "flex", alignItems: "center", justifyContent: "center", gap: 10, fontSize: 25, fontWeight: 650,
+                background: cobrada ? "#14B89F" : "#FFE7B8", color: cobrada ? "#FFFFFF" : "#8A5A00", transform: `scale(${cobrada ? (1 + 0.08 * Math.sin(pop * Math.PI)).toFixed(4) : 1})` } },
+                cobrada ? h("svg", { width: 22, height: 22, viewBox: "0 0 24 24" }, h("path", { d: "M5 12.5 L10 17 L19 7", fill: "none", stroke: "#FFFFFF", strokeWidth: 3, strokeLinecap: "round", strokeLinejoin: "round", pathLength: 1, strokeDasharray: 1, strokeDashoffset: (1 - tramo(t, seg.f + 0.05, seg.f + 0.3)).toFixed(3) })) : null,
+                cobrada ? "Cobrada" : "Pendiente"))),
+          h("div", { style: { display: "flex", alignItems: "center", gap: 14, marginTop: 26, height: 48, opacity: tramo(t, D.i - 0.25, D.i, CURVAS.lineal) } },
+            h("div", { style: { fontSize: 24, color: "#5A6178", fontWeight: "560" } }, "Enlace de pago"),
+            h("div", { style: { padding: "8px 18px", borderRadius: 14, background: "rgba(14,18,34,0.06)", fontSize: 28, fontWeight: 650, fontVariantNumeric: "tabular-nums", letterSpacing: "-0.01em", minWidth: 150 } },
+              escrito, h("span", { style: { display: "inline-block", width: 3, height: 30, marginLeft: 3, verticalAlign: "-5px", background: "#4C7DFF", opacity: cursorOn && t < O.f + 0.6 ? 1 : 0 } })))),
+        cobrada && pop < 1 ? Onda(t, { t0: seg.f + 0.03, x: CX + 430 - 44 - 95, y: 430 + 38 + 120, w: 190, h: 52, radio: 26, crece: 0.3, dur: 0.35, color: "rgba(20,184,159,0.8)", grosor: 2 }) : null);
+    };
+
+    const escena = (t) => {
+      const fondoCalmo = 0.22 + 0.1 * tramo(t, 4.4, G - 0.2);                     // antes del golpe: la misma malla apagada
+      const cam = 1 + 0.025 * tramo(t, 12.0, 13.0, CURVAS.suave);                  // asentamiento final (el «final» de la música)
+      return capa({},
+        malla(t, fondoCalmo),
+        capa({ transform: `scale(${cam.toFixed(4)})` },
+          VENTANAS.map((w) => ventana(t, w)),
+          titulo(t),
+          punto(t),
+          revelado(t),
+          logo(t),
+          tarjeta(t)),
+        Pildora(t));
+    };
+
+    MG.montar({ id: "promo", duracion: DUR, fps: 60, estilo: E, escena });
+  </script>
+</body>
+</html>

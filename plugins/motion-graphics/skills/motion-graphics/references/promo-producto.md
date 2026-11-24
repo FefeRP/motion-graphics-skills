@@ -167,9 +167,54 @@ Antes de seguir, comprueba en la tabla:
 - La UI muerta: estados que cambian solos, sin cursor ni sonido.
 - Tecleo de cadencia mecánica; zooms grandes de una captura rasterizada (en HTML, escala vectores y texto vivo).
 
+## Lecciones de promos reales (lo que pidió el cliente tras verlas)
+- **Inicio en claro si la marca es clara.** Un arranque oscuro «para dramatizar el problema» con giro a claro le pareció
+  ajeno a la marca. Cuenta el problema en claro pero **neutro** (blanco, grises, sin color de marca) y deja que el
+  **color llegue con la marca** en el golpe (p. ej. el degradado de malla de su web abriéndose en círculo detrás del logo):
+  el contraste neutro → color hace el trabajo que antes hacía oscuro → claro.
+- **Las líneas nacen del logo, nunca de una caja.** Líneas rectas del borde del bloque del logo a fichas en óvalo «parecen
+  dibujadas y mal colocadas». Funciona: el logo se recoge en su símbolo, el símbolo sube y de su base salen curvas Bézier
+  con tangente vertical en los dos extremos hacia una **fila** de piezas (diagrama de una fuente a N). Cada línea crece
+  por longitud de arco con un punto de cabeza, la pieza **nace cuando le llega su línea** (con onda) a la vez que la voz
+  la nombra, y después corren pulsos por los cables para que nada se quede quieto.
+- **Usa el fondo de la propia web** (su shader o degradado de malla) portado a la pieza y pintado en función de t: liga la
+  promo con la marca. **A pantalla completa y sin velos encima**: fundirlo hacia abajo, o dejar un degradado claro bajo los
+  subtítulos, se ve como una **franja blanca** que aparece y desaparece (sobre todo mientras el fondo se abre en círculo o
+  entra con fundido, cuando el código cree que «no hay fondo» y vuelve a poner el velo). Los subtítulos van en una
+  **píldora de cristal** (blanco ~70 % + `backdrop-filter: blur`) en todo el vídeo: se leen igual en claro, sobre el
+  degradado y sobre pantallas oscuras, y no hay nada que pueda hacer franja.
+- **Busca las franjas midiendo, no a ojo**: reduce el vídeo a 64×36 en gris y compara, fotograma a fotograma, el brillo de
+  las filas de abajo con las del centro; los tramos donde abajo es >10 niveles más claro son candidatos. Luego, hoja de
+  fotogramas cada 0,1 s de cada tramo. Un revisor de vídeo a 4 fps no las ve (o las inventa).
+- **Ningún texto sin ancho fijo dentro de una tarjeta.** Una línea de fuente («Plan · pagando el año · IVA · precio del…»)
+  de 22 px mide ~980 px y se sale de una tarjeta de 880 útiles. Calcula ancho ≈ caracteres × 0,5 × tamaño; si no cabe con
+  40 px de margen, pártela en líneas con `white-space: nowrap` cada una y alarga la tarjeta. Cifras que crecen
+  (8,23 € → 526,72 €): mide el valor más largo, no el primero.
+- **Revelado del logo: máscara suave, nunca recorte duro**, y la parte visible siempre centrada. Un `clip-path: inset()`
+  que avanza parte letras a la mitad («GAMZ(») y deja restos al recogerse; con el nombre oculto, el símbolo solo queda
+  descentrado dentro del círculo que se abre en el centro. Funciona: símbolo centrado → se desplaza a su sitio mientras
+  el nombre entra con `mask-image: linear-gradient` (borde de ~12 % que avanza) y un leve deslizamiento.
+- **Mockups con contenido real, no barras grises.** Ventanas que la cámara acerca se leen: remitentes y asuntos, nombres
+  de fichero con tamaño, reuniones con hora, mensajes de chat, una web con titular. Acabado: botones de ventana en color,
+  buscador, sombras en capas (contacto + ambiente) y un reflejo diagonal muy suave.
+- **Voz: cuidado con la «y» encadenada.** «…la web… y cada una…», «Y todo eso…», «Y si…», «y la invitación…» en serie
+  cansa. Enumera sin conjunción («tu agenda, tu web…»), parte en dos frases («…con tu calendario. La invitación sale…») o
+  convierte en pregunta («¿Vienes de Gmail?»). Las pausas nuevas («web…», «?») sueltan el ducking: mide voz/música solo
+  en ventanas con voz y añade bajada a esas frases.
+- **Preguntas naturales, no de teletienda.** «¿Tu correo lleva el nombre de tu empresa? Con X, sí.» en serie suena
+  abusivo. Mejor una pregunta de arranque conversacional («¿Te has parado a contar…?»), afirmaciones que enseñan
+  («Empieza por el correo…», «Las reuniones las apunta…») y como mucho otra pregunta donde surja sola («¿Tienes que
+  mandar algo pesado?»). Genera la locución **de una vez** (todo el texto en una petición con tiempos por carácter) y
+  córtala por frases: misma entonación, sin parches.
+
 ## Proceso recomendado
 1. Mide 2–3 referencias del mismo tipo (descárgalas a 480p y pásalas por el revisor con el prompt de
    [checklist-promo.md](checklist-promo.md)) y apunta sus números en `BRIEF.md`.
 2. Escribe el guion con la plantilla de ritmo y pasa las 3 comprobaciones de la tabla.
 3. Haz un **animático** antes del render completo: fotogramas cada 0,5 s en una hoja de contacto, revisable en 1 min.
 4. Renderiza, pasa la checklist y el revisor, corrige y repite hasta aprobar.
+
+## Con voz en off
+Las recetas concretas (estructura con preguntas, hook clavado a la voz, píldora de cristal, revelado del logo,
+microdetalles, música con ducking, locución y versiones) están en [promo-recetas.md](promo-recetas.md), con la
+plantilla `kit/piezas/promo.html`.

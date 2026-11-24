@@ -16,10 +16,12 @@ Cómo se escribe una pieza: [hyperframes.md](hyperframes.md).
 | Luz y fondo (`motion-luz-fondo`) | `FondoEstilo`, `Halo`, `Aurora`, `Manchas`, `VeloEsquina`, `Vineta`, `Grano`, `Bokeh`, `Destello`, `Sombra`, `Hud`, `timecode` |
 | Partículas (`motion-3d`) | `Chispas`, `Progreso`; 3D de CSS con `Camara` + `Movil` con `z` |
 | Elementos externos (IA, recortes) | `Elemento` (imagen con recorte, ajuste, máscara, tinte con el alfa de la imagen, mezcla), `colocaMedio` (coloca un `<video class="clip">` fijo) — [elementos-ia.md](elementos-ia.md) |
-| Sonido (`motion-ritmo-sonido`) | bloque JSON `mg-sonido` en la pieza (música + efectos de `comun/sfx`), convertido por `scripts/mg.mjs` |
+| Sonido (`motion-ritmo-sonido`) | bloque JSON `mg-sonido` en la pieza (música + efectos de `comun/sfx` + voz con `voz`, `vozInicio`, `volumenVoz`), convertido por `scripts/mg.mjs` |
 
 Demos (`kit/piezas`): `oscuro` (10 s), `claro` (10 s), `agencia` (11,25 s), `mezcla` (la misma escena con cualquier
-dirección: `variantes/mezcla-*.json`), `elementos` (integración de imagen y clip con alfa).
+dirección: `variantes/mezcla-*.json`), `elementos` (integración de imagen y clip con alfa), `promo` (13 s, plantilla de
+promo con voz: hook palabra a palabra, malla a sangre, píldora de cristal, revelado del logo, tarjeta con microdetalles;
+[promo-recetas.md](promo-recetas.md)).
 
 ## Solo en el kit secundario (`kit-remotion/src/motion/base`, Remotion, congelado)
 Para usarlos en HyperFrames hay que portarlos (tabla de equivalencias en [hyperframes.md](hyperframes.md)); la lógica
@@ -48,6 +50,8 @@ Recreaciones verificadas (`kit-remotion/src/motion/recreaciones`): `RecOscuroCob
 ## Scripts
 `kit/scripts`: `mg.mjs` (render, stills, lint, preview), `alfa.mjs` (recorte y alfa de imagen o clip), `bucle.mjs`
 (bucle perfecto), `medir-bucle.mjs`, `musica.mjs`, `sfx.mjs`, `medir-ritmo.cjs`, `capturar.mjs`, `extraer-tokens.mjs`,
-`comparar-fidelidad.mjs`, `comparar-video.mjs`.
+`comparar-fidelidad.mjs`, `comparar-video.mjs`, `revisar-guion.mjs`, `voz.mjs` (revisar y generar la locución con tiempos
+por palabra), `audio.mjs` (ducking, medir voz/música, remezclar sin re-render), `franjas.mjs` (franjas y velos),
+`marca.mjs` (carpeta de recursos de marca).
 `kit-remotion/scripts`: `render.mjs` (render, stills, `--desde/--hasta/--mudo`), `empalmar.mjs`, `recortar.mjs` y los mismos
 de medida.

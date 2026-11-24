@@ -13,6 +13,7 @@
 //        { "musica": "musica/musica-oscuro.wav", "volumenMusica": 0.55, "fundido": 0.6, "volumen": 0.75,
 //          "sfx": [ { "t": 0.2, "n": "whoosh" }, { "t": 2.5, "n": "impacto", "vol": 0.8 } ] }
 //      </script>
+//    Con voz en off: "voz": "voz/voz.wav" (+ "volumenVoz", "vozInicio"); la música ya con ducking (scripts/audio.mjs).
 //    Rutas relativas a `comun/`. La duración de cada efecto se lee del WAV. Con `--variables` que traigan "sonido"
 //    (un objeto como el de arriba), ese manda: así una misma pieza cambia de música por dirección.
 // 2. Lanza el CLI de HyperFrames instalado (versión fijada en package.json) sin telemetría, sin instalar skills en
@@ -68,6 +69,7 @@ function generaIndex(variables) {
   if (son && !tiene("--mudo")) {
     const tags = [];
     const vol = son.volumen ?? 1; // mismos valores por defecto que el Sonido del kit de Remotion
+    if (son.voz) tags.push(`<audio id="mg-voz" class="clip" src="comun/${son.voz}" data-start="${son.vozInicio ?? 0}" data-duration="${dur}" data-volume="${son.volumenVoz ?? 1}" data-track-index="19"></audio>`);
     if (son.musica) tags.push(`<audio id="mg-musica" class="clip" src="comun/${son.musica}" data-start="0" data-duration="${dur}" data-volume="${son.volumenMusica ?? 0.6}"${son.fundido ? ` data-fade-out="${son.fundido}"` : ""} data-track-index="20"></audio>`);
     (son.sfx || []).forEach((s, i) => {
       const src = `comun/sfx/${s.n}.wav`, d = Math.min(durWav(join(KIT, src)), s.dur ?? 1.4, Math.max(0.05, dur - s.t));

@@ -17,9 +17,10 @@ kit/
   comun/mg.js          motor (window.MG)          comun/fuentes.css + fuentes/   fuentes OFL locales
   comun/vendor/gsap.min.js                        comun/sfx/*.wav, comun/musica/*.wav (sintetizados)
   comun/elementos/     imágenes y clips externos (generados con IA, recortes, capturas)
-  piezas/<pieza>.html  una composición por fichero (oscuro, claro, agencia, mezcla, elementos)
+  piezas/<pieza>.html  una composición por fichero (oscuro, claro, agencia, mezcla, elementos, promo)
   variantes/*.json     variables para una pieza (dirección, textos, sonido)
   scripts/mg.mjs       render · stills · lint · preview      scripts/alfa.mjs, bucle.mjs, medir-bucle.mjs
+  scripts/voz.mjs · audio.mjs · franjas.mjs · marca.mjs     voz en off, ducking/remezcla, franjas, recursos de marca
 ```
 `mg.mjs` genera en `.obras/<pieza>-<pid>/` un `index.html` (con el sonido convertido en etiquetas) y un enlace a
 `comun/`, así varias órdenes a la vez no se pisan. Se borra solo.
@@ -84,6 +85,9 @@ kit/
 | `node scripts/mg.mjs render <pieza> [-o salida/x.mp4] [--variables JSON] [--desde a --hasta b] [--mudo] [--calidad draft\|looks\|delivery] [--crf 16] [-w 3]` | MP4 H.264 + AAC |
 | `node scripts/medir-ritmo.cjs v.mp4` · `ffmpeg -i v.mp4 -af ebur128=peak=true -f null -` | ritmo, saltos, volumen |
 | `node scripts/comparar-video.mjs ref.mp4 v.mp4 comp.mp4` | contra una referencia o la versión anterior |
+| `node scripts/franjas.mjs v.mp4 [--zona arriba]` | franjas o velos que aparecen en el borde (código 3 = candidatos) |
+| `node scripts/voz.mjs revisar|generar …` · `node scripts/audio.mjs ducking|medir|remezclar …` | voz en off, ducking medido y cambiar el audio sin re-renderizar ([promo-recetas.md](promo-recetas.md)) |
+| `node scripts/marca.mjs crear|guardar|listar|usar …` | recursos de la marca del usuario ([recursos.md](recursos.md)) |
 
 Velocidad medida (1080p, 60 fps, 3 núcleos, sin GPU): ≈6–7 s de render por segundo de vídeo (10 s → 64–75 s).
 

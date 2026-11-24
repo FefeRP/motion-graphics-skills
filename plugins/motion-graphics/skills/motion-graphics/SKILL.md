@@ -52,6 +52,13 @@ un evento cada ≤ 1,8 s, variar escala y molde, UI viva y de cerca, transicione
 cierre con clímax), plantillas por segundos de 15, 30, 45 y 60 s y recetas de hooks y transiciones. Y antes de
 entregar, la [checklist anti-aburrimiento](references/checklist-promo.md) (bloque A automático con
 `node scripts/revisar-guion.mjs GUION.md`). Cumplir la rejilla y meter 3D no basta: aburre lo predecible.
+**Con voz en off**, además, [references/promo-recetas.md](references/promo-recetas.md) y la plantilla
+`kit/piezas/promo.html`: preguntas que plantean el problema, hook palabra a palabra clavado a la voz, fondo a sangre
+sin velos, subtítulos en píldora de cristal, un solo material y una sola dimensión, revelado del logo con anticipación
+y capas, microdetalles, locución escrita como suena (`scripts/voz.mjs`), música con ducking y drop en el revelado
+(`scripts/audio.mjs`, que también la cambia sin re-renderizar) y cómo arrastrar todos los cambios entre versiones.
+Iconos, fondos y objetos **de la marca**: [references/recursos.md](references/recursos.md) (Higgsfield + carpeta de
+marca con `scripts/marca.mjs`); decoración y shaders: el kit o la librería de NEW ERA, que **se copian tal cual**.
 
 ## Paso 1 · Entender el pedido (brief)
 Saca del pedido (pregunta **solo** lo que falte y cambie la decisión, en una tanda):
@@ -139,6 +146,8 @@ qué queda (desviaciones de la interfaz, textos por confirmar).
 ## Referencias
 - [references/promo-producto.md](references/promo-producto.md): promos y lanzamientos SaaS de primer nivel: leyes con números, plantillas por segundos, recetas de hooks, transiciones y UI viva, sonido, antipatrones.
 - [references/checklist-promo.md](references/checklist-promo.md): la checklist anti-aburrimiento (guion, fotogramas, medidas, prompt del revisor).
+- [references/promo-recetas.md](references/promo-recetas.md): promo con voz en off: estructura, hook, fondo, píldora, coherencia, revelado del logo, microdetalles, música y ducking, locución, versiones (con números y scripts).
+- [references/recursos.md](references/recursos.md): de dónde sale cada recurso: código del kit o librería de NEW ERA (tal cual), Higgsfield para lo propio de la marca (modelo, prompt, encaje, revisión) y carpeta de marca reutilizable.
 - [references/direcciones.md](references/direcciones.md): las direcciones de partida (antes, skills de estilo) y cómo mezclarlas.
 - [references/hyperframes.md](references/hyperframes.md): el motor principal: cómo se escribe una pieza, reglas, sonido, render.
 - [references/elementos-ia.md](references/elementos-ia.md): elementos generados con Higgsfield: cuándo, modelo, prompt, presupuesto, descarga, alfa, bucle e integración.

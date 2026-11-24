@@ -67,3 +67,12 @@ imagen), `Hud`. `Resplandor`, `Chispa`, `Asterisco` y `Meteoro` para acentos de 
 - **Cambio de tema en caliente**: los acentos de la interfaz pasan de gris a color de marca en 2–3 fotogramas, en cascada
   de arriba abajo (la app "se enciende").
 - Ejemplo: `RecSeguimiento` (dirección `claro-lavanda`).
+
+## Fondo a sangre sin franjas (promo)
+- Malla o shader que cubre **todo** el cuadro en todos los fotogramas, determinista por `t`; antes y después de un
+  revelado, la misma malla (apagada con `saturate`/`brightness` antes). Capas con `filter: blur`, 60 px más grandes
+  por cada lado.
+- **Sin velos** detrás de los subtítulos (el contraste lo da la píldora) ni viñetas que se encienden; sin viñeta en
+  fondos claros. Compruébalo con `node scripts/franjas.mjs v.mp4` (y `--zona arriba`): un revisor con IA no lo ve.
+- Shaders y decoración de la librería de NEW ERA o del kit: **se copian tal cual** (solo hay que hacerlos deterministas,
+  `../motion-graphics/references/recursos.md` §1). Más en `../motion-graphics/references/promo-recetas.md` §3.

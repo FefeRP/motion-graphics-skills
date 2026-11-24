@@ -62,3 +62,15 @@ Sonidos sintetizados en `comun/sfx` (kit-remotion: `public/sfx`; `node scripts/s
 ## Comprobar
 `ffmpeg -i v.mp4 -af ebur128=peak=true -f null -` → integrado −14 LUFS (redes) y pico < −1 dBFS. Un revisor de vídeo
 con IA a 4 fps da desfases falsos de ~250 ms: compruébalo a 60 fps con los fotogramas antes de mover nada.
+
+## Voz en off, ducking y cambiar la música sin re-renderizar
+- Locución escrita como suena (cifras, siglas y dominios en letra; pocas «y»): `node scripts/voz.mjs revisar` antes de
+  generar y `voz.mjs generar` (toda en una petición → `voz.wav` + tiempos por palabra). En la pieza: `"voz"`,
+  `"vozInicio"` y `"volumenVoz"` en `mg-sonido`.
+- **Ducking**: `node scripts/audio.mjs ducking musica.wav voz.wav musica-duck.wav --golpes G --voz-inicio s --duracion s`
+  (silencio de 150 ms antes de cada golpe, muestra a muestra) y `audio.mjs medir` hasta mediana ≥ 8 dB y p10 ≥ 3 dB por
+  frase (`--bajadas` en las tapadas; bajo la palabra del logo, en el drop, no bajes de ×0,6).
+- **El drop cae en el revelado del logo** (G). Compruébalo con `volumedetect` en [G − 0,13, G] (≈ −80 dB) y [G, G + 0,25].
+- **Cambiar música, voz o efectos de un vídeo ya hecho**: `node scripts/audio.mjs remezclar <pieza> v.mp4 v2.mp4
+  --musica otra.wav` (imagen copiada bit a bit). Música natural con Eleven Music (de pago, con permiso): estilos,
+  negativos y cómo alinearla en `../motion-graphics/references/promo-recetas.md` §8.

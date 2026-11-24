@@ -51,7 +51,7 @@ if (iTr >= 0) {
   chk(!mas.length, `A4 transiciones: ${Object.entries(usos).map(([k, n]) => `${k}×${n}`).join(", ")}`, `A4 transiciones repetidas más de 2 veces: ${mas.map(([k, n]) => `${k}×${n}`).join(", ")}`);
 } else fallos.push("A4 falta la columna «transición»");
 if (iTx >= 0) {
-  const largos = ev.filter((e) => { const n = /^\d+$/.test(e.texto) ? Number(e.texto) : e.texto.replace(/[«»"“”]/g, "").split(/\s+/).filter((w) => w && !/^[—-]$/.test(w)).length; return n > 4 && !/cta|gamzy\.|\.(org|com|es)/i.test(e.texto); });
+  const largos = ev.filter((e) => { const n = /^\d+$/.test(e.texto) ? Number(e.texto) : e.texto.replace(/[«»"“”]/g, "").split(/\s+/).filter((w) => w && !/^[—-]$/.test(w)).length; return n > 4 && !/cta|\.(org|com|es|io|app|net)\b/i.test(e.texto); });
   chk(!largos.length, "A7 textos de ≤ 4 palabras", `A7 textos de más de 4 palabras en ${largos.map((e) => e.t).join(", ")} s`);
 }
 console.log(`${fichero}: ${ev.length} eventos, ${ev.length ? (ev[ev.length - 1].t - ev[0].t).toFixed(1) : 0} s`);

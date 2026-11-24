@@ -64,6 +64,15 @@ push-ins), all-different transitions, sound with a signature and a climax before
 second and hook and transition recipes. `references/checklist-promo.md` is the checklist a promo must pass before
 delivery, and `kit/scripts/revisar-guion.mjs` checks the rhythm table of the script automatically.
 
+With a voice-over, `references/promo-recetas.md` and the `promo` template piece add what a real promo taught after
+ten client versions: questions that state the problem, a hook pinned word by word to the voice, glass-pill subtitles
+timed from the voice, a layered logo reveal on the music drop, one material and one dimension, micro-details, ducking
+measured per phrase, a voice-over written as it sounds, and how to carry every change between versions. New scripts:
+`voz.mjs` (voice-over lint and generation with word timings), `audio.mjs` (ducking, measuring and re-mixing a rendered
+video without re-rendering), `franjas.mjs` (background stripes) and `marca.mjs` (your brand's resource folder: icons
+and elements you generate with Higgsfield, reused in your next videos; decoration and shaders from the kit or the NEW
+ERA library are copied as they are).
+
 ## Learned from references, frame by frame
 Every style and variant comes from studying real motion graphics frame by frame (timing, easing measured per frame,
 sampled palettes, type, layers, sound) and then **recreating them in this engine and checking the recreation against
@@ -235,7 +244,7 @@ conductor, elige y mezcla técnicas y construye la pieza, y ocho skills de técn
 movimiento, transiciones, tipografía, luz y fondos, 3D y partículas, mapas 3D en perspectiva, ritmo y sonido), más un kit de HyperFrames listo
 para renderizar (y un kit de Remotion secundario). Saben cuándo usar elementos generados con IA (objetos, fondos,
 texturas, personajes, productos, bucles) y cómo integrarlos, siempre con presupuesto máximo y precio estimado antes.
-Las direcciones visuales (oscuro, claro, agencia y sus variantes) son ajustes mezclables. Cuando recrean la interfaz de tu producto, siguen un proceso obligatorio de fidelidad (fuente de
+Las direcciones visuales (oscuro, claro, agencia y sus variantes) son ajustes mezclables. Para promos con voz en off traen recetas con números (hook clavado a la voz, subtítulos en píldora de cristal, revelado del logo en el drop, ducking medido, locución escrita como suena, versiones que arrastran todos los cambios) y una plantilla, y una carpeta de recursos de marca por usuario: los iconos propios se generan con Higgsfield; la decoración y los shaders del kit o de la librería de NEW ERA se copian tal cual. Cuando recrean la interfaz de tu producto, siguen un proceso obligatorio de fidelidad (fuente de
 verdad, tokens copiados, comparación con capturas reales y lista de comprobación) para que sea idéntica a la real.
 Instalación: `claude plugin marketplace add FefeRP/motion-graphics-skills` y
 `claude plugin install motion-graphics@motion-graphics-skills`. Las skills están escritas en español.

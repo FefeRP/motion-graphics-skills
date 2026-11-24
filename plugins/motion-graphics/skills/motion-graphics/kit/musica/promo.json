@@ -1,0 +1,16 @@
+{
+  "duracion": 13.5, "bpm": 120, "fundido": 1.2,
+  "secciones": [
+    { "nombre": "intro", "desde": 0, "hasta": 4, "arp": "A", "arpCorte": [300, 3200], "acordes": 0.35, "acordesCorte": 800 },
+    { "nombre": "subida", "desde": 4, "hasta": 5.85, "charles": true, "bajo": true, "arp": "A", "arpCorte": [3200, 7000], "acordes": 0.5, "acordesCorte": 1600 },
+    { "nombre": "tension", "desde": 5.85, "hasta": 6 },
+    { "nombre": "drop", "desde": 6, "hasta": 12, "groove": true, "arp": "B", "arpCorte": [5500, 5500] },
+    { "nombre": "final", "desde": 12, "hasta": 13.5 }
+  ],
+  "eventos": [
+    { "t": 4, "tipo": "subida", "hasta": 5.85, "nivel": 0.4 },
+    { "t": 4, "tipo": "redoble", "hasta": 5.85 },
+    { "t": 6, "tipo": "golpe", "fuerza": 1 }, { "t": 6, "tipo": "crash", "nivel": 1 },
+    { "t": 12, "tipo": "final", "fuerza": 0.8 }
+  ]
+}

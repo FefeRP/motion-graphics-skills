@@ -62,3 +62,13 @@ Parte del plugin de motion graphics. Motor principal: **HyperFrames** (HTML + CS
 - **Relevo texto → logo** (`Relevo a b`): cruce con desenfoque en 0,23 s (7 f a 30 fps) en el mismo sitio, opcional
   `tracking` que se cierra. Para cambiar un título de interfaz por la marca sin corte.
 - Ejemplo completo: `RecSeguimiento` (`src/motion/recreaciones/seguimiento.tsx`, producto ficticio «ruta», 12 s, 90 BPM).
+
+## Texto con voz en off (promo)
+- **Título del hook clavado a la voz**: cada palabra entra en el inicio de su palabra hablada − 0,05 s (sube 40 px,
+  desenfoque 10 → 0, expo 0,42 s), maquetado entero desde el principio para que nada salte; empieza a ×1,25 y se recoge
+  con la palabra clave. Tiempos de `voz-tiempos.json` (`scripts/voz.mjs`), buscados por palabra, nunca por índice.
+- **Subtítulos en píldora de cristal** (blanco 0,72 + `backdrop-filter`, 42 px, peso 560, radio 999, `top 952`): entra en
+  0,12/0,32 s, sale en 0,25 s, sin fundido entre trozos pegados; se lee la forma escrita («30», «tumarca.io») aunque se
+  oiga la hablada; ninguno cruza un revelado. Plantilla `kit/piezas/promo.html` (`Pildora`), números en `../motion-graphics/references/promo-recetas.md` §4.
+- **Nombre del logo**: máscara `linear-gradient(90deg, #000 pos−9%, transparent pos+3%)` + `translateX(−26 → 0)` con la voz
+  que lo dice; la caja del nombre crece para que el conjunto siga centrado. Nunca `clip-path: inset` en logos.

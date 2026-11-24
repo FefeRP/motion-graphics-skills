@@ -60,3 +60,11 @@ Parte del plugin de motion graphics. Motor principal: **HyperFrames** (HTML + CS
 - **Inundación de luz** (`InundaLuz t0 dur={0.2}`): manchas desde las esquinas de abajo que crecen ease-in y SE QUEDAN; con
   hijos (el primer plano congelado con `Freeze`) el vídeo enlaza en bucle en vez de acabar en negro o congelado.
 - Ejemplo completo: `RecSeguimiento` (`src/motion/recreaciones/seguimiento.tsx`, producto ficticio «ruta», 12 s, 90 BPM).
+
+## Revelado del logo en el golpe (promo con voz)
+Anticipación (punto que crece a 17 px, toma aire −18 % y desaparece en G + 0,03 sobre 150 ms de silencio) → círculo
+`R = 12 + (1 − (1 − u)^4,2)·1138` en 0,92 s con banda esmerilada 15 ms por delante (≤ 34 px), halo de ancho según la
+velocidad, aro de 2,5 px, eco a −80 ms, estelas tenues (≤ 0,09), grano dentro y la malla revelada que se enfoca
+(blur 14 → 0, escala 1,08 → 1) → logo con rebote, sombra que se posa y nombre con máscara de degradado. Ningún subtítulo
+lo cruza. Todo con sus números en `../motion-graphics/references/promo-recetas.md` §6; hecho en `kit/piezas/promo.html` (`revelado`, `logo`).
+- **Hilo conductor**: lo del hook se transforma en lo que abre el logo (las ventanas colapsan en el punto de cristal).
