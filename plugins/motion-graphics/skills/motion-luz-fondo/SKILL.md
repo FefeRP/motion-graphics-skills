@@ -74,5 +74,7 @@ imagen), `Hud`. `Resplandor`, `Chispa`, `Asterisco` y `Meteoro` para acentos de 
   por cada lado.
 - **Sin velos** detrás de los subtítulos (el contraste lo da la píldora) ni viñetas que se encienden; sin viñeta en
   fondos claros. Compruébalo con `node scripts/franjas.mjs v.mp4` (y `--zona arriba`): un revisor con IA no lo ve.
-- Shaders y decoración de la librería de NEW ERA o del kit: **se copian tal cual** (solo hay que hacerlos deterministas,
-  `../motion-graphics/references/recursos.md` §1). Más en `../motion-graphics/references/promo-recetas.md` §3.
+- Shaders y decoración de la librería de componentes o del kit: **se copian tal cual** (solo hay que hacerlos
+  deterministas): `node scripts/biblioteca.mjs buscar "shader agua" --categoria fondos`, `traer <id>` y el GLSL tal cual
+  en `MG.shader({ id, fragmento, vertice })` con `uTime = t` (`../motion-graphics/references/recursos.md` §1; ejemplo
+  `piezas/biblioteca.html`). Más en `../motion-graphics/references/promo-recetas.md` §3.

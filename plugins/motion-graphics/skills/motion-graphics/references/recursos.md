@@ -5,35 +5,91 @@ dentro de este plugin: si todos los usuarios usaran los mismos, todos los vídeo
 
 | Qué | De dónde | Se modifica |
 |---|---|---|
-| Decoración, shaders y fondos animados, efectos de texto, partículas, rejillas, brillos, transiciones | **Código**: el kit (`MG.*`) o la **librería de NEW ERA** (abajo) | Se copian **tal cual** y se retocan solo si hace falta (color de la marca, tiempos) |
+| Decoración, shaders y fondos animados, efectos de texto, partículas, rejillas, brillos, transiciones | **Código**: el kit (`MG.*`) o la **librería de componentes** (§1, solo las categorías de vídeo) | Se copian **tal cual** y se retocan solo si hace falta (color de la marca, tiempos) |
 | Iconos, iconos animados, objetos, productos, personajes, fondos y texturas **propios de la marca o del proyecto** | **Higgsfield** (§2), generados por cada usuario para su marca | Se generan a medida desde el principio |
 | Lo que ya se generó para esa marca en vídeos anteriores | **Carpeta de recursos de marca** del usuario (§3) | Se reutilizan; si se crean variantes, con el mismo prompt base |
 
 Texto, cifras, interfaz y logos van siempre por código (el logo, el SVG real de la marca).
 
-## 1. Librería de NEW ERA (decoración y shaders listos)
-El marketplace hermano **the-new-era-websites** tiene una biblioteca de componentes (fondos animados, shaders,
-textos animados, brillos, marquesinas, 3D…) y motores sin dependencias. Es general para todas las skills: el motion
-graphics la usa como cantera de **decoración**.
-- **Cómo se consulta**: si el plugin está instalado, con su skill `biblioteca-componentes`:
-  `node <plugin the-new-era-websites>/skills/biblioteca-componentes/scripts/buscar.mjs "shader de malla"` (y
-  `ver <id> --todo` para el código). El catálogo se apunta con `BIBLIOTECA_COMPONENTES` (carpeta o URL; credenciales,
-  si las pide, en `BIBLIOTECA_AUTH_FILE`, nunca en ficheros del vídeo). Sin plugin o sin catálogo, el kit basta
-  (`MG.Manchas`, `Aurora`, `Halo`, `Grano`, `Vineta`, partículas, formas): no bloquees el vídeo esperando la librería.
-- **Copiar tal cual vale**: un shader o una decoración que ya funciona rara vez mejora rehecho. Cópialo y retócalo solo
-  si hace falta (colores de la dirección, velocidad). La regla de «cambiar cuatro cosas» de esa skill es para webs, no
-  para estos vídeos.
-- **Lo único obligatorio es hacerlo determinista** (si no, HyperFrames no lo renderiza igual en cada fotograma):
-  1. Todo el tiempo sale de `t` de `escena(t)`: fuera `requestAnimationFrame`, `Date.now`, `performance.now`,
-     `setInterval`, `Math.random` (usa `MG.azar(semilla)`) y transiciones CSS (el lint del kit lo comprueba, también en
-     comentarios).
-  2. Un shader WebGL: crea el contexto una vez y en `escena(t)` pon el uniforme de tiempo (`uTime = t`) y dibuja.
-     Canvas 2D: igual, se repinta desde `t`.
-  3. React/Tailwind no hacen falta: pasa el JSX a HTML + CSS normal dentro de la pieza (las clases de Tailwind se
-     traducen a sus propiedades).
-  4. Conserva el aviso de licencia y autor en un comentario del fichero (dentro del `<script>`, nunca antes del doctype).
-- **Fondos a pantalla completa**: ver «Fondo sin huecos ni franjas» en [promo-recetas.md](promo-recetas.md) (el shader
-  cubre el lienzo entero, sin velos encima).
+## 1. Librería de componentes (decoración y shaders listos)
+La librería de componentes del marketplace hermano **the-new-era-websites** (skill `biblioteca-componentes`) es la
+librería común de recursos de todas las skills: fondos y shaders, texto animado, efectos, 3D… con el código, la
+licencia y el autor de cada pieza. El motion graphics la usa como cantera de **decoración**, solo en las categorías que
+sirven en vídeo.
+
+### 1a. Acceso (lo pone cada persona en SU entorno, nunca en ficheros del vídeo ni del repo)
+```bash
+# a) carpeta local con indice.json y c/<fuente>/<slug>.json (quien mantiene el catálogo)
+export BIBLIOTECA_COMPONENTES=/ruta/al/catalogo/datos
+# b) la API del catálogo con un token personal (lo normal): se recibe con una invitación de tipo «skills»
+export BIBLIOTECA_COMPONENTES=https://catalogo.ejemplo.com/api
+export BIBLIOTECA_TOKEN_FILE=/ruta/fuera/del/proyecto/token.txt    # o BIBLIOTECA_TOKEN=ne_… en la sesión
+```
+- **Invitación «skills»**: la pide cada persona a quien administra la librería. Es un enlace de un solo uso (caduca a
+  las 72 h) que da un **token personal** para la API; no abre la web del catálogo. El token no se comparte, no se pega
+  en el chat y no va en ningún fichero del vídeo, del kit ni de un repo (si se filtra, se pide que lo revoquen).
+- La API da el índice entero y un **número limitado de fichas con código al día** por persona: busca en el índice y
+  pide solo las que vayas a usar. Las de licencia «no redistribuir» llegan sin código (solo el enlace a su web).
+- Errores: 401 = falta el token o no vale (revocado, mal copiado); 429 = límite del día.
+- Sin acceso, el kit basta (`MG.Manchas`, `Aurora`, `Halo`, `Grano`, `Vineta`, partículas, formas): no bloquees el vídeo.
+
+### 1b. Buscar y traer (desde la carpeta del kit)
+```bash
+node scripts/biblioteca.mjs categorias                         # las que entran en vídeo y las que no
+node scripts/biblioteca.mjs buscar "agua ondas" [--categoria fondos] [--sin three,ogl]
+node scripts/biblioteca.mjs ver kokonut/caustics-background     # licencia, autor, técnica, dependencias
+node scripts/biblioteca.mjs traer kokonut/caustics-background   # → comun/biblioteca/kokonut-caustics-background/ + LICENCIA.md
+```
+Con el plugin the-new-era-websites instalado vale igual su `buscar.mjs` (mismas variables), pero solo se usan las
+categorías de esta tabla. Busca por lo que HACE el efecto (glow, ripple, noise, beam, grid), mejor en inglés.
+
+| Entran en vídeo | Para qué |
+|---|---|
+| `fondos` | shaders, auroras, rejillas, partículas |
+| `texto` | texto animado |
+| `3d` | objetos y escenas 3D |
+| `hero` | efectos de cabecera: focos, haces, bandas |
+| `tarjetas` | solo sus **efectos** (meteoros, haces, brillos, revelados), no la tarjeta como interfaz |
+| `iconos` | solo elementos animados (brillos, bordes, confeti, números); los iconos de marca se generan (§2) |
+| `cursor` | estelas y halos, movidos por `t` |
+| `carga` | loaders y brillos de carga: una app viva |
+| `scroll` | revelados, progresos y números que ruedan, pasados a `t` |
+| `dispositivos` | marcos de móvil y navegador |
+
+**Fuera** (interfaz web pura, la usan las skills de webs): botones, navegación, formularios, carruseles, testimonios,
+precios, modales y overlays, listas y tablas, otros (widgets). La interfaz de un producto en un vídeo se recrea fiel a
+ese producto (`motion-interfaz`), no con piezas genéricas.
+
+### 1c. Copiarlo tal cual (y retocar solo si hace falta)
+Un shader o una decoración que ya funciona rara vez mejora rehecho: el efecto, las curvas y el material van **tal
+cual** (mismo GLSL, mismos valores). Se toca solo lo que el vídeo pida: color (los tokens de la dirección o de la
+marca), escala o velocidad si no encaja, y el contenido (textos reales). Lo único **obligatorio** es hacerlo
+determinista, porque HyperFrames pide cada fotograma por su tiempo:
+1. Todo el tiempo sale de `t` de `escena(t)`: fuera `requestAnimationFrame`, `Date.now`, el reloj de `performance`,
+   `setInterval`/`setTimeout`, `Math.random` (usa `MG.azar(semilla)`) y transiciones CSS (el lint lo comprueba).
+2. **Shader WebGL → `MG.shader`**: crea el canvas y el contexto una vez, debajo de la escena, y en cada fotograma pone
+   las uniformes (tipos leídos del programa; un `sampler2D` recibe un canvas o una imagen):
+   ```js
+   const fondo = MG.shader({ id: "pieza", fragmento: FRAGMENT, vertice: VERTEX });   // los del componente, tal cual
+   const escena = (t) => { fondo({ uTime: t, uRes: [1920, 1080], uMask: mascara2d }); return h(...); };
+   ```
+   Si el original hace `uTime = (ahora − inicio) / 1000`, aquí es `uTime = t` (o `t × velocidad` si su reloj iba escalado).
+3. **Lo interactivo → tabla de tiempos**: lo que en la web hace el ratón (clics, estelas, hover) pasa a una lista
+   `[x, y, nace, fuerza]` que se elige por `t` (las N más recientes ya nacidas). Así el efecto vive igual sin ratón.
+4. **React/Tailwind no hacen falta**: el JSX pasa a `h(...)` y las clases de Tailwind a sus propiedades CSS. Lo que
+   el componente mide del DOM (texto para una máscara, cajas) se calcula con la misma geometría con la que pintas el
+   texto (canvas 2D con la fuente ya cargada), no leyendo el DOM del fotograma anterior.
+5. **Licencia**: el aviso de autor y licencia en un comentario dentro del `<script>` (nunca antes del doctype). Las de
+   «no redistribuir» / Commons Clause sirven para tus vídeos, pero no se publican sueltas (ni en un repo ni en un kit).
+6. **Render sin GPU**: un shader a pantalla completa por CPU cuesta (las cáusticas: ≈ 43 s de render por segundo a
+   1080p60). Si el fondo es suave, `MG.shader({ escala: 0.5–0.75 })` lo dibuja a menos resolución y lo estira.
+Ejemplo completo: `piezas/biblioteca.html` del kit (cáusticas de Kokonut UI, MIT: shader copiado tal cual, gotas
+por tabla con cada palabra, sombra del titular desde la misma geometría que el texto).
+
+### 1d. Qué NO se sube a la librería
+Nada generado por nosotros o por el usuario (shaders hechos para un vídeo, iconos, fondos de Higgsfield) ni nada con
+marca: lo propio de cada marca vive en su carpeta de marca (§3). La librería solo recoge piezas de fuentes abiertas.
+- **Fondos a pantalla completa**: ver «Fondo sin huecos ni franjas» en [promo-recetas.md](promo-recetas.md).
 
 ## 2. Generar recursos de marca con Higgsfield
 Antes de nada, §0 de [elementos-ia.md](elementos-ia.md): **presupuesto máximo**, precio estimado de cada recurso con

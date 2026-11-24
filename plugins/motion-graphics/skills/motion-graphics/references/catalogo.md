@@ -15,13 +15,14 @@ Cómo se escribe una pieza: [hyperframes.md](hyperframes.md).
 | Transiciones (`motion-transiciones`) | `Forma` (objeto puente), `Flash`, `FugaLuz`, `ZoomAtraves`, `BarridoRadial`, `Glitch`, `Escaneo`, `Onda` |
 | Luz y fondo (`motion-luz-fondo`) | `FondoEstilo`, `Halo`, `Aurora`, `Manchas`, `VeloEsquina`, `Vineta`, `Grano`, `Bokeh`, `Destello`, `Sombra`, `Hud`, `timecode` |
 | Partículas (`motion-3d`) | `Chispas`, `Progreso`; 3D de CSS con `Camara` + `Movil` con `z` |
-| Elementos externos (IA, recortes) | `Elemento` (imagen con recorte, ajuste, máscara, tinte con el alfa de la imagen, mezcla), `colocaMedio` (coloca un `<video class="clip">` fijo) — [elementos-ia.md](elementos-ia.md) |
+| Elementos externos (IA, recortes) | `Elemento` (imagen con recorte, ajuste, máscara, tinte con el alfa de la imagen, mezcla), `colocaMedio` (coloca un `<video class="clip">` fijo), `shader` (un shader de pantalla completa, p. ej. de la librería de componentes, con `uTime = t`; [recursos.md](recursos.md) §1) — [elementos-ia.md](elementos-ia.md) |
 | Sonido (`motion-ritmo-sonido`) | bloque JSON `mg-sonido` en la pieza (música + efectos de `comun/sfx` + voz con `voz`, `vozInicio`, `volumenVoz`), convertido por `scripts/mg.mjs` |
 
 Demos (`kit/piezas`): `oscuro` (10 s), `claro` (10 s), `agencia` (11,25 s), `mezcla` (la misma escena con cualquier
 dirección: `variantes/mezcla-*.json`), `elementos` (integración de imagen y clip con alfa), `promo` (13 s, plantilla de
 promo con voz: hook palabra a palabra, malla a sangre, píldora de cristal, revelado del logo, tarjeta con microdetalles;
-[promo-recetas.md](promo-recetas.md)).
+[promo-recetas.md](promo-recetas.md)), `biblioteca` (9 s, un shader de la librería de componentes copiado tal cual:
+cáusticas con gotas por tabla de tiempos y sombra del titular; [recursos.md](recursos.md) §1).
 
 ## Solo en el kit secundario (`kit-remotion/src/motion/base`, Remotion, congelado)
 Para usarlos en HyperFrames hay que portarlos (tabla de equivalencias en [hyperframes.md](hyperframes.md)); la lógica

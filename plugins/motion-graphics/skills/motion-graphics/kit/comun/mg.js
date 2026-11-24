@@ -587,6 +587,87 @@
    */
   const colocaMedio = (id, estilo) => { const el = document.getElementById(id); if (el) ponEstilo(el, estilo, el.__mgEstilo); if (el) el.__mgEstilo = estilo; };
 
+  /**
+   * Shader de pantalla completa (p. ej. un fondo de la librería de componentes, copiado tal cual) dentro de una pieza.
+   * Crea el <canvas> y el contexto WebGL UNA vez, debajo de la escena (antes de `.mg-escena`), y devuelve
+   * `dibuja(t, uniformes)` para llamarlo desde `escena(t)`: el tiempo del shader sale de `t`, nunca de un reloj.
+   *   const fondo = MG.shader({ id: "pieza", fragmento: FRAG, vertice: VERT, escala: 1 });
+   *   escena: (t) => { fondo({ uTime: t, uRes: [1920, 1080], uMask: lienzo2d }); return h(...); }
+   * Tipos de las uniformes: los lee del programa (float, vec2-4, int, bool, mat, arrays con Float32Array). Un sampler2D
+   * recibe un <canvas>/<img> y se sube como textura en cada llamada (o `{ fuente, fija: true }` para subirla una vez).
+   * Vértice por defecto: un triángulo a pantalla completa con `aPos` (−1..1) y `vUv` (0..1). WebGL2 si el shader empieza
+   * por `#version 300 es`. `escala` < 1 dibuja a menos resolución y lo estira (fondos suaves: 0,5–0,75 renderiza más rápido).
+   */
+  const shader = ({ id, fragmento, vertice, escala = 1, ancho, alto, estilo } = {}) => {
+    let gl = null, prog = null, tipos = {}, texturas = {}, lienzo = null, roto = false;
+    const VERT2 = "#version 300 es\nin vec2 aPos;\nout vec2 vUv;\nvoid main(){ vUv = aPos * 0.5 + 0.5; gl_Position = vec4(aPos, 0.0, 1.0); }";
+    const VERT1 = "attribute vec2 aPos;\nvarying vec2 vUv;\nvoid main(){ vUv = aPos * 0.5 + 0.5; gl_Position = vec4(aPos, 0.0, 1.0); }";
+    const prepara = () => {
+      const W = ancho || M.ancho, H = alto || M.alto, v2 = /^\s*#version 300 es/.test(fragmento);
+      const raiz = Array.from(document.querySelectorAll("[data-composition-id]")).find((n) => n.getAttribute("data-composition-id") === id) || document.body;
+      lienzo = document.createElement("canvas"); lienzo.className = "mg-shader";
+      lienzo.width = Math.round(W * escala); lienzo.height = Math.round(H * escala);
+      ponEstilo(lienzo, { position: "absolute", left: 0, top: 0, width: W, height: H, ...(estilo || {}) });
+      raiz.insertBefore(lienzo, raiz.querySelector(":scope > .mg-escena") || raiz.firstChild);
+      const op = { alpha: false, antialias: false, depth: false, preserveDrawingBuffer: true };
+      gl = lienzo.getContext(v2 ? "webgl2" : "webgl", op);
+      if (!gl) { roto = true; console.error("MG.shader: sin WebGL"); return; }
+      const comp = (tipo, src) => { const s = gl.createShader(tipo); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error("MG.shader: " + gl.getShaderInfoLog(s)); return s; };
+      prog = gl.createProgram();
+      gl.attachShader(prog, comp(gl.VERTEX_SHADER, vertice || (v2 ? VERT2 : VERT1)));
+      gl.attachShader(prog, comp(gl.FRAGMENT_SHADER, fragmento));
+      gl.bindAttribLocation(prog, 0, "aPos"); gl.linkProgram(prog);
+      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error("MG.shader: " + gl.getProgramInfoLog(prog));
+      gl.useProgram(prog);
+      const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+      gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+      const n = gl.getProgramParameter(prog, gl.ACTIVE_UNIFORMS);
+      let unidad = 0;
+      for (let i = 0; i < n; i++) {
+        const u = gl.getActiveUniform(prog, i), nombre = u.name.replace(/\[0\]$/, "");
+        tipos[nombre] = { tipo: u.type, sitio: gl.getUniformLocation(prog, u.name), unidad: u.type === gl.SAMPLER_2D ? unidad++ : -1 };
+      }
+      gl.viewport(0, 0, lienzo.width, lienzo.height);
+    };
+    const pon = (nombre, v) => {
+      const d = tipos[nombre]; if (!d) return;
+      const s = d.sitio, a = typeof v === "number" || typeof v === "boolean" ? [Number(v)] : v;
+      switch (d.tipo) {
+        case gl.FLOAT: gl.uniform1fv(s, a); break;
+        case gl.FLOAT_VEC2: gl.uniform2fv(s, a); break;
+        case gl.FLOAT_VEC3: gl.uniform3fv(s, a); break;
+        case gl.FLOAT_VEC4: gl.uniform4fv(s, a); break;
+        case gl.INT: case gl.BOOL: gl.uniform1iv(s, a.map ? a.map(Math.round) : a); break;
+        case gl.FLOAT_MAT3: gl.uniformMatrix3fv(s, false, a); break;
+        case gl.FLOAT_MAT4: gl.uniformMatrix4fv(s, false, a); break;
+        case gl.SAMPLER_2D: {
+          const fuente = v && v.fuente ? v.fuente : v, fija = v && v.fija;
+          let tx = texturas[nombre];
+          gl.activeTexture(gl.TEXTURE0 + d.unidad);
+          if (!tx) {
+            tx = texturas[nombre] = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tx);
+            for (const [p, q] of [[gl.TEXTURE_MIN_FILTER, gl.LINEAR], [gl.TEXTURE_MAG_FILTER, gl.LINEAR], [gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE], [gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE]]) gl.texParameteri(gl.TEXTURE_2D, p, q);
+            tx.subida = false;
+          } else gl.bindTexture(gl.TEXTURE_2D, tx);
+          if (fuente && !(fija && tx.subida)) { gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, fuente); tx.subida = true; }
+          gl.uniform1i(s, d.unidad); break;
+        }
+        default: console.warn("MG.shader: tipo de uniforme no soportado en " + nombre);
+      }
+    };
+    const dibuja = (uniformes = {}) => {
+      if (roto) return null;
+      if (!gl) prepara();
+      if (roto) return null;
+      gl.useProgram(prog);
+      for (const k in uniformes) pon(k, uniformes[k]);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      return lienzo;
+    };
+    return dibuja;
+  };
+
   // ───────────────────────── sonido y variables ─────────────────────────
   // El render de HyperFrames solo mezcla los <audio class="clip"> ESCRITOS en el HTML (no los creados por JS). Declara
   // el sonido en un <script type="application/json" id="mg-sonido"> y `scripts/mg.mjs` lo convierte en etiquetas
@@ -633,7 +714,7 @@
     piezaEn, Movil, entraSale, Tarjeta, Camara2D, camara2DEn, Camara, camaraEn, desenfoque,
     Descifra, Mascara, Lineas, PorLetra, PorPalabra, Golpe, Contador, Teclea, Palabra, Rodillo, Neon,
     Forma, Onda, Progreso, Flash, Deriva, ZoomAtraves, FugaLuz, BarridoRadial, Glitch, Chispas, Escaneo,
-    Halo, Vineta, Grano, Bokeh, Destello, VeloEsquina, Sombra, Hud, timecode, Manchas, Aurora, FondoEstilo, Elemento, colocaMedio, variables,
+    Halo, Vineta, Grano, Bokeh, Destello, VeloEsquina, Sombra, Hud, timecode, Manchas, Aurora, FondoEstilo, Elemento, colocaMedio, shader, variables,
   };
   window.MG = MG;
 })();

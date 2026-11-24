@@ -1,5 +1,25 @@
 # Changelog
 
+## 3.3.0 · 2026-11-24 · Connected to the component library
+- **The component library** (the one behind the `biblioteca-componentes` skill of the sister marketplace
+  the-new-era-websites) is now the shared source of decoration for motion graphics too. Access is per person, set in
+  your own environment and never in video files or repos: a local catalog folder, or the catalog API with a personal
+  token you get from a «skills» invitation (`BIBLIOTECA_COMPONENTES` + `BIBLIOTECA_TOKEN` / `BIBLIOTECA_TOKEN_FILE`).
+- **Only the categories that work in video**: backgrounds and shaders, animated text, 3D, hero effects, card
+  *effects*, animated elements, cursor trails, loaders, scroll reveals (driven by time) and device frames. Pure web UI
+  (buttons, navigation, forms, carousels, testimonials, pricing, modals, lists, widgets) stays out.
+- **New script `kit/scripts/biblioteca.mjs`** (`categorias`, `buscar`, `ver`, `traer`): searches the library inside
+  those categories and copies a component into `kit/comun/biblioteca/<id>/` with its licence. Works without the other
+  plugin. Fetched components are never published with the kit.
+- **New `MG.shader`**: a full-screen WebGL shader (e.g. copied as-is from the library) inside a piece, created once
+  under the scene and driven by `t` (uniform types read from the program; canvases and images as textures; optional
+  lower resolution).
+- **New example `kit/piezas/biblioteca.html`** (9 s): an MIT pool-caustics background copied as-is, with the clicks
+  of the original turned into a timed list of drops (one per word) and the headline shadow drawn from the same
+  geometry as the text. Checked with frames, stripe detection, rhythm (0 % still, 0 jumps) and loudness (−14 LUFS).
+- `references/recursos.md` §1 rewritten (access, categories, the copy-as-is recipe, licences, what never goes into
+  the library); linked from the master skill, `motion-luz-fondo`, the catalog and the HyperFrames reference.
+
 ## 3.2.0 · 2026-11-24 · Voice-over promos, brand resources and a promo template
 - **New `references/promo-recetas.md`**: recipes with numbers from a real 90 s product promo that went through ten
   client versions: problem questions + a voice that convinces, a hook pinned word by word to the voice, full-bleed

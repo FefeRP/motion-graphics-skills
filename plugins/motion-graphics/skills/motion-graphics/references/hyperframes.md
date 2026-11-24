@@ -88,6 +88,7 @@ kit/
 | `node scripts/franjas.mjs v.mp4 [--zona arriba]` | franjas o velos que aparecen en el borde (código 3 = candidatos) |
 | `node scripts/voz.mjs revisar|generar …` · `node scripts/audio.mjs ducking|medir|remezclar …` | voz en off, ducking medido y cambiar el audio sin re-renderizar ([promo-recetas.md](promo-recetas.md)) |
 | `node scripts/marca.mjs crear|guardar|listar|usar …` | recursos de la marca del usuario ([recursos.md](recursos.md)) |
+| `node scripts/biblioteca.mjs categorias|buscar|ver|traer …` | librería de componentes, solo categorías de vídeo ([recursos.md](recursos.md) §1) |
 
 Velocidad medida (1080p, 60 fps, 3 núcleos, sin GPU): ≈6–7 s de render por segundo de vídeo (10 s → 64–75 s).
 

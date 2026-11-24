@@ -58,7 +58,8 @@ sin velos, subtítulos en píldora de cristal, un solo material y una sola dimen
 y capas, microdetalles, locución escrita como suena (`scripts/voz.mjs`), música con ducking y drop en el revelado
 (`scripts/audio.mjs`, que también la cambia sin re-renderizar) y cómo arrastrar todos los cambios entre versiones.
 Iconos, fondos y objetos **de la marca**: [references/recursos.md](references/recursos.md) (Higgsfield + carpeta de
-marca con `scripts/marca.mjs`); decoración y shaders: el kit o la librería de NEW ERA, que **se copian tal cual**.
+marca con `scripts/marca.mjs`); decoración y shaders: el kit o la **librería de componentes** (solo sus categorías de vídeo, con
+`scripts/biblioteca.mjs` y tu acceso por carpeta o por API con token personal), que **se copian tal cual**.
 
 ## Paso 1 · Entender el pedido (brief)
 Saca del pedido (pregunta **solo** lo que falte y cambie la decisión, en una tanda):
@@ -108,6 +109,10 @@ pedido es atmosférico o de marca y hay presupuesto; nunca para enseñar una int
 elementos con modelo, duración y resolución, **precio estimado de cada uno y total**, y visto bueno con el presupuesto
 máximo. Recetas, modelos, prompts, descarga e integración: [references/elementos-ia.md](references/elementos-ia.md).
 
+**Antes de programar o generar decoración** (un fondo vivo, un shader, un efecto de texto, partículas): búscala en la
+librería de componentes (`node scripts/biblioteca.mjs buscar "…"`, solo categorías de vídeo) y cópiala tal cual con
+`MG.shader` o pasándola a `h(...)`; acceso, categorías y receta en [references/recursos.md](references/recursos.md) §1.
+
 ## Paso 4 · Guion por eventos y sonido
 Una fila por pulso: `t · golpe · escala · qué entra · de qué objeto nace · transición · cámara · texto · sonido` (`motion-ritmo-sonido`; plantilla en `references/promo-producto.md`). Comprueba la tabla con `node scripts/revisar-guion.mjs GUION.md` antes de animar. Elige el BPM
 y la música (`scripts/musica.mjs`, sintetizada) ANTES de animar. Escribe el guion en `GUION.md` del vídeo.
@@ -118,7 +123,7 @@ y la música (`scripts/musica.mjs`, sintetizada) ANTES de animar. Escribe el gui
 3. Escribe la pieza en `kit/piezas/<nombre>.html` partiendo de la demo más cercana (`oscuro`, `claro`, `agencia`,
    `mezcla`, `elementos`): una función pura `escena(t)` que devuelve el árbol con `MG.h()` y los componentes `MG.*`,
    y `MG.montar({ id, duracion, fps: 60, estilo, escena })`. Sonido en el bloque JSON `mg-sonido`. Elementos generados
-   en `kit/comun/elementos/`. Detalle y reglas del motor: [references/hyperframes.md](references/hyperframes.md).
+   en `kit/comun/elementos/`; componentes traídos de la librería en `kit/comun/biblioteca/` (shader → `MG.shader`). Detalle y reglas del motor: [references/hyperframes.md](references/hyperframes.md).
 4. Los tiempos salen de la tabla del guion (una constante por evento; los efectos de sonido usan los mismos tiempos).
 5. `node scripts/mg.mjs lint <pieza>`: 0 errores.
 
@@ -147,7 +152,7 @@ qué queda (desviaciones de la interfaz, textos por confirmar).
 - [references/promo-producto.md](references/promo-producto.md): promos y lanzamientos SaaS de primer nivel: leyes con números, plantillas por segundos, recetas de hooks, transiciones y UI viva, sonido, antipatrones.
 - [references/checklist-promo.md](references/checklist-promo.md): la checklist anti-aburrimiento (guion, fotogramas, medidas, prompt del revisor).
 - [references/promo-recetas.md](references/promo-recetas.md): promo con voz en off: estructura, hook, fondo, píldora, coherencia, revelado del logo, microdetalles, música y ducking, locución, versiones (con números y scripts).
-- [references/recursos.md](references/recursos.md): de dónde sale cada recurso: código del kit o librería de NEW ERA (tal cual), Higgsfield para lo propio de la marca (modelo, prompt, encaje, revisión) y carpeta de marca reutilizable.
+- [references/recursos.md](references/recursos.md): de dónde sale cada recurso: código del kit o librería de componentes (tal cual; acceso por carpeta o API con token, categorías de vídeo, `MG.shader`), Higgsfield para lo propio de la marca (modelo, prompt, encaje, revisión) y carpeta de marca reutilizable.
 - [references/direcciones.md](references/direcciones.md): las direcciones de partida (antes, skills de estilo) y cómo mezclarlas.
 - [references/hyperframes.md](references/hyperframes.md): el motor principal: cómo se escribe una pieza, reglas, sonido, render.
 - [references/elementos-ia.md](references/elementos-ia.md): elementos generados con Higgsfield: cuándo, modelo, prompt, presupuesto, descarga, alfa, bucle e integración.

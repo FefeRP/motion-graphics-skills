@@ -70,8 +70,14 @@ timed from the voice, a layered logo reveal on the music drop, one material and 
 measured per phrase, a voice-over written as it sounds, and how to carry every change between versions. New scripts:
 `voz.mjs` (voice-over lint and generation with word timings), `audio.mjs` (ducking, measuring and re-mixing a rendered
 video without re-rendering), `franjas.mjs` (background stripes) and `marca.mjs` (your brand's resource folder: icons
-and elements you generate with Higgsfield, reused in your next videos; decoration and shaders from the kit or the NEW
-ERA library are copied as they are).
+and elements you generate with Higgsfield, reused in your next videos; decoration and shaders from the kit or the
+component library are copied as they are).
+
+**Component library (3.3.0).** Backgrounds, shaders, animated text and effects come from the component library of
+the sister marketplace the-new-era-websites, only in the categories that work in video. Each person connects with a
+local catalog folder or with the catalog API and a personal token from a «skills» invitation, set in their own
+environment. `node scripts/biblioteca.mjs buscar|ver|traer` finds and copies a component; `MG.shader` drops a
+shader into a piece as it is, driven by time (example: `kit/piezas/biblioteca.html`).
 
 ## Learned from references, frame by frame
 Every style and variant comes from studying real motion graphics frame by frame (timing, easing measured per frame,
@@ -244,7 +250,7 @@ conductor, elige y mezcla técnicas y construye la pieza, y ocho skills de técn
 movimiento, transiciones, tipografía, luz y fondos, 3D y partículas, mapas 3D en perspectiva, ritmo y sonido), más un kit de HyperFrames listo
 para renderizar (y un kit de Remotion secundario). Saben cuándo usar elementos generados con IA (objetos, fondos,
 texturas, personajes, productos, bucles) y cómo integrarlos, siempre con presupuesto máximo y precio estimado antes.
-Las direcciones visuales (oscuro, claro, agencia y sus variantes) son ajustes mezclables. Para promos con voz en off traen recetas con números (hook clavado a la voz, subtítulos en píldora de cristal, revelado del logo en el drop, ducking medido, locución escrita como suena, versiones que arrastran todos los cambios) y una plantilla, y una carpeta de recursos de marca por usuario: los iconos propios se generan con Higgsfield; la decoración y los shaders del kit o de la librería de NEW ERA se copian tal cual. Cuando recrean la interfaz de tu producto, siguen un proceso obligatorio de fidelidad (fuente de
+Las direcciones visuales (oscuro, claro, agencia y sus variantes) son ajustes mezclables. Para promos con voz en off traen recetas con números (hook clavado a la voz, subtítulos en píldora de cristal, revelado del logo en el drop, ducking medido, locución escrita como suena, versiones que arrastran todos los cambios) y una plantilla, y una carpeta de recursos de marca por usuario: los iconos propios se generan con Higgsfield; la decoración y los shaders del kit o de la librería de componentes se copian tal cual. Desde la 3.3.0 la librería de componentes (la del marketplace the-new-era-websites) está conectada: cada persona entra con una carpeta local o con la API y su token personal de una invitación «skills», solo en las categorías que sirven en vídeo (fondos y shaders, texto animado, 3D, efectos, elementos animados, estelas, cargas, revelados y marcos de dispositivo; fuera la interfaz web pura); `scripts/biblioteca.mjs` busca y trae, y `MG.shader` monta un shader tal cual movido por el tiempo. Cuando recrean la interfaz de tu producto, siguen un proceso obligatorio de fidelidad (fuente de
 verdad, tokens copiados, comparación con capturas reales y lista de comprobación) para que sea idéntica a la real.
 Instalación: `claude plugin marketplace add FefeRP/motion-graphics-skills` y
 `claude plugin install motion-graphics@motion-graphics-skills`. Las skills están escritas en español.

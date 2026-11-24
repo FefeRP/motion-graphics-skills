@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1920, height=1080">
+  <title>Fondo de la librería: cáusticas</title>
+  <link rel="stylesheet" href="comun/fuentes.css">
+  <script src="comun/vendor/gsap.min.js"></script>
+  <script src="comun/mg.js"></script>
+</head>
+<body>
+  <!-- Ejemplo de recurso de la librería de componentes dentro de una pieza: el fondo «Caustics Background» (Kokonut UI,
+       MIT) con su shader COPIADO TAL CUAL. Solo cambia el envoltorio: el reloj sale de t, las gotas que en la web hace el
+       ratón van en una tabla de tiempos (GOTAS) y la sombra del titular se pinta desde la misma geometría que el texto.
+       9 s, 60 fps, sin marca. Receta: references/recursos.md §1 de la skill motion-graphics. -->
+  <div id="biblioteca" data-composition-id="biblioteca" data-start="0" data-duration="9" data-width="1920" data-height="1080" data-fps="60" style="width:1920px;height:1080px;position:relative;background:#06201f"></div>
+  <script type="application/json" id="mg-sonido">
+    { "musica": "musica/serif-calido.wav", "volumenMusica": 0.5, "volumen": 0.7, "fundido": 1.2, "sfx": [
+      { "t": 0.02, "n": "pop", "vol": 0.3 }, { "t": 0.4, "n": "tic", "vol": 0.25 }, { "t": 0.72, "n": "tic", "vol": 0.25 },
+      { "t": 1.2, "n": "tic", "vol": 0.22 }, { "t": 1.45, "n": "tic", "vol": 0.22 }, { "t": 1.8, "n": "pop", "vol": 0.3 },
+      { "t": 2.9, "n": "whoosh-suave", "vol": 0.3 }, { "t": 5.12, "n": "whoosh", "vol": 0.3 }, { "t": 5.5, "n": "impacto", "vol": 0.45 },
+      { "t": 6.05, "n": "pop", "vol": 0.3 }, { "t": 6.4, "n": "tic", "vol": 0.22 }, { "t": 6.75, "n": "tic", "vol": 0.22 } ] }
+  </script>
+  <script>
+    const { h, tramo, interp, clamp, CURVAS, FUENTES } = MG;
+
+    /*
+     * Caustics Background · Kokonut UI (https://kokonutui.com, https://github.com/kokonut-labs/kokonutui)
+     * @author @dorianbaffier · @license MIT · copiado de la librería de componentes (kokonut/caustics-background).
+     * VERTEX y FRAGMENT van tal cual; RIPPLES, CELL y SHADOW_* son los del original.
+     */
+    const RIPPLES = 12, CELL = 150, SHADOW_X = 16, SHADOW_Y = 30, SHADOW_BLUR = 7;
+    const VERTEX = `#version 300 es
+in vec2 aPos;
+out vec2 vUv;
+void main() {
+  vUv = aPos * 0.5 + 0.5;
+  gl_Position = vec4(aPos, 0.0, 1.0);
+}`;
+    const FRAGMENT = `#version 300 es
+precision highp float;
+in vec2 vUv;
+out vec4 o;
+uniform vec2 uRes;
+uniform float uTime;
+uniform vec4 uRipples[${RIPPLES}];
+uniform sampler2D uMask;
+uniform vec3 uWater;
+uniform vec3 uLight;
+uniform vec2 uShadow;
+
+const float TAU = 6.28318530718;
+
+vec2 hash(vec2 p) {
+  p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));
+  return fract(sin(p) * 43758.5453);
+}
+
+float caustic(vec2 p, float t) {
+  vec2 q = p;
+  p += 0.34 * vec2(sin(p.y * 1.3 + t * 0.9), cos(p.x * 1.1 - t * 0.7));
+  p += 0.12 * vec2(sin(p.y * 3.1 - t), cos(p.x * 2.7 + t * 1.2));
+  vec2 n = floor(p);
+  vec2 f = fract(p);
+  float f1 = 8.0;
+  float f2 = 8.0;
+  for (int j = -1; j <= 1; j++) {
+    for (int i = -1; i <= 1; i++) {
+      vec2 g = vec2(float(i), float(j));
+      vec2 o = 0.5 + 0.42 * sin(t + TAU * hash(n + g));
+      vec2 r = g + o - f;
+      float d = dot(r, r);
+      if (d < f1) {
+        f2 = f1;
+        f1 = d;
+      } else if (d < f2) {
+        f2 = d;
+      }
+    }
+  }
+  float edge = sqrt(f2) - sqrt(f1);
+  float line = pow(1.0 - smoothstep(0.0, 0.14, edge), 2.0);
+  float halo = 1.0 - smoothstep(0.0, 0.32, edge);
+  float glint = 0.6 + 0.4 * sin(q.x * 0.55 + t * 0.6) * cos(q.y * 0.45 - t * 0.5);
+  return (line * 0.85 + halo * 0.18) * glint;
+}
+
+void main() {
+  vec2 px = vec2(vUv.x, 1.0 - vUv.y) * uRes;
+  vec2 bend = vec2(0.0);
+  float focus = 0.0;
+  for (int k = 0; k < ${RIPPLES}; k++) {
+    vec4 r = uRipples[k];
+    float age = uTime - r.z;
+    if (r.w <= 0.0 || age < 0.0 || age > 4.0) {
+      continue;
+    }
+    vec2 d = px - r.xy;
+    float dist = length(d);
+    float x = dist - age * 240.0;
+    float env = r.w * exp(-age * 0.8) * exp(-x * x / 2600.0) / (1.0 + dist * 0.002);
+    bend += (d / max(dist, 1.0)) * sin(x * 0.085) * env * 26.0;
+    focus += cos(x * 0.085) * env;
+  }
+  vec2 uv = (px + bend) / ${CELL}.0;
+  float t = uTime * 0.5;
+  float c = caustic(uv, t);
+  c = max(c, caustic(uv * 1.9 + 7.3, t * 0.8 + 3.0) * 0.22);
+  c = clamp(c * (1.0 + focus * 1.2) + focus * 0.4, 0.0, 1.0);
+
+  vec2 sway = vec2(sin(uTime * 0.7), cos(uTime * 0.55)) * 2.5;
+  vec2 s = (px - uShadow - bend * 1.4 - sway) / uRes;
+  float shade = texture(uMask, s).r;
+
+  vec3 floor = uWater * (1.0 - shade * 0.08);
+  vec3 col = mix(floor, uLight, c * (1.0 - shade * 0.9));
+  o = vec4(col, 1.0);
+}`;
+    // Colores del tema oscuro del original (fondo #06201f, luz #3ea89d) y del texto (zinc-50 / zinc-300).
+    const rgb = (x) => [1, 3, 5].map((i) => parseInt(x.slice(i, i + 2), 16) / 255);
+    const AGUA = rgb("#06201f"), LUZ = rgb("#3ea89d"), TEXTO = "#fafafa", SUAVE = "#d4d4d8";
+    // ─── fin de lo copiado ───
+
+    const W = 1920, H = 1080, FUENTE = FUENTES.INTER;
+    // Las gotas que en la web hace el ratón: [x, y, nace (s), fuerza]. Las 12 más recientes van al shader.
+    const GOTAS = [[1306, 324, 0.0, 1.1]];
+    // Titular: cada palabra cae al agua y deja su gota.
+    const LINEAS = [
+      { y: 430, tam: 150, sale: true, palabras: [["Cada", 0.35], ["gota,", 0.7]] },
+      { y: 600, tam: 150, sale: true, palabras: [["a", 1.15], ["su", 1.4], ["tiempo.", 1.75]] },
+      { y: 610, tam: 190, palabras: [["Tal", 6.0], ["cual.", 6.35]] },
+    ];
+    const SUB = { y: 735, tam: 36, texto: "Un fondo de la librería, copiado tal cual", t0: 2.55 };
+    // Estela: una pasada rápida de izquierda a derecha deja anillos pequeños (WAKE_SPEED del original) cada 0,11 s.
+    for (let k = 0; k < 12; k++) { const u = k / 11; GOTAS.push([260 + u * 1400, 860 - Math.sin(u * Math.PI) * 140, 2.95 + k * 0.11, 0.42]); }
+    GOTAS.push([960, 520, 5.5, 1.6]); // la gota grande que se lleva el titular
+    GOTAS.sort((a, b) => a[2] - b[2]);
+
+    // Geometría del texto: se mide con la fuente ya cargada (canvas 2D), y de ella salen el DOM y la máscara de sombra.
+    const med = document.createElement("canvas").getContext("2d");
+    const fuenteCss = (tam) => `600 ${tam}px ${FUENTE}`;
+    const ancho = (txt, tam) => { med.font = fuenteCss(tam); med.letterSpacing = (-0.045 * tam).toFixed(2) + "px"; return med.measureText(txt).width; };
+    const colocar = (l) => {
+      const esp = ancho(" ", l.tam), anchos = l.palabras.map(([p]) => ancho(p, l.tam));
+      let x = (W - (anchos.reduce((s, a) => s + a, 0) + esp * (anchos.length - 1))) / 2;
+      return l.palabras.map(([p, t0], i) => { const r = { p, t0, x, ancho: anchos[i], y: l.y, tam: l.tam, sale: !!l.sale }; x += anchos[i] + esp; return r; });
+    };
+    // Las palabras del titular se ven en [t0, 5.5]; las del final, desde su t0.
+    const estado = (w, t) => {
+      const entra = tramo(t, w.t0, w.t0 + 0.55, CURVAS.expo), sale = w.sale ? tramo(t, 5.35, 5.85, CURVAS.acelera) : 0;
+      return { o: entra * (1 - sale), dy: (1 - entra) * -40 + sale * 30, s: 1.12 - 0.12 * entra - 0.06 * sale, b: (1 - entra) * 14 + sale * 10 };
+    };
+    // Gota de cada palabra al caer (centro de la palabra).
+    for (const l of LINEAS) for (const w of colocar(l)) GOTAS.push([w.x + w.ancho / 2, w.y - l.tam * 0.3, w.t0 + 0.08, w.sale ? 0.75 : 1.0]);
+    GOTAS.sort((a, b) => a[2] - b[2]);
+
+    const mascara = document.createElement("canvas"); mascara.width = W / 2; mascara.height = H / 2;
+    const mx = mascara.getContext("2d");
+    const ondas = new Float32Array(RIPPLES * 4);
+    const fondo = MG.shader({ id: "biblioteca", fragmento: FRAGMENT, vertice: VERTEX, escala: 1 });
+
+    const escena = (t) => {
+      const palabras = LINEAS.flatMap(colocar);
+      // máscara: blanco donde flota algo (con su opacidad), desenfocada como el original; a media resolución
+      mx.setTransform(1, 0, 0, 1, 0, 0); mx.filter = "none"; mx.fillStyle = "black"; mx.fillRect(0, 0, W / 2, H / 2);
+      mx.setTransform(0.5, 0, 0, 0.5, 0, 0); mx.filter = `blur(${SHADOW_BLUR / 2}px)`; mx.textBaseline = "alphabetic";
+      for (const w of palabras) {
+        const e = estado(w, t); if (e.o <= 0.01) continue;
+        mx.globalAlpha = e.o; mx.font = fuenteCss(w.tam); mx.letterSpacing = (-0.045 * w.tam).toFixed(2) + "px"; mx.fillStyle = "white";
+        mx.save(); mx.translate(w.x + w.ancho / 2, w.y + e.dy); mx.scale(e.s, e.s); mx.fillText(w.p, -w.ancho / 2, 0); mx.restore();
+      }
+      const subO = tramo(t, SUB.t0, SUB.t0 + 0.6) * (1 - tramo(t, 5.2, 5.6, CURVAS.acelera));
+      if (subO > 0.01) { mx.globalAlpha = subO * 0.6; mx.font = `500 ${SUB.tam}px ${FUENTE}`; mx.letterSpacing = "0px"; mx.textAlign = "center"; mx.fillText(SUB.texto, W / 2, SUB.y); mx.textAlign = "left"; }
+      mx.globalAlpha = 1;
+      // las 12 gotas más recientes ya nacidas (el shader ignora las de más de 4 s)
+      ondas.fill(0);
+      GOTAS.filter((g) => g[2] <= t).slice(-RIPPLES).forEach((g, k) => ondas.set(g, k * 4));
+      fondo({ uRes: [W, H], uTime: t, uRipples: ondas, uMask: mascara, uWater: AGUA, uLight: LUZ, uShadow: [SHADOW_X, SHADOW_Y] });
+
+      return h("div", { style: { position: "absolute", left: 0, top: 0, width: W, height: H } },
+        palabras.map((w) => {
+          const e = estado(w, t);
+          return h("div", { key: w.p + w.t0, style: { position: "absolute", left: w.x, top: w.y + e.dy - w.tam, width: w.ancho + 40, height: w.tam * 1.25, fontFamily: FUENTE, fontWeight: 600,
+            fontSize: w.tam, lineHeight: `${w.tam}px`, letterSpacing: (-0.045 * w.tam).toFixed(2) + "px", color: TEXTO, whiteSpace: "nowrap", opacity: e.o,
+            transform: `scale(${e.s.toFixed(4)})`, transformOrigin: `${(w.ancho / 2).toFixed(1)}px ${(w.tam * 0.7).toFixed(1)}px`, filter: e.b > 0.2 ? `blur(${e.b.toFixed(2)}px)` : "none", paddingTop: w.tam * 0.2 } }, w.p);
+        }),
+        h("div", { style: { position: "absolute", left: 0, top: SUB.y - SUB.tam, width: W, textAlign: "center", fontFamily: FUENTE, fontWeight: 500, fontSize: SUB.tam, lineHeight: `${SUB.tam * 1.25}px`,
+          color: SUAVE, opacity: subO, transform: `translateY(${((1 - tramo(t, SUB.t0, SUB.t0 + 0.6)) * 16).toFixed(2)}px)` } }, SUB.texto));
+    };
+
+    MG.montar({ id: "biblioteca", duracion: 9, fps: 60, escena, fuentes: [FUENTE] });
+  </script>
+</body>
+</html>
